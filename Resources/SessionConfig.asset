@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b922c0839367f0543b7f38d475ba80c7, type: 3}
+  m_Name: SessionConfig
+  m_EditorClassIdentifier: Quantum.Unity::Quantum.QuantumDeterministicSessionConfigAsset
+  Config:
+    PlayerCount: 0
+    UpdateFPS: 64
+    LockstepSimulation: 0
+    RollbackWindow: 64
+    ChecksumInterval: 64
+    ChecksumCrossPlatformDeterminism: 0
+    InputDeltaCompression: 1
+    InputDelayMin: 0
+    InputDelayMax: 64
+    InputDelayPingStart: 100
+    InputHardTolerance: 8
+    InputRedundancy: 3
+    InputRepeatMaxDistance: 10
+    MinOffsetCorrectionDiff: 1
+    TimeCorrectionRate: 4
+    MinTimeCorrectionFrames: 1
+    SessionStartTimeout: 1
+    TimeScaleMin: 100
+    TimeScalePingMin: 100
+    TimeScalePingMax: 300
+    InputFixedSize: 0
+  OverrideHardTolerance: 0
+  HardTolerance: 8
