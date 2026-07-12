@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ef11b24dd8b636479cc530200469ee2, type: 3}
   m_Name: QuantumMapSceneInfo
   m_EditorClassIdentifier: Quantum.Unity::Quantum.QuantumMenuSceneInfo
-  Name: QuantumGameScene
-  ScenePath: Assets/QuantumUser/Scenes/QuantumGameScene.unity
-  Preview: {fileID: 0}
+  Name: Playground
+  ScenePath: Assets/Game/Scenes/Playground.unity
+  Preview: {fileID: 21300000, guid: 37f4a4d60464e734ab1a9707f2fec964, type: 3}
   IsHidden: 0
   RuntimeConfig:
     Seed: 0
     Map:
       Id:
-        Value: 289315009736834488
+        Value: 439818679169614717
     SimulationConfig:
       Id:
         Value: 127061825759951034

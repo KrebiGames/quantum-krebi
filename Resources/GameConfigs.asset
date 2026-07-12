@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefaultConfigKCC2D
   m_EditorClassIdentifier: Quantum.Engine.dll::Quantum.CharacterController2DConfig
   Identifier:
-    Path: QuantumUser/Resources/QuantumDefaultConfigs|DefaultConfigKCC2D
+    Path: QuantumUser/Resources/GameConfigs|DefaultConfigKCC2D
     Guid:
       Value: 2564832538172804254
   Offset:
@@ -64,7 +64,7 @@ MonoBehaviour:
   m_Name: DefaultConfigSimulation
   m_EditorClassIdentifier: Quantum.Simulation::Quantum.SimulationConfig
   Identifier:
-    Path: QuantumUser/Resources/QuantumDefaultConfigs|DefaultConfigSimulation
+    Path: QuantumUser/Resources/GameConfigs|DefaultConfigSimulation
     Guid:
       Value: 127061825759951034
   Entities:
@@ -228,7 +228,7 @@ MonoBehaviour:
   m_Name: DefaultConfigNavmeshAgent
   m_EditorClassIdentifier: Quantum.Engine.dll::Quantum.NavMeshAgentConfig
   Identifier:
-    Path: QuantumUser/Resources/QuantumDefaultConfigs|DefaultConfigNavmeshAgent
+    Path: QuantumUser/Resources/GameConfigs|DefaultConfigNavmeshAgent
     Guid:
       Value: 1819139074174404601
   UpdateInterval: 1
@@ -294,24 +294,12 @@ MonoBehaviour:
   m_Name: DefaultConfigSystems
   m_EditorClassIdentifier: Quantum.Simulation::Quantum.SystemsConfig
   Identifier:
-    Path: QuantumUser/Resources/QuantumDefaultConfigs|DefaultConfigSystems
+    Path: QuantumUser/Resources/GameConfigs|DefaultConfigSystems
     Guid:
       Value: 3630868459783392483
   Entries:
   - SystemType:
-      AssemblyQualifiedName: Quantum.Core.CullingSystem2D, Quantum.Simulation, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    SystemName: 
-    StartDisabled: 0
-    Children: []
-  - SystemType:
       AssemblyQualifiedName: Quantum.Core.CullingSystem3D, Quantum.Simulation, Version=0.0.0.0,
-        Culture=neutral, PublicKeyToken=null
-    SystemName: 
-    StartDisabled: 0
-    Children: []
-  - SystemType:
-      AssemblyQualifiedName: Quantum.Core.PhysicsSystem2D, Quantum.Simulation, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
     SystemName: 
     StartDisabled: 0
@@ -339,6 +327,24 @@ MonoBehaviour:
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     SystemName: 
     StartDisabled: 0
+    Children:
+    - SystemType:
+        AssemblyQualifiedName: Quantum.PlayerSpawnSystem, Quantum.Simulation, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+      SystemName: 
+      StartDisabled: 0
+      Children: []
+  - SystemType:
+      AssemblyQualifiedName: Quantum.KCCSystem, Quantum.Simulation, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    SystemName: 
+    StartDisabled: 0
+    Children: []
+  - SystemType:
+      AssemblyQualifiedName: Quantum.PlayerMovementSystem, Quantum.Simulation, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    SystemName: 
+    StartDisabled: 0
     Children: []
 --- !u!114 &11400000
 MonoBehaviour:
@@ -350,7 +356,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a89a4a7ca4e4d6e4698ba1a26ca4eae5, type: 3}
-  m_Name: QuantumDefaultConfigs
+  m_Name: GameConfigs
   m_EditorClassIdentifier: Quantum.Unity::Quantum.QuantumDefaultConfigs
   SimulationConfig: {fileID: -6446714587871261477}
   PhysicsMaterial: {fileID: 6097519113605056418}
@@ -372,7 +378,7 @@ MonoBehaviour:
   m_Name: DefaultConfigKCC3D
   m_EditorClassIdentifier: Quantum.Engine.dll::Quantum.CharacterController3DConfig
   Identifier:
-    Path: QuantumUser/Resources/QuantumDefaultConfigs|DefaultConfigKCC3D
+    Path: QuantumUser/Resources/GameConfigs|DefaultConfigKCC3D
     Guid:
       Value: 3759699976259520521
   Offset:
@@ -427,7 +433,7 @@ MonoBehaviour:
   m_Name: DefaultConfigPhysicsMaterial
   m_EditorClassIdentifier: Quantum.Engine.dll::Quantum.PhysicsMaterial
   Identifier:
-    Path: QuantumUser/Resources/QuantumDefaultConfigs|DefaultConfigPhysicsMaterial
+    Path: QuantumUser/Resources/GameConfigs|DefaultConfigPhysicsMaterial
     Guid:
       Value: 60469304474390371
   Restitution:

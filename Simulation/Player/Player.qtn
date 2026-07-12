@@ -1,0 +1,24 @@
+﻿enum PlayerTeam {
+	Blue, Red
+}
+
+component PlayerStatus {
+	[ExcludeFromPrototype]
+	player_ref PlayerRef;
+
+	[ExcludeFromPrototype]
+	entity_ref SpawnerEntityRef;
+
+	[ExcludeFromPrototype]
+	PlayerTeam PlayerTeam;
+
+	asset_ref<PlayerMovementData> PlayerMovementData;
+}
+
+component PlayerSpawner {
+	player_ref PlayerRef;
+	PlayerTeam PlayerTeam;
+}
+
+signal OnPlayerRespawned(entity_ref playerEntityRef, bool fullReset);
+signal OnPlayerRespawnTimerReset(entity_ref playerEntityRef);

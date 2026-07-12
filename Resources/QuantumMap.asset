@@ -19,9 +19,9 @@ MonoBehaviour:
   UserAsset:
     Id:
       Value: 0
-  Scene: 
-  ScenePath: 
-  SceneGuid: 
+  Scene: QuantumGameScene
+  ScenePath: Assets/QuantumUser/Scenes/QuantumGameScene.unity
+  SceneGuid: 4b0f826587c4f76478dac3d5e2ecfb6a
   WorldSize: 256
   BucketsCount: 16
   BucketsSubdivisions: 8
@@ -32,7 +32,7 @@ MonoBehaviour:
   TriangleMeshCellSize: -1
   StaticColliders3DTrianglesData:
     Id:
-      Value: 0
+      Value: 498326315200734121
   SerializeTrianglesMetadata: 0
   GridSizeX: 64
   GridSizeY: 64
@@ -42,7 +42,7 @@ MonoBehaviour:
   StaticColliders2D: []
   StaticColliders3D: []
   MapEntities: []
-  SerializedTriangleDataUncompressedSize: 0
+  SerializedTriangleDataUncompressedSize: 8
   references:
     version: 2
     RefIds: []
