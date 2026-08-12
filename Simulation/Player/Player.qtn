@@ -20,5 +20,11 @@ component PlayerSpawner {
 	PlayerTeam PlayerTeam;
 }
 
+component CrabOrientation {
+	FP LocalYaw;
+	FP OrientationAngle;
+	FP RotationSpeed;
+}
+
 signal OnPlayerRespawned(entity_ref playerEntityRef, bool fullReset);
 signal OnPlayerRespawnTimerReset(entity_ref playerEntityRef);

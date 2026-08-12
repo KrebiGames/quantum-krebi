@@ -97,6 +97,8 @@ MonoBehaviour:
       RawValue: 0
     MinContactInverseMass:
       RawValue: 35
+    BaumgarteBetaValue:
+      RawValue: 13107
     SimplexMinBitShift: 0
     SimplexMaxBitShift: 2
     ShapeCastMaxIterations: 16
@@ -345,7 +347,13 @@ MonoBehaviour:
         Culture=neutral, PublicKeyToken=null
     SystemName: 
     StartDisabled: 0
-    Children: []
+    Children:
+    - SystemType:
+        AssemblyQualifiedName: Quantum.CrabOrientationSystem, Quantum.Simulation,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      SystemName: 
+      StartDisabled: 0
+      Children: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0

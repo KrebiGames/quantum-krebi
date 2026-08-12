@@ -1116,7 +1116,7 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct _globals_ {
-    public const Int32 SIZE = 1696;
+    public const Int32 SIZE = 1704;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(0)]
     public Int32 PlayerConnectedCount;
@@ -1138,10 +1138,10 @@ namespace Quantum {
     public BitSet1024 Systems;
     [FieldOffset(296)]
     public PhysicsSceneSettings PhysicsSettings;
-    [FieldOffset(632)]
+    [FieldOffset(640)]
     [FramePrinter.FixedArrayAttribute(typeof(Input), 6)]
     private fixed Byte _input_[1056];
-    [FieldOffset(1688)]
+    [FieldOffset(1696)]
     public BitSet6 PlayerLastConnectionState;
     public readonly FixedArray<Input> input {
       get {
@@ -1253,6 +1253,32 @@ namespace Quantum {
         if (p->_field_used_ == REGULAR) {
           Quantum.QuantumRegularThumbSticks.Serialize(&p->_Regular, serializer);
         }
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct CrabOrientation : Quantum.IComponent {
+    public const Int32 SIZE = 24;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(0)]
+    public FP LocalYaw;
+    [FieldOffset(8)]
+    public FP OrientationAngle;
+    [FieldOffset(16)]
+    public FP RotationSpeed;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 21013;
+        hash = hash * 31 + LocalYaw.GetHashCode();
+        hash = hash * 31 + OrientationAngle.GetHashCode();
+        hash = hash * 31 + RotationSpeed.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (CrabOrientation*)ptr;
+        FP.Serialize(&p->LocalYaw, serializer);
+        FP.Serialize(&p->OrientationAngle, serializer);
+        FP.Serialize(&p->RotationSpeed, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
@@ -1553,6 +1579,8 @@ namespace Quantum {
       BuildSignalsArrayOnComponentRemoved<CharacterController2D>();
       BuildSignalsArrayOnComponentAdded<CharacterController3D>();
       BuildSignalsArrayOnComponentRemoved<CharacterController3D>();
+      BuildSignalsArrayOnComponentAdded<Quantum.CrabOrientation>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.CrabOrientation>();
       BuildSignalsArrayOnComponentAdded<EntityGroup>();
       BuildSignalsArrayOnComponentRemoved<EntityGroup>();
       BuildSignalsArrayOnComponentAdded<Quantum.KCC>();
@@ -1685,9 +1713,11 @@ namespace Quantum {
       typeRegistry.Register(typeof(CallbackFlags), 4);
       typeRegistry.Register(typeof(CharacterController2D), CharacterController2D.SIZE);
       typeRegistry.Register(typeof(CharacterController3D), CharacterController3D.SIZE);
+      typeRegistry.Register(typeof(CharacterJoint3D), CharacterJoint3D.SIZE);
       typeRegistry.Register(typeof(ColorRGBA), ColorRGBA.SIZE);
       typeRegistry.Register(typeof(ComponentPrototypeRef), ComponentPrototypeRef.SIZE);
       typeRegistry.Register(typeof(ComponentTypeRef), ComponentTypeRef.SIZE);
+      typeRegistry.Register(typeof(Quantum.CrabOrientation), Quantum.CrabOrientation.SIZE);
       typeRegistry.Register(typeof(DistanceJoint), DistanceJoint.SIZE);
       typeRegistry.Register(typeof(DistanceJoint3D), DistanceJoint3D.SIZE);
       typeRegistry.Register(typeof(Quantum.EKCCCollisionSource), 1);
@@ -1780,16 +1810,17 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum._globals_), Quantum._globals_.SIZE);
     }
     static partial void InitComponentTypeIdGen(Int32 extraComponentCount) {
-      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 8 + extraComponentCount);
+      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 9 + extraComponentCount);
       ComponentTypeId.RegisterBuiltInComponents();
-      ComponentTypeId.RegisterComponent<Quantum.KCC>(21, Quantum.KCC.Serialize, null, Quantum.KCC.OnRemoved, ComponentFlags.None);
-      ComponentTypeId.RegisterComponent<Quantum.KCCProcessorLink>(22, Quantum.KCCProcessorLink.Serialize, null, null, ComponentFlags.None);
-      ComponentTypeId.RegisterComponent<Quantum.NPC>(23, Quantum.NPC.Serialize, null, null, ComponentFlags.None);
-      ComponentTypeId.RegisterComponent<Quantum.NavigationSource>(24, Quantum.NavigationSource.Serialize, null, Quantum.NavigationSource.OnRemoved, ComponentFlags.None);
-      ComponentTypeId.RegisterComponent<Quantum.Platform>(25, Quantum.Platform.Serialize, null, Quantum.Platform.OnRemoved, ComponentFlags.None);
-      ComponentTypeId.RegisterComponent<Quantum.Player>(26, Quantum.Player.Serialize, null, null, ComponentFlags.None);
-      ComponentTypeId.RegisterComponent<Quantum.PlayerSpawner>(27, Quantum.PlayerSpawner.Serialize, null, null, ComponentFlags.None);
-      ComponentTypeId.RegisterComponent<Quantum.PlayerStatus>(28, Quantum.PlayerStatus.Serialize, null, null, ComponentFlags.None);
+      ComponentTypeId.RegisterComponent<Quantum.CrabOrientation>(21, Quantum.CrabOrientation.Serialize, null, null, ComponentFlags.None);
+      ComponentTypeId.RegisterComponent<Quantum.KCC>(22, Quantum.KCC.Serialize, null, Quantum.KCC.OnRemoved, ComponentFlags.None);
+      ComponentTypeId.RegisterComponent<Quantum.KCCProcessorLink>(23, Quantum.KCCProcessorLink.Serialize, null, null, ComponentFlags.None);
+      ComponentTypeId.RegisterComponent<Quantum.NPC>(24, Quantum.NPC.Serialize, null, null, ComponentFlags.None);
+      ComponentTypeId.RegisterComponent<Quantum.NavigationSource>(25, Quantum.NavigationSource.Serialize, null, Quantum.NavigationSource.OnRemoved, ComponentFlags.None);
+      ComponentTypeId.RegisterComponent<Quantum.Platform>(26, Quantum.Platform.Serialize, null, Quantum.Platform.OnRemoved, ComponentFlags.None);
+      ComponentTypeId.RegisterComponent<Quantum.Player>(27, Quantum.Player.Serialize, null, null, ComponentFlags.None);
+      ComponentTypeId.RegisterComponent<Quantum.PlayerSpawner>(28, Quantum.PlayerSpawner.Serialize, null, null, ComponentFlags.None);
+      ComponentTypeId.RegisterComponent<Quantum.PlayerStatus>(29, Quantum.PlayerStatus.Serialize, null, null, ComponentFlags.None);
     }
     static partial void EnsureNotStrippedGen() {
       FramePrinter.EnsureNotStripped();
