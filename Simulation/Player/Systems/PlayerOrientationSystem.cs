@@ -3,7 +3,7 @@ namespace Quantum {
 	using UnityEngine.Scripting;
 
 	[Preserve]
-	public unsafe class CrabOrientationSystem : SystemMainThreadFilter<CrabOrientationSystem.Filter> {
+	public unsafe class PlayerOrientationSystem : SystemMainThreadFilter<PlayerOrientationSystem.Filter> {
 		public struct Filter {
 			public EntityRef Entity;
 			public PlayerStatus* PlayerStatus;
@@ -17,18 +17,23 @@ namespace Quantum {
 			if (input.MoveDirection.SqrMagnitude <= FP._0_01 * FP._0_01)
 				return;
 
-			// Continuous joystick movement angle
 			FP movementYaw = FPMath.Atan2(input.MoveDirection.X, input.MoveDirection.Y) * FP.Rad2Deg;
 
-			// Both valid sideways orientations
-			FP yawA = movementYaw + orientation->OrientationAngle;
-			FP yawB = movementYaw - orientation->OrientationAngle;
+			FP yawA = movementYaw + orientation->OrientationAngle; // left side leads
+			FP yawB = movementYaw - orientation->OrientationAngle; // right side leads
 
-			// Choose the one keeping the crab facing forward / back towards camera
-			FP angleA = FPMath.Abs(FPMath.AngleBetweenDegrees(FP._0, yawA));
-			FP angleB = FPMath.Abs(FPMath.AngleBetweenDegrees(FP._0, yawB));
+			bool movingForward = input.MoveDirection.Y >= FP._0;
+			FP targetYaw;
 
-			FP targetYaw = angleA < angleB ? yawA : yawB;
+			if (input.AimDirection.X > FP._0_01)
+				targetYaw = movingForward ? yawA : yawB;
+			else if (input.AimDirection.X < -FP._0_01)
+				targetYaw = movingForward ? yawB : yawA;
+			else {
+				FP deltaA = FPMath.Abs(FPMath.AngleBetweenDegrees(orientation->LocalYaw, yawA));
+				FP deltaB = FPMath.Abs(FPMath.AngleBetweenDegrees(orientation->LocalYaw, yawB));
+				targetYaw = deltaA < deltaB ? yawA : yawB;
+			}
 
 			FP delta = FPMath.AngleBetweenDegrees(orientation->LocalYaw, targetYaw);
 			FP maxDelta = orientation->RotationSpeed * frame.DeltaTime;
