@@ -349,7 +349,7 @@ MonoBehaviour:
     StartDisabled: 0
     Children:
     - SystemType:
-        AssemblyQualifiedName: Quantum.CrabOrientationSystem, Quantum.Simulation,
+        AssemblyQualifiedName: Quantum.PlayerOrientationSystem, Quantum.Simulation,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       SystemName: 
       StartDisabled: 0
