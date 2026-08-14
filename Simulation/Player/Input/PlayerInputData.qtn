@@ -1,0 +1,7 @@
+[ExcludeFromPrototype]
+struct PlayerInputData {
+    FPVector2 MoveDirection;
+    FPVector2 AimDirection;
+    button Sprint;
+    button Jump;
+}

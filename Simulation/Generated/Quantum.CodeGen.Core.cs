@@ -909,6 +909,37 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   [ExcludeFromPrototype()]
+  public unsafe partial struct PlayerInputData {
+    public const Int32 SIZE = 56;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(40)]
+    public FPVector2 MoveDirection;
+    [FieldOffset(24)]
+    public FPVector2 AimDirection;
+    [FieldOffset(12)]
+    public Button Sprint;
+    [FieldOffset(0)]
+    public Button Jump;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 10193;
+        hash = hash * 31 + MoveDirection.GetHashCode();
+        hash = hash * 31 + AimDirection.GetHashCode();
+        hash = hash * 31 + Sprint.GetHashCode();
+        hash = hash * 31 + Jump.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (PlayerInputData*)ptr;
+        Button.Serialize(&p->Jump, serializer);
+        Button.Serialize(&p->Sprint, serializer);
+        FPVector2.Serialize(&p->AimDirection, serializer);
+        FPVector2.Serialize(&p->MoveDirection, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  [ExcludeFromPrototype()]
   public unsafe partial struct QuantumDemoInputPlatformer2D {
     public const Int32 SIZE = 128;
     public const Int32 ALIGNMENT = 8;
@@ -1472,17 +1503,20 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct Player : Quantum.IComponent {
-    public const Int32 SIZE = 16;
+    public const Int32 SIZE = 24;
     public const Int32 ALIGNMENT = 8;
+    [FieldOffset(16)]
+    public FP WalkSpeed;
     [FieldOffset(8)]
-    public FP JumpForce;
+    public FP NormalJump;
     [FieldOffset(0)]
     [HideInInspector()]
     public PlayerRef PlayerRef;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 2621;
-        hash = hash * 31 + JumpForce.GetHashCode();
+        hash = hash * 31 + WalkSpeed.GetHashCode();
+        hash = hash * 31 + NormalJump.GetHashCode();
         hash = hash * 31 + PlayerRef.GetHashCode();
         return hash;
       }
@@ -1490,7 +1524,8 @@ namespace Quantum {
     public static void Serialize(void* ptr, FrameSerializer serializer) {
         var p = (Player*)ptr;
         PlayerRef.Serialize(&p->PlayerRef, serializer);
-        FP.Serialize(&p->JumpForce, serializer);
+        FP.Serialize(&p->NormalJump, serializer);
+        FP.Serialize(&p->WalkSpeed, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
@@ -1784,6 +1819,7 @@ namespace Quantum {
       typeRegistry.Register(typeof(PhysicsSceneSettings), PhysicsSceneSettings.SIZE);
       typeRegistry.Register(typeof(Quantum.Platform), Quantum.Platform.SIZE);
       typeRegistry.Register(typeof(Quantum.Player), Quantum.Player.SIZE);
+      typeRegistry.Register(typeof(Quantum.PlayerInputData), Quantum.PlayerInputData.SIZE);
       typeRegistry.Register(typeof(PlayerRef), PlayerRef.SIZE);
       typeRegistry.Register(typeof(Quantum.PlayerSpawner), Quantum.PlayerSpawner.SIZE);
       typeRegistry.Register(typeof(Quantum.PlayerStatus), Quantum.PlayerStatus.SIZE);

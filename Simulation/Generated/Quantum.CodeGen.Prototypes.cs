@@ -362,7 +362,8 @@ namespace Quantum.Prototypes {
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.Player))]
   public unsafe partial class PlayerPrototype : ComponentPrototype<Quantum.Player> {
-    public FP JumpForce;
+    public FP WalkSpeed;
+    public FP NormalJump;
     [HideInInspector()]
     public PlayerRef PlayerRef;
     partial void MaterializeUser(Frame frame, ref Quantum.Player result, in PrototypeMaterializationContext context);
@@ -372,8 +373,26 @@ namespace Quantum.Prototypes {
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.Player result, in PrototypeMaterializationContext context = default) {
-        result.JumpForce = this.JumpForce;
+        result.WalkSpeed = this.WalkSpeed;
+        result.NormalJump = this.NormalJump;
         result.PlayerRef = this.PlayerRef;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [ExcludeFromPrototype()]
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.PlayerInputData))]
+  public unsafe partial class PlayerInputDataPrototype : StructPrototype {
+    public FPVector2 MoveDirection;
+    public FPVector2 AimDirection;
+    public Button Sprint;
+    public Button Jump;
+    partial void MaterializeUser(Frame frame, ref Quantum.PlayerInputData result, in PrototypeMaterializationContext context);
+    public void Materialize(Frame frame, ref Quantum.PlayerInputData result, in PrototypeMaterializationContext context = default) {
+        result.MoveDirection = this.MoveDirection;
+        result.AimDirection = this.AimDirection;
+        result.Sprint = this.Sprint;
+        result.Jump = this.Jump;
         MaterializeUser(frame, ref result, in context);
     }
   }

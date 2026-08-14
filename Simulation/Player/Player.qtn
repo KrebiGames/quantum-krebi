@@ -2,6 +2,14 @@
 	Blue, Red
 }
 
+component Player {
+	FP WalkSpeed;
+	FP NormalJump;
+
+	[HideInInspector]
+	PlayerRef PlayerRef;
+}
+
 component PlayerStatus {
 	[ExcludeFromPrototype]
 	player_ref PlayerRef;
