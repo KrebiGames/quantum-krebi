@@ -29,9 +29,19 @@ component PlayerSpawner {
 }
 
 component CrabOrientation {
+	FP WorldYaw;
 	FP LocalYaw;
 	FP OrientationAngle;
 	FP RotationSpeed;
+}
+
+component BodyAnchor {
+}
+
+component CrabClaw {
+	FPVector3 RestLocalPosition;
+	FPVector3 RestTwistAxis;
+	FPVector3 RestSwingAxis;
 }
 
 signal OnPlayerRespawned(entity_ref playerEntityRef, bool fullReset);

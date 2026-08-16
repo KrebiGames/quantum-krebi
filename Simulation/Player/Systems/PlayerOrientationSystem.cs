@@ -6,6 +6,7 @@ namespace Quantum {
 	public unsafe class PlayerOrientationSystem : SystemMainThreadFilter<PlayerOrientationSystem.Filter> {
 		public struct Filter {
 			public EntityRef Entity;
+			public Transform3D* Transform;
 			public PlayerStatus* PlayerStatus;
 			public CrabOrientation* Orientation;
 		}
@@ -14,25 +15,23 @@ namespace Quantum {
 			PlayerInputData input = *frame.GetPlayerInput(filter.PlayerStatus->PlayerRef);
 			CrabOrientation* orientation = filter.Orientation;
 
-			if (input.MoveDirection.SqrMagnitude <= FP._0_01 * FP._0_01)
-				return;
+			FPVector3 forward = filter.Transform->Forward;
+			FP baseYaw = FPMath.Atan2(forward.X, forward.Z) * FP.Rad2Deg;
 
-			FP movementYaw = FPMath.Atan2(
-				input.MoveDirection.X,
-				input.MoveDirection.Y
-			) * FP.Rad2Deg;
+			if (input.MoveDirection.SqrMagnitude <= FP._0_01 * FP._0_01) {
+				orientation->WorldYaw = baseYaw + orientation->LocalYaw;
+				return;
+			}
+
+			FP movementYaw = FPMath.Atan2(input.MoveDirection.X, input.MoveDirection.Y) * FP.Rad2Deg;
 
 			FP yawA = movementYaw + orientation->OrientationAngle;
 			FP yawB = movementYaw - orientation->OrientationAngle;
-
 			FP targetYaw;
 
-			// Pure / almost pure sideways movement: always favor forward-facing orientation.
 			if (FPMath.Abs(input.MoveDirection.X) > FPMath.Abs(input.MoveDirection.Y)) {
-				// Sideways movement: always choose the orientation facing most forward.
 				FP forwardA = FPMath.Abs(FPMath.AngleBetweenDegrees(FP._0, yawA));
 				FP forwardB = FPMath.Abs(FPMath.AngleBetweenDegrees(FP._0, yawB));
-
 				targetYaw = forwardA < forwardB ? yawA : yawB;
 			} else {
 				bool movingForward = input.MoveDirection.Y > FP._0;
@@ -52,6 +51,7 @@ namespace Quantum {
 			FP maxDelta = orientation->RotationSpeed * frame.DeltaTime;
 
 			orientation->LocalYaw += FPMath.Clamp(delta, -maxDelta, maxDelta);
+			orientation->WorldYaw = baseYaw + orientation->LocalYaw;
 		}
 	}
 }
