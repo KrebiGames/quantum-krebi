@@ -854,74 +854,74 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct BodyAnchor : Quantum.IComponent {
+    public const Int32 SIZE = 24;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(16)]
+    public FP PreviousBaseYaw;
+    [FieldOffset(8)]
+    public FP ContinuousBaseYaw;
+    [FieldOffset(0)]
+    public QBoolean Initialized;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 3769;
+        hash = hash * 31 + PreviousBaseYaw.GetHashCode();
+        hash = hash * 31 + ContinuousBaseYaw.GetHashCode();
+        hash = hash * 31 + Initialized.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+      var p = (BodyAnchor*)ptr;
+      QBoolean.Serialize(&p->Initialized, serializer);
+      FP.Serialize(&p->ContinuousBaseYaw, serializer);
+      FP.Serialize(&p->PreviousBaseYaw, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct CrabClaw : Quantum.IComponent {
     public const Int32 SIZE = 4;
     public const Int32 ALIGNMENT = 4;
     [FieldOffset(0)]
     private fixed Byte _alignment_padding_[4];
     public override readonly Int32 GetHashCode() {
       unchecked { 
-        var hash = 3769;
-        return hash;
-      }
-    }
-    public static void Serialize(void* ptr, FrameSerializer serializer) {
-      var p = (BodyAnchor*)ptr;
-    }
-  }
-  [StructLayout(LayoutKind.Explicit)]
-  public unsafe partial struct CrabClaw : Quantum.IComponent {
-    public const Int32 SIZE = 72;
-    public const Int32 ALIGNMENT = 8;
-    [FieldOffset(0)]
-    public FPVector3 RestLocalPosition;
-    [FieldOffset(48)]
-    public FPVector3 RestTwistAxis;
-    [FieldOffset(24)]
-    public FPVector3 RestSwingAxis;
-    public override readonly Int32 GetHashCode() {
-      unchecked { 
         var hash = 8803;
-        hash = hash * 31 + RestLocalPosition.GetHashCode();
-        hash = hash * 31 + RestTwistAxis.GetHashCode();
-        hash = hash * 31 + RestSwingAxis.GetHashCode();
         return hash;
       }
     }
     public static void Serialize(void* ptr, FrameSerializer serializer) {
       var p = (CrabClaw*)ptr;
-      FPVector3.Serialize(&p->RestLocalPosition, serializer);
-      FPVector3.Serialize(&p->RestSwingAxis, serializer);
-      FPVector3.Serialize(&p->RestTwistAxis, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct CrabOrientation : Quantum.IComponent {
     public const Int32 SIZE = 32;
     public const Int32 ALIGNMENT = 8;
+    [FieldOffset(16)]
+    public FP OrientationAngle;
+    [FieldOffset(8)]
+    public FP NormalRotationSmooth;
     [FieldOffset(24)]
-    public FP WorldYaw;
+    public FP SprintRotationSmooth;
     [FieldOffset(0)]
     public FP LocalYaw;
-    [FieldOffset(8)]
-    public FP OrientationAngle;
-    [FieldOffset(16)]
-    public FP RotationSpeed;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 21013;
-        hash = hash * 31 + WorldYaw.GetHashCode();
-        hash = hash * 31 + LocalYaw.GetHashCode();
         hash = hash * 31 + OrientationAngle.GetHashCode();
-        hash = hash * 31 + RotationSpeed.GetHashCode();
+        hash = hash * 31 + NormalRotationSmooth.GetHashCode();
+        hash = hash * 31 + SprintRotationSmooth.GetHashCode();
+        hash = hash * 31 + LocalYaw.GetHashCode();
         return hash;
       }
     }
     public static void Serialize(void* ptr, FrameSerializer serializer) {
       var p = (CrabOrientation*)ptr;
       FP.Serialize(&p->LocalYaw, serializer);
+      FP.Serialize(&p->NormalRotationSmooth, serializer);
       FP.Serialize(&p->OrientationAngle, serializer);
-      FP.Serialize(&p->RotationSpeed, serializer);
-      FP.Serialize(&p->WorldYaw, serializer);
+      FP.Serialize(&p->SprintRotationSmooth, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]

@@ -67,8 +67,9 @@ namespace Quantum.Prototypes {
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.BodyAnchor))]
   public unsafe partial class BodyAnchorPrototype : ComponentPrototype<Quantum.BodyAnchor> {
-    [HideInInspector()]
-    public Int32 _empty_prototype_dummy_field_;
+    public FP PreviousBaseYaw;
+    public FP ContinuousBaseYaw;
+    public QBoolean Initialized;
     partial void MaterializeUser(Frame frame, ref Quantum.BodyAnchor result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
       Quantum.BodyAnchor component = default;
@@ -76,15 +77,17 @@ namespace Quantum.Prototypes {
       return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.BodyAnchor result, in PrototypeMaterializationContext context = default) {
+      result.PreviousBaseYaw = this.PreviousBaseYaw;
+      result.ContinuousBaseYaw = this.ContinuousBaseYaw;
+      result.Initialized = this.Initialized;
       MaterializeUser(frame, ref result, in context);
     }
   }
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.CrabClaw))]
   public unsafe partial class CrabClawPrototype : ComponentPrototype<Quantum.CrabClaw> {
-    public FPVector3 RestLocalPosition;
-    public FPVector3 RestTwistAxis;
-    public FPVector3 RestSwingAxis;
+    [HideInInspector()]
+    public Int32 _empty_prototype_dummy_field_;
     partial void MaterializeUser(Frame frame, ref Quantum.CrabClaw result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
       Quantum.CrabClaw component = default;
@@ -92,19 +95,16 @@ namespace Quantum.Prototypes {
       return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.CrabClaw result, in PrototypeMaterializationContext context = default) {
-      result.RestLocalPosition = this.RestLocalPosition;
-      result.RestTwistAxis = this.RestTwistAxis;
-      result.RestSwingAxis = this.RestSwingAxis;
       MaterializeUser(frame, ref result, in context);
     }
   }
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.CrabOrientation))]
   public unsafe partial class CrabOrientationPrototype : ComponentPrototype<Quantum.CrabOrientation> {
-    public FP WorldYaw;
-    public FP LocalYaw;
     public FP OrientationAngle;
-    public FP RotationSpeed;
+    public FP NormalRotationSmooth;
+    public FP SprintRotationSmooth;
+    public FP LocalYaw;
     partial void MaterializeUser(Frame frame, ref Quantum.CrabOrientation result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
       Quantum.CrabOrientation component = default;
@@ -112,10 +112,10 @@ namespace Quantum.Prototypes {
       return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.CrabOrientation result, in PrototypeMaterializationContext context = default) {
-      result.WorldYaw = this.WorldYaw;
-      result.LocalYaw = this.LocalYaw;
       result.OrientationAngle = this.OrientationAngle;
-      result.RotationSpeed = this.RotationSpeed;
+      result.NormalRotationSmooth = this.NormalRotationSmooth;
+      result.SprintRotationSmooth = this.SprintRotationSmooth;
+      result.LocalYaw = this.LocalYaw;
       MaterializeUser(frame, ref result, in context);
     }
   }
