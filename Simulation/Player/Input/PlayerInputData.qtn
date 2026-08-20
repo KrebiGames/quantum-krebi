@@ -8,6 +8,6 @@ struct PlayerInputData {
 	button Jump;
 	button LeftClawKick;
 	button RightClawKick;
-	button LeftClawCut;
-	button RightClawCut;
+	button LeftClawPinch;
+	button RightClawPinch;
 }

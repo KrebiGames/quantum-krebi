@@ -9,8 +9,8 @@ namespace Quantum {
 			input._b = playerInput.Sprint;
 			input._l1 = playerInput.LeftClawKick;
 			input._r1 = playerInput.RightClawKick;
-			input._c = playerInput.LeftClawCut;
-			input._d = playerInput.RightClawCut;
+			input._c = playerInput.LeftClawPinch;
+			input._d = playerInput.RightClawPinch;
 
 			input._analogLeftTrigger = (byte)(int)(FPMath.Clamp01(playerInput.LeftClawReach) * 255);
 			input._analogRightTrigger = (byte)(int)(FPMath.Clamp01(playerInput.RightClawReach) * 255);
@@ -28,8 +28,8 @@ namespace Quantum {
 			playerInput.Sprint = input._b;
 			playerInput.LeftClawKick = input._l1;
 			playerInput.RightClawKick = input._r1;
-			playerInput.LeftClawCut = input._c;
-			playerInput.RightClawCut = input._d;
+			playerInput.LeftClawPinch = input._c;
+			playerInput.RightClawPinch = input._d;
 
 			playerInput.LeftClawReach = (FP)input._analogLeftTrigger / 255;
 			playerInput.RightClawReach = (FP)input._analogRightTrigger / 255;

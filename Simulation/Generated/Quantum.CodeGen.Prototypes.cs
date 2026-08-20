@@ -494,8 +494,8 @@ namespace Quantum.Prototypes {
     public Button Jump;
     public Button LeftClawKick;
     public Button RightClawKick;
-    public Button LeftClawCut;
-    public Button RightClawCut;
+    public Button LeftClawPinch;
+    public Button RightClawPinch;
     partial void MaterializeUser(Frame frame, ref Quantum.PlayerInputData result, in PrototypeMaterializationContext context);
     public void Materialize(Frame frame, ref Quantum.PlayerInputData result, in PrototypeMaterializationContext context = default) {
       result.MoveDirection = this.MoveDirection;
@@ -506,8 +506,8 @@ namespace Quantum.Prototypes {
       result.Jump = this.Jump;
       result.LeftClawKick = this.LeftClawKick;
       result.RightClawKick = this.RightClawKick;
-      result.LeftClawCut = this.LeftClawCut;
-      result.RightClawCut = this.RightClawCut;
+      result.LeftClawPinch = this.LeftClawPinch;
+      result.RightClawPinch = this.RightClawPinch;
       MaterializeUser(frame, ref result, in context);
     }
   }

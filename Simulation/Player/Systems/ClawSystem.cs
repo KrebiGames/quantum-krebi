@@ -29,7 +29,7 @@ namespace Quantum {
 		private void UpdateClaw(Frame frame, PlayerInputData input, EntityRef clawEntity, Claw* claw, Transform3D* clawTransform, PhysicsBody3D* body, Transform3D* anchorTransform) {
 			FP reach = claw->Side == ClawSide.Left ? input.LeftClawReach : input.RightClawReach;
 			bool kickPressed = claw->Side == ClawSide.Left ? input.LeftClawKick.WasPressed : input.RightClawKick.WasPressed;
-			bool cutDown = claw->Side == ClawSide.Left ? input.LeftClawCut.IsDown : input.RightClawCut.IsDown;
+			bool pinch = claw->Side == ClawSide.Left ? input.LeftClawPinch.IsDown : input.RightClawPinch.IsDown;
 
 			reach = FPMath.Clamp01(reach);
 
@@ -47,8 +47,8 @@ namespace Quantum {
 			} else if (claw->KickTime > FP._0) {
 				claw->State = ClawState.Kick;
 				claw->KickTime -= frame.DeltaTime;
-			} else if (cutDown && fullReach) {
-				claw->State = ClawState.Cut;
+			} else if (pinch && fullReach) {
+				claw->State = ClawState.Pinch;
 			} else if (fullReach && hasTarget) {
 				claw->GrabTime += frame.DeltaTime;
 				claw->State = claw->GrabTime >= claw->GrabDelay ? ClawState.Grab : ClawState.Reach;
@@ -61,7 +61,7 @@ namespace Quantum {
 			}
 
 			FPVector3 targetLocalPosition = GetTargetLocalPosition(frame, clawEntity, claw, anchorTransform, reach);
-			FP smooth = claw->State == ClawState.Kick || claw->State == ClawState.Cut ? claw->AttackSmooth : claw->PositionSmooth;
+			FP smooth = claw->State == ClawState.Kick || claw->State == ClawState.Pinch ? claw->AttackSmooth : claw->PositionSmooth;
 			FP positionT = FPMath.Clamp01(smooth * frame.DeltaTime);
 
 			claw->CurrentLocalPosition += (targetLocalPosition - claw->CurrentLocalPosition) * positionT;
@@ -74,7 +74,7 @@ namespace Quantum {
 		}
 
 		private FPVector3 GetTargetLocalPosition(Frame frame, EntityRef clawEntity, Claw* claw, Transform3D* anchorTransform, FP reach) {
-			if (claw->State == ClawState.Kick || claw->State == ClawState.Cut)
+			if (claw->State == ClawState.Kick || claw->State == ClawState.Pinch)
 				return claw->ReachLocalPosition;
 
 			if (claw->State == ClawState.Grab && frame.Unsafe.TryGetPointer<ClawTarget>(clawEntity, out var target) && target->Entity != EntityRef.None && frame.Unsafe.TryGetPointer<Transform3D>(target->Entity, out var targetTransform)) {

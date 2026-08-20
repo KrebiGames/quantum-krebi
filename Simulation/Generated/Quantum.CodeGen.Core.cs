@@ -59,7 +59,7 @@ namespace Quantum {
     Kick,
     Grab,
     Hold,
-    Cut,
+    Pinch,
   }
   public enum EKCCCollisionSource : byte {
     None = 0,
@@ -502,14 +502,14 @@ namespace Quantum {
     public Button Sprint;
     [FieldOffset(16)]
     public Button Jump;
-    [FieldOffset(40)]
-    public Button LeftClawKick;
-    [FieldOffset(64)]
-    public Button RightClawKick;
     [FieldOffset(28)]
-    public Button LeftClawCut;
+    public Button LeftClawKick;
     [FieldOffset(52)]
-    public Button RightClawCut;
+    public Button RightClawKick;
+    [FieldOffset(40)]
+    public Button LeftClawPinch;
+    [FieldOffset(64)]
+    public Button RightClawPinch;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 10193;
@@ -521,8 +521,8 @@ namespace Quantum {
         hash = hash * 31 + Jump.GetHashCode();
         hash = hash * 31 + LeftClawKick.GetHashCode();
         hash = hash * 31 + RightClawKick.GetHashCode();
-        hash = hash * 31 + LeftClawCut.GetHashCode();
-        hash = hash * 31 + RightClawCut.GetHashCode();
+        hash = hash * 31 + LeftClawPinch.GetHashCode();
+        hash = hash * 31 + RightClawPinch.GetHashCode();
         return hash;
       }
     }
@@ -531,10 +531,10 @@ namespace Quantum {
       FP.Serialize(&p->LeftClawReach, serializer);
       FP.Serialize(&p->RightClawReach, serializer);
       Button.Serialize(&p->Jump, serializer);
-      Button.Serialize(&p->LeftClawCut, serializer);
       Button.Serialize(&p->LeftClawKick, serializer);
-      Button.Serialize(&p->RightClawCut, serializer);
+      Button.Serialize(&p->LeftClawPinch, serializer);
       Button.Serialize(&p->RightClawKick, serializer);
+      Button.Serialize(&p->RightClawPinch, serializer);
       Button.Serialize(&p->Sprint, serializer);
       FPVector2.Serialize(&p->AimDirection, serializer);
       FPVector2.Serialize(&p->MoveDirection, serializer);
