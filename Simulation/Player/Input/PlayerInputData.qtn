@@ -1,7 +1,13 @@
 [ExcludeFromPrototype]
 struct PlayerInputData {
-    FPVector2 MoveDirection;
-    FPVector2 AimDirection;
-    button Sprint;
-    button Jump;
+	FPVector2 MoveDirection;
+	FPVector2 AimDirection;
+	FP LeftClawReach;
+	FP RightClawReach;
+	button Sprint;
+	button Jump;
+	button LeftClawKick;
+	button RightClawKick;
+	button LeftClawCut;
+	button RightClawCut;
 }

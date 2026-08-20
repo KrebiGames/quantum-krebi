@@ -3,11 +3,11 @@ namespace Quantum {
 	using UnityEngine.Scripting;
 
 	[Preserve]
-	public unsafe class BodyAnchorFollowSystem : SystemMainThreadFilter<BodyAnchorFollowSystem.Filter> {
+	public unsafe class BodyAnchorSystem : SystemMainThreadFilter<BodyAnchorSystem.Filter> {
 		public struct Filter {
 			public EntityRef Entity;
 			public Transform3D* Transform;
-			public CrabOrientation* Orientation;
+			public BodyOrientation* Orientation;
 			public EntityGroup* EntityGroup;
 		}
 

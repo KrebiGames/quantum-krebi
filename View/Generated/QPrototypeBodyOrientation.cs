@@ -14,14 +14,14 @@ namespace Quantum {
   using UnityEngine;
   
   [UnityEngine.DisallowMultipleComponent()]
-  public unsafe partial class QPrototypeCrabOrientation : QuantumUnityComponentPrototype<Quantum.Prototypes.CrabOrientationPrototype>, IQuantumUnityPrototypeWrapperForComponent<Quantum.CrabOrientation> {
-    partial void CreatePrototypeUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.CrabOrientationPrototype prototype);
+  public unsafe partial class QPrototypeBodyOrientation : QuantumUnityComponentPrototype<Quantum.Prototypes.BodyOrientationPrototype>, IQuantumUnityPrototypeWrapperForComponent<Quantum.BodyOrientation> {
+    partial void CreatePrototypeUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.BodyOrientationPrototype prototype);
     [DrawInline()]
     [ReadOnly(InEditMode = false)]
-    public Quantum.Prototypes.CrabOrientationPrototype Prototype;
+    public Quantum.Prototypes.BodyOrientationPrototype Prototype;
     public override System.Type ComponentType {
       get {
-        return typeof(Quantum.CrabOrientation);
+        return typeof(Quantum.BodyOrientation);
       }
     }
     public override ComponentPrototype CreatePrototype(Quantum.QuantumEntityPrototypeConverter converter) {

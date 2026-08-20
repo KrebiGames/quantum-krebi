@@ -3,17 +3,17 @@ namespace Quantum {
 	using UnityEngine.Scripting;
 
 	[Preserve]
-	public unsafe class PlayerOrientationSystem : SystemMainThreadFilter<PlayerOrientationSystem.Filter> {
+	public unsafe class BodyOrientationSystem : SystemMainThreadFilter<BodyOrientationSystem.Filter> {
 		public struct Filter {
 			public EntityRef Entity;
 			public Transform3D* Transform;
 			public PlayerStatus* PlayerStatus;
-			public CrabOrientation* Orientation;
+			public BodyOrientation* Orientation;
 		}
 
 		public override void Update(Frame frame, ref Filter filter) {
 			PlayerInputData input = *frame.GetPlayerInput(filter.PlayerStatus->PlayerRef);
-			CrabOrientation* orientation = filter.Orientation;
+			BodyOrientation* orientation = filter.Orientation;
 			FP targetYaw;
 
 			if (input.MoveDirection.SqrMagnitude <= FP._0_01 * FP._0_01) {

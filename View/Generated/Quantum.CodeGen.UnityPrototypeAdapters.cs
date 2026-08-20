@@ -50,6 +50,35 @@ namespace Quantum.Prototypes.Unity {
   #endif //;
   
   [System.SerializableAttribute()]
+  public unsafe partial class ClawGripPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.ClawGripPrototype> {
+    public Quantum.QuantumEntityPrototype Entity;
+    partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.ClawGripPrototype prototype);
+    public override Quantum.Prototypes.ClawGripPrototype Convert(Quantum.QuantumEntityPrototypeConverter converter) {
+      var result = new Quantum.Prototypes.ClawGripPrototype();
+      converter.Convert(this.Entity, out result.Entity);
+      ConvertUser(converter, ref result);
+      return result;
+    }
+  }
+  [System.SerializableAttribute()]
+  public unsafe partial class ClawTargetPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.ClawTargetPrototype> {
+    public Quantum.QuantumEntityPrototype Entity;
+    public FPVector3 WorldPosition;
+    [UnitAttribute(Units.Degrees)]
+    public FPVector3 WorldRotation;
+    public QBoolean HasWorldPose;
+    partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.ClawTargetPrototype prototype);
+    public override Quantum.Prototypes.ClawTargetPrototype Convert(Quantum.QuantumEntityPrototypeConverter converter) {
+      var result = new Quantum.Prototypes.ClawTargetPrototype();
+      converter.Convert(this.Entity, out result.Entity);
+      converter.Convert(this.WorldPosition, out result.WorldPosition);
+      converter.Convert(this.WorldRotation, out result.WorldRotation);
+      converter.Convert(this.HasWorldPose, out result.HasWorldPose);
+      ConvertUser(converter, ref result);
+      return result;
+    }
+  }
+  [System.SerializableAttribute()]
   public unsafe partial class KCCPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.KCCPrototype> {
     public AssetRef<KCCSettings> Settings;
     partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.KCCPrototype prototype);

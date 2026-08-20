@@ -151,7 +151,7 @@ MonoBehaviour:
     - 
     - Water
     - UI
-    - 
+    - Claw
     - 
     - 
     - 
@@ -337,14 +337,20 @@ MonoBehaviour:
     StartDisabled: 0
     Children:
     - SystemType:
-        AssemblyQualifiedName: Quantum.PlayerOrientationSystem, Quantum.Simulation,
+        AssemblyQualifiedName: Quantum.BodyOrientationSystem, Quantum.Simulation,
           Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
       SystemName: 
       StartDisabled: 0
       Children: []
     - SystemType:
-        AssemblyQualifiedName: Quantum.BodyAnchorFollowSystem, Quantum.Simulation,
-          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+        AssemblyQualifiedName: Quantum.BodyAnchorSystem, Quantum.Simulation, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+      SystemName: 
+      StartDisabled: 0
+      Children: []
+    - SystemType:
+        AssemblyQualifiedName: Quantum.ClawSystem, Quantum.Simulation, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
       SystemName: 
       StartDisabled: 0
       Children: []
