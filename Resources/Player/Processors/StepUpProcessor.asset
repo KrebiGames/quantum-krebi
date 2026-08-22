@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: StepUpProcessor
   m_EditorClassIdentifier: 
   Identifier:
-    Path: QuantumUser/View/Player/Processors/StepUpProcessor
+    Path: QuantumUser/Resources/Player/Processors/StepUpProcessor
     Guid:
       Value: 486799045937222986
   StepHeight:

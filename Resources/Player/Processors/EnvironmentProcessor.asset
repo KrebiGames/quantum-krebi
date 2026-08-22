@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnvironmentProcessor
   m_EditorClassIdentifier: 
   Identifier:
-    Path: QuantumUser/View/Player/Processors/EnvironmentProcessor
+    Path: QuantumUser/Resources/Player/Processors/EnvironmentProcessor
     Guid:
       Value: 354731927238327760
   KinematicSpeed:

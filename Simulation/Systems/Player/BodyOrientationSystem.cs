@@ -48,7 +48,14 @@ namespace Quantum {
 			}
 
 			FP delta = FPMath.AngleBetweenDegrees(orientation->LocalYaw, targetYaw);
-			FP rotationSmooth = input.Sprint.IsDown ? orientation->SprintRotationSmooth : orientation->NormalRotationSmooth;
+
+			FP rotationSmooth;
+
+			if (orientation->Interacting)
+				rotationSmooth = orientation->InteractionRotationSmooth;
+			else
+				rotationSmooth = input.Sprint.IsDown ? orientation->SprintRotationSmooth : orientation->NormalRotationSmooth;
+
 			FP rotationT = FPMath.Clamp01(rotationSmooth * frame.DeltaTime);
 			orientation->LocalYaw += delta * rotationT;
 		}

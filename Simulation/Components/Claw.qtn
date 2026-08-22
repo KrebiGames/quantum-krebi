@@ -11,7 +11,6 @@ enum ClawState {
 }
 
 component Claw {
-	// General
 	ClawSide Side;
 	ClawState State;
 
@@ -27,29 +26,33 @@ component Claw {
 	FP KickDuration;
 	FP KickTime;
 
-	// Grab
+	// Runtime
+	FPVector3 PreviousDesiredPosition;
+	FPVector3 CurrentLocalPosition;
+}
+
+component ClawGrab {
+	// Settings
 	FP GrabDetectRange;
 	FP GrabReleaseRange;
 	FP CollisionSafeDistance;
+	FP GrabMaxAngle;
 	FP GrabStrength;
 	FP GrabDamping;
 	FP MaxGrabForce;
 	FP CrabReactionScale;
+	FP GrabForceSmooth;
+	FPVector3 CurrentGrabForce;
 
 	// Runtime
-	EntityRef CollisionTarget;
-	FPVector3 CollisionLocalPoint;
-
-	FPVector3 PreviousDesiredPosition;
-	FPVector3 LastInteractionPosition;
-	FPVector3 CurrentLocalPosition;
-
-	bool CollisionSuppressed;
-}
-
-component ClawGrip {
 	EntityRef Target;
 	FPVector3 LocalPoint;
+	FPVector3 PreviousHandlePosition;
+
+	EntityRef CollisionTarget;
+	FPVector3 CollisionLocalPoint;
+	FPVector3 LastInteractionPosition;
+	bool CollisionSuppressed;
 }
 
 component Interactable {
@@ -58,12 +61,9 @@ component Interactable {
 signal OnTargetGrabStarted(EntityRef target, EntityRef claw, FPVector3 position);
 signal OnTargetGrabReleased(EntityRef target, EntityRef claw, FPVector3 position);
 
-event ClawGrabStarted {
+event ClawStateChanged {
+	EntityRef Entity;
 	ClawSide Side;
-	FPVector3 TargetPosition;
-}
-
-event ClawGrabReleased {
-	ClawSide Side;
+	ClawState State;
 	FPVector3 TargetPosition;
 }

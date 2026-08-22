@@ -14,18 +14,18 @@ namespace Quantum {
   using UnityEngine;
   
   [UnityEngine.DisallowMultipleComponent()]
-  public unsafe partial class QPrototypeClawGrip : QuantumUnityComponentPrototype<Quantum.Prototypes.ClawGripPrototype>, IQuantumUnityPrototypeWrapperForComponent<Quantum.ClawGrip> {
-    partial void CreatePrototypeUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.ClawGripPrototype prototype);
+  public unsafe partial class QPrototypeClawGrab : QuantumUnityComponentPrototype<Quantum.Prototypes.ClawGrabPrototype>, IQuantumUnityPrototypeWrapperForComponent<Quantum.ClawGrab> {
+    partial void CreatePrototypeUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.ClawGrabPrototype prototype);
     [DrawInline()]
     [ReadOnly(InEditMode = false)]
-    public Quantum.Prototypes.Unity.ClawGripPrototype Prototype;
+    public Quantum.Prototypes.Unity.ClawGrabPrototype Prototype;
     public override System.Type ComponentType {
       get {
-        return typeof(Quantum.ClawGrip);
+        return typeof(Quantum.ClawGrab);
       }
     }
     public override ComponentPrototype CreatePrototype(Quantum.QuantumEntityPrototypeConverter converter) {
-      Quantum.Prototypes.ClawGripPrototype result;
+      Quantum.Prototypes.ClawGrabPrototype result;
       converter.Convert(Prototype, out result);
       CreatePrototypeUser(converter, ref result);
       return result;

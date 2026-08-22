@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PositionOffsetProcessor
   m_EditorClassIdentifier: 
   Identifier:
-    Path: QuantumUser/View/Player/Processors/PositionOffsetProcessor
+    Path: QuantumUser/Resources/Player/Processors/PositionOffsetProcessor
     Guid:
       Value: 298091185791803423
   PositionOffset:

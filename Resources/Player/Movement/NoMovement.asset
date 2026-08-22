@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: NoMovement
   m_EditorClassIdentifier: Quantum.Engine.dll::Quantum.CharacterController3DConfig
   Identifier:
-    Path: QuantumUser/View/Player/Movement/NoMovement
+    Path: QuantumUser/Resources/Player/Movement/NoMovement
     Guid:
       Value: 526709336776992299
   Offset:

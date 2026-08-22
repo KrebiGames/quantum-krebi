@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GroundSnapProcessor
   m_EditorClassIdentifier: 
   Identifier:
-    Path: QuantumUser/View/Player/Processors/GroundSnapProcessor
+    Path: QuantumUser/Resources/Player/Processors/GroundSnapProcessor
     Guid:
       Value: 536337578711360915
   SnapDistance:

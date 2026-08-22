@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlayerKCCSettings
   m_EditorClassIdentifier: 
   Identifier:
-    Path: QuantumUser/View/Player/Processors/PlayerKCCSettings
+    Path: QuantumUser/Resources/Player/Processors/PlayerKCCSettings
     Guid:
       Value: 509779430936162382
   Radius:

@@ -19,10 +19,10 @@ namespace Quantum {
 				return;
 
 			foreach (var (clawEntity, index) in frame.GetEntityGroupIterator(filter.Entity)) {
-				if (!frame.Unsafe.TryGetPointer<Claw>(clawEntity, out var claw) || !frame.Unsafe.TryGetPointer<ClawGrip>(clawEntity, out var grip) || !frame.Unsafe.TryGetPointer<Transform3D>(clawEntity, out var clawTransform))
+				if (!frame.Unsafe.TryGetPointer<Claw>(clawEntity, out var claw) || !frame.Unsafe.TryGetPointer<ClawGrab>(clawEntity, out var grab) || !frame.Unsafe.TryGetPointer<Transform3D>(clawEntity, out var clawTransform))
 					continue;
 
-				if (grip->Target != EntityRef.None || claw->KickTime > FP._0)
+				if (grab->Target != EntityRef.None || claw->KickTime > FP._0)
 					continue;
 
 				FP reach = claw->Side == ClawSide.Left ? input.LeftClawReach : input.RightClawReach;
@@ -31,12 +31,12 @@ namespace Quantum {
 				if (reach <= FP._0_01)
 					continue;
 
-				TryAcquireGrab(frame, clawEntity, claw, grip, clawTransform, anchorTransform);
+				TryAcquireGrab(frame, filter.Entity, clawEntity, claw, grab, clawTransform, anchorTransform, reach);
 			}
 		}
 
-		private void TryAcquireGrab(Frame frame, EntityRef clawEntity, Claw* claw, ClawGrip* grip, Transform3D* clawTransform, Transform3D* anchorTransform) {
-			Shape3D searchShape = Shape3D.CreateSphere(claw->GrabDetectRange);
+		private void TryAcquireGrab(Frame frame, EntityRef entity, EntityRef clawEntity, Claw* claw, ClawGrab* grab, Transform3D* clawTransform, Transform3D* anchorTransform, FP reach) {
+			Shape3D searchShape = Shape3D.CreateSphere(grab->GrabDetectRange);
 			var hits = frame.Physics3D.OverlapShape(clawTransform->Position, FPQuaternion.Identity, searchShape, -1, QueryOptions.HitAll | QueryOptions.ComputeDetailedInfo);
 
 			EntityRef bestTarget = EntityRef.None;
@@ -62,7 +62,7 @@ namespace Quantum {
 
 				FPVector3 point = hits[i].Point;
 
-				if (!IsWithinReach(claw, anchorTransform, point, claw->GrabReleaseRange))
+				if (!IsWithinReach(claw, anchorTransform, point, grab->GrabReleaseRange))
 					continue;
 
 				FP distance = (point - clawTransform->Position).SqrMagnitude;
@@ -81,19 +81,21 @@ namespace Quantum {
 			if (!frame.Unsafe.TryGetPointer<Transform3D>(bestTarget, out var transform))
 				return;
 
-			grip->Target = bestTarget;
-			grip->LocalPoint = transform->Rotation.Inverted * (bestPoint - transform->Position);
+			grab->Target = bestTarget;
+			grab->LocalPoint = transform->Rotation.Inverted * (bestPoint - transform->Position);
 
-			claw->CollisionTarget = bestTarget;
-			claw->CollisionLocalPoint = grip->LocalPoint;
-			claw->LastInteractionPosition = bestPoint;
-			claw->CollisionSuppressed = true;
+			FPVector3 reachLocalPosition = claw->IdleLocalPosition + (claw->ReachLocalPosition - claw->IdleLocalPosition) * reach;
+			grab->PreviousHandlePosition = anchorTransform->Position + anchorTransform->Rotation * reachLocalPosition;
+
+			grab->CollisionTarget = bestTarget;
+			grab->CollisionLocalPoint = grab->LocalPoint;
+			grab->LastInteractionPosition = bestPoint;
+			grab->CollisionSuppressed = true;
+
 			claw->State = ClawState.Grab;
 
-			Log.Info($"[GRAB ACQUIRED] Claw={clawEntity} Target={bestTarget} Point={bestPoint}");
-
+			frame.Events.ClawStateChanged(entity, claw->Side, ClawState.Grab, bestPoint);
 			frame.Signals.OnTargetGrabStarted(bestTarget, clawEntity, bestPoint);
-			frame.Events.ClawGrabStarted(claw->Side, bestPoint);
 		}
 
 		private bool TryGetBodyAnchor(Frame frame, EntityRef entity, out Transform3D* anchorTransform) {

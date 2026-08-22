@@ -49,14 +49,16 @@ namespace Quantum {
   using RuntimeInitializeOnLoadMethodAttribute = UnityEngine.RuntimeInitializeOnLoadMethodAttribute;
   #endif //;
   
-  public unsafe partial class EventClawGrabStarted : EventBase {
+  public unsafe partial class EventClawStateChanged : EventBase {
     public new const Int32 ID = Statics.EventRegistrations.CoreIdStart + 0;
+    public EntityRef Entity;
     public ClawSide Side;
+    public ClawState State;
     public FPVector3 TargetPosition;
-    protected EventClawGrabStarted(Int32 id, EventFlags flags) : 
+    protected EventClawStateChanged(Int32 id, EventFlags flags) : 
         base(id, flags) {
     }
-    public EventClawGrabStarted() : 
+    public EventClawStateChanged() : 
         base(ID, EventFlags.Server|EventFlags.Client) {
     }
     public new QuantumGame Game {
@@ -69,35 +71,10 @@ namespace Quantum {
     }
     public override Int32 GetHashCode() {
       unchecked {
-        var hash = 366207085;
+        var hash = 642906053;
+        hash = hash * 31 + Entity.GetHashCode();
         hash = hash * 31 + Side.GetHashCode();
-        hash = hash * 31 + TargetPosition.GetHashCode();
-        return hash;
-      }
-    }
-  }
-  public unsafe partial class EventClawGrabReleased : EventBase {
-    public new const Int32 ID = Statics.EventRegistrations.CoreIdStart + 1;
-    public ClawSide Side;
-    public FPVector3 TargetPosition;
-    protected EventClawGrabReleased(Int32 id, EventFlags flags) : 
-        base(id, flags) {
-    }
-    public EventClawGrabReleased() : 
-        base(ID, EventFlags.Server|EventFlags.Client) {
-    }
-    public new QuantumGame Game {
-      get {
-        return (QuantumGame)base.Game;
-      }
-      set {
-        base.Game = value;
-      }
-    }
-    public override Int32 GetHashCode() {
-      unchecked {
-        var hash = 1066329691;
-        hash = hash * 31 + Side.GetHashCode();
+        hash = hash * 31 + State.GetHashCode();
         hash = hash * 31 + TargetPosition.GetHashCode();
         return hash;
       }
@@ -105,16 +82,11 @@ namespace Quantum {
   }
   public unsafe partial class Frame {
     public unsafe partial struct FrameEvents {
-      public EventClawGrabStarted ClawGrabStarted(ClawSide Side, FPVector3 TargetPosition) {
-        var ev = _f.Context.AcquireEvent<EventClawGrabStarted>(EventClawGrabStarted.ID);
+      public EventClawStateChanged ClawStateChanged(EntityRef Entity, ClawSide Side, ClawState State, FPVector3 TargetPosition) {
+        var ev = _f.Context.AcquireEvent<EventClawStateChanged>(EventClawStateChanged.ID);
+        ev.Entity = Entity;
         ev.Side = Side;
-        ev.TargetPosition = TargetPosition;
-        _f.AddEvent(ev);
-        return ev;
-      }
-      public EventClawGrabReleased ClawGrabReleased(ClawSide Side, FPVector3 TargetPosition) {
-        var ev = _f.Context.AcquireEvent<EventClawGrabReleased>(EventClawGrabReleased.ID);
-        ev.Side = Side;
+        ev.State = State;
         ev.TargetPosition = TargetPosition;
         _f.AddEvent(ev);
         return ev;
@@ -126,8 +98,7 @@ namespace Quantum {
       internal const Int32 CoreIdStart = 1;
       internal EventRegistry CoreRegistrations = RegisterCore(registry);
       private static EventRegistry RegisterCore(EventRegistry registry) {
-        registry.Register<EventClawGrabStarted>(EventClawGrabStarted.ID);
-        registry.Register<EventClawGrabReleased>(EventClawGrabReleased.ID);
+        registry.Register<EventClawStateChanged>(EventClawStateChanged.ID);
         return registry;
       }
     }

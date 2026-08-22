@@ -33,7 +33,10 @@ component BodyOrientation {
 	FP OrientationAngle;
 	FP NormalRotationSmooth;
 	FP SprintRotationSmooth;
+	FP InteractionRotationSmooth;
 	FP LocalYaw;
+
+	bool Interacting;
 }
 
 component BodyAnchor {

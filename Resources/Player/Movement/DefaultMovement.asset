@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DefaultMovement
   m_EditorClassIdentifier: Quantum.Engine.dll::Quantum.CharacterController3DConfig
   Identifier:
-    Path: QuantumUser/View/Player/Movement/DefaultMovement
+    Path: QuantumUser/Resources/Player/Movement/DefaultMovement
     Guid:
       Value: 527535213580748712
   Offset:

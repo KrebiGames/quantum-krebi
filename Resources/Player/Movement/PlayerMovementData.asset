@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlayerMovementData
   m_EditorClassIdentifier: Quantum.Simulation::Quantum.PlayerMovementData
   Identifier:
-    Path: QuantumUser/View/Player/Movement/PlayerMovementData
+    Path: QuantumUser/Resources/Player/Movement/PlayerMovementData
     Guid:
       Value: 444126016389987576
   FaceAimDirection: 0

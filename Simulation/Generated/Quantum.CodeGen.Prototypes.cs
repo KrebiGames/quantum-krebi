@@ -89,7 +89,9 @@ namespace Quantum.Prototypes {
     public FP OrientationAngle;
     public FP NormalRotationSmooth;
     public FP SprintRotationSmooth;
+    public FP InteractionRotationSmooth;
     public FP LocalYaw;
+    public QBoolean Interacting;
     partial void MaterializeUser(Frame frame, ref Quantum.BodyOrientation result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
       Quantum.BodyOrientation component = default;
@@ -100,13 +102,15 @@ namespace Quantum.Prototypes {
       result.OrientationAngle = this.OrientationAngle;
       result.NormalRotationSmooth = this.NormalRotationSmooth;
       result.SprintRotationSmooth = this.SprintRotationSmooth;
+      result.InteractionRotationSmooth = this.InteractionRotationSmooth;
       result.LocalYaw = this.LocalYaw;
+      result.Interacting = this.Interacting;
       MaterializeUser(frame, ref result, in context);
     }
   }
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.Claw))]
-  public unsafe class ClawPrototype : ComponentPrototype<Quantum.Claw> {
+  public unsafe partial class ClawPrototype : ComponentPrototype<Quantum.Claw> {
     public Quantum.QEnum32<ClawSide> Side;
     public Quantum.QEnum32<ClawState> State;
     public FPVector3 ShoulderLocalPosition;
@@ -117,19 +121,9 @@ namespace Quantum.Prototypes {
     public FP KickSmooth;
     public FP KickDuration;
     public FP KickTime;
-    public FP GrabDetectRange;
-    public FP GrabReleaseRange;
-    public FP CollisionSafeDistance;
-    public FP GrabStrength;
-    public FP GrabDamping;
-    public FP MaxGrabForce;
-    public FP CrabReactionScale;
-    public MapEntityId CollisionTarget;
-    public FPVector3 CollisionLocalPoint;
     public FPVector3 PreviousDesiredPosition;
-    public FPVector3 LastInteractionPosition;
     public FPVector3 CurrentLocalPosition;
-    public QBoolean CollisionSuppressed;
+    partial void MaterializeUser(Frame frame, ref Quantum.Claw result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
       Quantum.Claw component = default;
       Materialize((Frame)f, ref component, in context);
@@ -146,34 +140,54 @@ namespace Quantum.Prototypes {
       result.KickSmooth = this.KickSmooth;
       result.KickDuration = this.KickDuration;
       result.KickTime = this.KickTime;
+      result.PreviousDesiredPosition = this.PreviousDesiredPosition;
+      result.CurrentLocalPosition = this.CurrentLocalPosition;
+      MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.ClawGrab))]
+  public unsafe class ClawGrabPrototype : ComponentPrototype<Quantum.ClawGrab> {
+    public FP GrabDetectRange;
+    public FP GrabReleaseRange;
+    public FP CollisionSafeDistance;
+    public FP GrabMaxAngle;
+    public FP GrabStrength;
+    public FP GrabDamping;
+    public FP MaxGrabForce;
+    public FP CrabReactionScale;
+    public FP GrabForceSmooth;
+    public FPVector3 CurrentGrabForce;
+    public MapEntityId Target;
+    public FPVector3 LocalPoint;
+    public FPVector3 PreviousHandlePosition;
+    public MapEntityId CollisionTarget;
+    public FPVector3 CollisionLocalPoint;
+    public FPVector3 LastInteractionPosition;
+    public QBoolean CollisionSuppressed;
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+      Quantum.ClawGrab component = default;
+      Materialize((Frame)f, ref component, in context);
+      return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.ClawGrab result, in PrototypeMaterializationContext context = default) {
       result.GrabDetectRange = this.GrabDetectRange;
       result.GrabReleaseRange = this.GrabReleaseRange;
       result.CollisionSafeDistance = this.CollisionSafeDistance;
+      result.GrabMaxAngle = this.GrabMaxAngle;
       result.GrabStrength = this.GrabStrength;
       result.GrabDamping = this.GrabDamping;
       result.MaxGrabForce = this.MaxGrabForce;
       result.CrabReactionScale = this.CrabReactionScale;
-      PrototypeValidator.FindMapEntity(this.CollisionTarget, in context, out result.CollisionTarget);
-      result.CollisionLocalPoint = this.CollisionLocalPoint;
-      result.PreviousDesiredPosition = this.PreviousDesiredPosition;
-      result.LastInteractionPosition = this.LastInteractionPosition;
-      result.CurrentLocalPosition = this.CurrentLocalPosition;
-      result.CollisionSuppressed = this.CollisionSuppressed;
-    }
-  }
-  [System.SerializableAttribute()]
-  [Quantum.Prototypes.Prototype(typeof(Quantum.ClawGrip))]
-  public unsafe class ClawGripPrototype : ComponentPrototype<Quantum.ClawGrip> {
-    public MapEntityId Target;
-    public FPVector3 LocalPoint;
-    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
-      Quantum.ClawGrip component = default;
-      Materialize((Frame)f, ref component, in context);
-      return f.Set(entity, component) == SetResult.ComponentAdded;
-    }
-    public void Materialize(Frame frame, ref Quantum.ClawGrip result, in PrototypeMaterializationContext context = default) {
+      result.GrabForceSmooth = this.GrabForceSmooth;
+      result.CurrentGrabForce = this.CurrentGrabForce;
       PrototypeValidator.FindMapEntity(this.Target, in context, out result.Target);
       result.LocalPoint = this.LocalPoint;
+      result.PreviousHandlePosition = this.PreviousHandlePosition;
+      PrototypeValidator.FindMapEntity(this.CollisionTarget, in context, out result.CollisionTarget);
+      result.CollisionLocalPoint = this.CollisionLocalPoint;
+      result.LastInteractionPosition = this.LastInteractionPosition;
+      result.CollisionSuppressed = this.CollisionSuppressed;
     }
   }
   [System.SerializableAttribute()]
