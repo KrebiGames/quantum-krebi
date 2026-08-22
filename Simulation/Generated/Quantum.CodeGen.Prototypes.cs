@@ -106,23 +106,30 @@ namespace Quantum.Prototypes {
   }
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.Claw))]
-  public unsafe partial class ClawPrototype : ComponentPrototype<Quantum.Claw> {
+  public unsafe class ClawPrototype : ComponentPrototype<Quantum.Claw> {
     public Quantum.QEnum32<ClawSide> Side;
     public Quantum.QEnum32<ClawState> State;
     public FPVector3 ShoulderLocalPosition;
-    public FP MaxReach;
     public FPVector3 IdleLocalPosition;
     public FPVector3 ReachLocalPosition;
+    public FP MaxReach;
     public FP PositionSmooth;
-    public FP AttackSmooth;
+    public FP KickSmooth;
     public FP KickDuration;
     public FP KickTime;
-    public FP GrabThreshold;
-    public FP GrabDelay;
-    public FP GrabTime;
+    public FP GrabDetectRange;
+    public FP GrabReleaseRange;
+    public FP CollisionSafeDistance;
+    public FP GrabStrength;
+    public FP GrabDamping;
+    public FP MaxGrabForce;
+    public FP CrabReactionScale;
+    public MapEntityId CollisionTarget;
+    public FPVector3 CollisionLocalPoint;
+    public FPVector3 PreviousDesiredPosition;
+    public FPVector3 LastInteractionPosition;
     public FPVector3 CurrentLocalPosition;
-    public QBoolean Initialized;
-    partial void MaterializeUser(Frame frame, ref Quantum.Claw result, in PrototypeMaterializationContext context);
+    public QBoolean CollisionSuppressed;
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
       Quantum.Claw component = default;
       Materialize((Frame)f, ref component, in context);
@@ -132,52 +139,41 @@ namespace Quantum.Prototypes {
       result.Side = this.Side;
       result.State = this.State;
       result.ShoulderLocalPosition = this.ShoulderLocalPosition;
-      result.MaxReach = this.MaxReach;
       result.IdleLocalPosition = this.IdleLocalPosition;
       result.ReachLocalPosition = this.ReachLocalPosition;
+      result.MaxReach = this.MaxReach;
       result.PositionSmooth = this.PositionSmooth;
-      result.AttackSmooth = this.AttackSmooth;
+      result.KickSmooth = this.KickSmooth;
       result.KickDuration = this.KickDuration;
       result.KickTime = this.KickTime;
-      result.GrabThreshold = this.GrabThreshold;
-      result.GrabDelay = this.GrabDelay;
-      result.GrabTime = this.GrabTime;
+      result.GrabDetectRange = this.GrabDetectRange;
+      result.GrabReleaseRange = this.GrabReleaseRange;
+      result.CollisionSafeDistance = this.CollisionSafeDistance;
+      result.GrabStrength = this.GrabStrength;
+      result.GrabDamping = this.GrabDamping;
+      result.MaxGrabForce = this.MaxGrabForce;
+      result.CrabReactionScale = this.CrabReactionScale;
+      PrototypeValidator.FindMapEntity(this.CollisionTarget, in context, out result.CollisionTarget);
+      result.CollisionLocalPoint = this.CollisionLocalPoint;
+      result.PreviousDesiredPosition = this.PreviousDesiredPosition;
+      result.LastInteractionPosition = this.LastInteractionPosition;
       result.CurrentLocalPosition = this.CurrentLocalPosition;
-      result.Initialized = this.Initialized;
-      MaterializeUser(frame, ref result, in context);
+      result.CollisionSuppressed = this.CollisionSuppressed;
     }
   }
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.ClawGrip))]
   public unsafe class ClawGripPrototype : ComponentPrototype<Quantum.ClawGrip> {
-    public MapEntityId Entity;
+    public MapEntityId Target;
+    public FPVector3 LocalPoint;
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
       Quantum.ClawGrip component = default;
       Materialize((Frame)f, ref component, in context);
       return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.ClawGrip result, in PrototypeMaterializationContext context = default) {
-      PrototypeValidator.FindMapEntity(this.Entity, in context, out result.Entity);
-    }
-  }
-  [System.SerializableAttribute()]
-  [Quantum.Prototypes.Prototype(typeof(Quantum.ClawTarget))]
-  public unsafe class ClawTargetPrototype : ComponentPrototype<Quantum.ClawTarget> {
-    public MapEntityId Entity;
-    public FPVector3 WorldPosition;
-    [UnitAttribute(Units.Degrees)]
-    public FPVector3 WorldRotation;
-    public QBoolean HasWorldPose;
-    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
-      Quantum.ClawTarget component = default;
-      Materialize((Frame)f, ref component, in context);
-      return f.Set(entity, component) == SetResult.ComponentAdded;
-    }
-    public void Materialize(Frame frame, ref Quantum.ClawTarget result, in PrototypeMaterializationContext context = default) {
-      PrototypeValidator.FindMapEntity(this.Entity, in context, out result.Entity);
-      result.WorldPosition = this.WorldPosition;
-      result.WorldRotation = FPQuaternion.Euler(this.WorldRotation);
-      result.HasWorldPose = this.HasWorldPose;
+      PrototypeValidator.FindMapEntity(this.Target, in context, out result.Target);
+      result.LocalPoint = this.LocalPoint;
     }
   }
   [System.SerializableAttribute()]
@@ -215,6 +211,21 @@ namespace Quantum.Prototypes {
       result._analogRightTrigger = this._analogRightTrigger;
       result._analogLeftTrigger = this._analogLeftTrigger;
       this.ThumbSticks.Materialize(frame, ref result.ThumbSticks, in context);
+      MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.Interactable))]
+  public unsafe partial class InteractablePrototype : ComponentPrototype<Quantum.Interactable> {
+    [HideInInspector()]
+    public Int32 _empty_prototype_dummy_field_;
+    partial void MaterializeUser(Frame frame, ref Quantum.Interactable result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+      Quantum.Interactable component = default;
+      Materialize((Frame)f, ref component, in context);
+      return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.Interactable result, in PrototypeMaterializationContext context = default) {
       MaterializeUser(frame, ref result, in context);
     }
   }
@@ -467,6 +478,7 @@ namespace Quantum.Prototypes {
   public unsafe partial class PlayerPrototype : ComponentPrototype<Quantum.Player> {
     public FP WalkSpeed;
     public FP NormalJump;
+    public FP Mass;
     [HideInInspector()]
     public PlayerRef PlayerRef;
     partial void MaterializeUser(Frame frame, ref Quantum.Player result, in PrototypeMaterializationContext context);
@@ -478,6 +490,7 @@ namespace Quantum.Prototypes {
     public void Materialize(Frame frame, ref Quantum.Player result, in PrototypeMaterializationContext context = default) {
       result.WalkSpeed = this.WalkSpeed;
       result.NormalJump = this.NormalJump;
+      result.Mass = this.Mass;
       result.PlayerRef = this.PlayerRef;
       MaterializeUser(frame, ref result, in context);
     }

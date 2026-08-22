@@ -5,6 +5,7 @@
 component Player {
 	FP WalkSpeed;
 	FP NormalJump;
+	FP Mass;
 
 	[HideInInspector]
 	PlayerRef PlayerRef;
@@ -39,55 +40,6 @@ component BodyAnchor {
 	FP PreviousBaseYaw;
 	FP ContinuousBaseYaw;
 	bool Initialized;
-}
-
-enum ClawSide {
-	Left,
-	Right
-}
-
-enum ClawState {
-	Idle,
-	Reach,
-	Kick,
-	Grab,
-	Hold,
-	Cut
-}
-
-component Claw {
-	ClawSide Side;
-	ClawState State;
-
-	FPVector3 ShoulderLocalPosition;
-	FP MaxReach;
-
-	FPVector3 IdleLocalPosition;
-	FPVector3 ReachLocalPosition;
-
-	FP PositionSmooth;
-	FP AttackSmooth;
-
-	FP KickDuration;
-	FP KickTime;
-
-	FP GrabThreshold;
-	FP GrabDelay;
-	FP GrabTime;
-
-	FPVector3 CurrentLocalPosition;
-	bool Initialized;
-}
-
-component ClawTarget {
-	EntityRef Entity;
-	FPVector3 WorldPosition;
-	FPQuaternion WorldRotation;
-	bool HasWorldPose;
-}
-
-component ClawGrip {
-	EntityRef Entity;
 }
 
 signal OnPlayerRespawned(entity_ref playerEntityRef, bool fullReset);

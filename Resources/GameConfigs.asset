@@ -152,7 +152,7 @@ MonoBehaviour:
     - Water
     - UI
     - Claw
-    - 
+    - Interactable
     - 
     - 
     - 
@@ -348,8 +348,20 @@ MonoBehaviour:
       SystemName: 
       StartDisabled: 0
       Children: []
+  - SystemType:
+      AssemblyQualifiedName: Quantum.ClawSystem, Quantum.Simulation, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    SystemName: 
+    StartDisabled: 0
+    Children:
     - SystemType:
-        AssemblyQualifiedName: Quantum.ClawSystem, Quantum.Simulation, Version=0.0.0.0,
+        AssemblyQualifiedName: Quantum.ClawGrabSystem, Quantum.Simulation, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+      SystemName: 
+      StartDisabled: 0
+      Children: []
+    - SystemType:
+        AssemblyQualifiedName: Quantum.ClawCollisionSystem, Quantum.Simulation, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
       SystemName: 
       StartDisabled: 0
@@ -361,11 +373,23 @@ MonoBehaviour:
     StartDisabled: 0
     Children: []
   - SystemType:
-      AssemblyQualifiedName: Quantum.KCCSystem, Quantum.Simulation, Version=0.0.0.0,
+      AssemblyQualifiedName: Quantum.ClawGrabDetectSystem, Quantum.Simulation, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
     SystemName: 
     StartDisabled: 0
     Children: []
+  - SystemType:
+      AssemblyQualifiedName: Quantum.KCCSystem, Quantum.Simulation, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    SystemName: 
+    StartDisabled: 0
+    Children:
+    - SystemType:
+        AssemblyQualifiedName: Quantum.KCCBodyInteractionSystem, Quantum.Simulation,
+          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      SystemName: 
+      StartDisabled: 0
+      Children: []
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -384,7 +408,7 @@ MonoBehaviour:
   CharacterController3DConfig: {fileID: 3500193719729476152}
   NavMeshAgentConfig: {fileID: -5569434635450811384}
   SystemsConfig: {fileID: -3263132816677585118}
-  InputActionAsset: {fileID: -944628639613478452, guid: 8a2679cf1c581ca41a337897e3dc5a06, type: 3}
+  InputActionAsset: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
 --- !u!114 &3500193719729476152
 MonoBehaviour:
   m_ObjectHideFlags: 0

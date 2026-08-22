@@ -58,8 +58,6 @@ namespace Quantum {
     Reach,
     Kick,
     Grab,
-    Hold,
-    Pinch,
   }
   public enum EKCCCollisionSource : byte {
     None = 0,
@@ -946,56 +944,80 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct Claw : Quantum.IComponent {
-    public const Int32 SIZE = 176;
+    public const Int32 SIZE = 288;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(0)]
     public ClawSide Side;
     [FieldOffset(4)]
     public ClawState State;
-    [FieldOffset(152)]
+    [FieldOffset(264)]
     public FPVector3 ShoulderLocalPosition;
-    [FieldOffset(64)]
-    public FP MaxReach;
-    [FieldOffset(104)]
+    [FieldOffset(168)]
     public FPVector3 IdleLocalPosition;
-    [FieldOffset(128)]
+    [FieldOffset(240)]
     public FPVector3 ReachLocalPosition;
-    [FieldOffset(72)]
+    [FieldOffset(104)]
+    public FP MaxReach;
+    [FieldOffset(112)]
     public FP PositionSmooth;
-    [FieldOffset(16)]
-    public FP AttackSmooth;
-    [FieldOffset(48)]
-    public FP KickDuration;
-    [FieldOffset(56)]
-    public FP KickTime;
-    [FieldOffset(32)]
-    public FP GrabThreshold;
-    [FieldOffset(24)]
-    public FP GrabDelay;
-    [FieldOffset(40)]
-    public FP GrabTime;
     [FieldOffset(80)]
+    public FP KickSmooth;
+    [FieldOffset(72)]
+    public FP KickDuration;
+    [FieldOffset(88)]
+    public FP KickTime;
+    [FieldOffset(48)]
+    public FP GrabDetectRange;
+    [FieldOffset(56)]
+    public FP GrabReleaseRange;
+    [FieldOffset(24)]
+    public FP CollisionSafeDistance;
+    [FieldOffset(64)]
+    public FP GrabStrength;
+    [FieldOffset(40)]
+    public FP GrabDamping;
+    [FieldOffset(96)]
+    public FP MaxGrabForce;
+    [FieldOffset(32)]
+    public FP CrabReactionScale;
+    [FieldOffset(16)]
+    public EntityRef CollisionTarget;
+    [FieldOffset(120)]
+    public FPVector3 CollisionLocalPoint;
+    [FieldOffset(216)]
+    public FPVector3 PreviousDesiredPosition;
+    [FieldOffset(192)]
+    public FPVector3 LastInteractionPosition;
+    [FieldOffset(144)]
     public FPVector3 CurrentLocalPosition;
     [FieldOffset(8)]
-    public QBoolean Initialized;
+    public QBoolean CollisionSuppressed;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 19417;
         hash = hash * 31 + (Int32)Side;
         hash = hash * 31 + (Int32)State;
         hash = hash * 31 + ShoulderLocalPosition.GetHashCode();
-        hash = hash * 31 + MaxReach.GetHashCode();
         hash = hash * 31 + IdleLocalPosition.GetHashCode();
         hash = hash * 31 + ReachLocalPosition.GetHashCode();
+        hash = hash * 31 + MaxReach.GetHashCode();
         hash = hash * 31 + PositionSmooth.GetHashCode();
-        hash = hash * 31 + AttackSmooth.GetHashCode();
+        hash = hash * 31 + KickSmooth.GetHashCode();
         hash = hash * 31 + KickDuration.GetHashCode();
         hash = hash * 31 + KickTime.GetHashCode();
-        hash = hash * 31 + GrabThreshold.GetHashCode();
-        hash = hash * 31 + GrabDelay.GetHashCode();
-        hash = hash * 31 + GrabTime.GetHashCode();
+        hash = hash * 31 + GrabDetectRange.GetHashCode();
+        hash = hash * 31 + GrabReleaseRange.GetHashCode();
+        hash = hash * 31 + CollisionSafeDistance.GetHashCode();
+        hash = hash * 31 + GrabStrength.GetHashCode();
+        hash = hash * 31 + GrabDamping.GetHashCode();
+        hash = hash * 31 + MaxGrabForce.GetHashCode();
+        hash = hash * 31 + CrabReactionScale.GetHashCode();
+        hash = hash * 31 + CollisionTarget.GetHashCode();
+        hash = hash * 31 + CollisionLocalPoint.GetHashCode();
+        hash = hash * 31 + PreviousDesiredPosition.GetHashCode();
+        hash = hash * 31 + LastInteractionPosition.GetHashCode();
         hash = hash * 31 + CurrentLocalPosition.GetHashCode();
-        hash = hash * 31 + Initialized.GetHashCode();
+        hash = hash * 31 + CollisionSuppressed.GetHashCode();
         return hash;
       }
     }
@@ -1003,67 +1025,65 @@ namespace Quantum {
       var p = (Claw*)ptr;
       serializer.Stream.Serialize((Int32*)&p->Side);
       serializer.Stream.Serialize((Int32*)&p->State);
-      QBoolean.Serialize(&p->Initialized, serializer);
-      FP.Serialize(&p->AttackSmooth, serializer);
-      FP.Serialize(&p->GrabDelay, serializer);
-      FP.Serialize(&p->GrabThreshold, serializer);
-      FP.Serialize(&p->GrabTime, serializer);
+      QBoolean.Serialize(&p->CollisionSuppressed, serializer);
+      EntityRef.Serialize(&p->CollisionTarget, serializer);
+      FP.Serialize(&p->CollisionSafeDistance, serializer);
+      FP.Serialize(&p->CrabReactionScale, serializer);
+      FP.Serialize(&p->GrabDamping, serializer);
+      FP.Serialize(&p->GrabDetectRange, serializer);
+      FP.Serialize(&p->GrabReleaseRange, serializer);
+      FP.Serialize(&p->GrabStrength, serializer);
       FP.Serialize(&p->KickDuration, serializer);
+      FP.Serialize(&p->KickSmooth, serializer);
       FP.Serialize(&p->KickTime, serializer);
+      FP.Serialize(&p->MaxGrabForce, serializer);
       FP.Serialize(&p->MaxReach, serializer);
       FP.Serialize(&p->PositionSmooth, serializer);
+      FPVector3.Serialize(&p->CollisionLocalPoint, serializer);
       FPVector3.Serialize(&p->CurrentLocalPosition, serializer);
       FPVector3.Serialize(&p->IdleLocalPosition, serializer);
+      FPVector3.Serialize(&p->LastInteractionPosition, serializer);
+      FPVector3.Serialize(&p->PreviousDesiredPosition, serializer);
       FPVector3.Serialize(&p->ReachLocalPosition, serializer);
       FPVector3.Serialize(&p->ShoulderLocalPosition, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct ClawGrip : Quantum.IComponent {
-    public const Int32 SIZE = 8;
+    public const Int32 SIZE = 32;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(0)]
-    public EntityRef Entity;
+    public EntityRef Target;
+    [FieldOffset(8)]
+    public FPVector3 LocalPoint;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 7789;
-        hash = hash * 31 + Entity.GetHashCode();
+        hash = hash * 31 + Target.GetHashCode();
+        hash = hash * 31 + LocalPoint.GetHashCode();
         return hash;
       }
     }
     public static void Serialize(void* ptr, FrameSerializer serializer) {
       var p = (ClawGrip*)ptr;
-      EntityRef.Serialize(&p->Entity, serializer);
+      EntityRef.Serialize(&p->Target, serializer);
+      FPVector3.Serialize(&p->LocalPoint, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
-  public unsafe partial struct ClawTarget : Quantum.IComponent {
-    public const Int32 SIZE = 72;
-    public const Int32 ALIGNMENT = 8;
-    [FieldOffset(8)]
-    public EntityRef Entity;
-    [FieldOffset(16)]
-    public FPVector3 WorldPosition;
-    [FieldOffset(40)]
-    public FPQuaternion WorldRotation;
+  public unsafe partial struct Interactable : Quantum.IComponent {
+    public const Int32 SIZE = 4;
+    public const Int32 ALIGNMENT = 4;
     [FieldOffset(0)]
-    public QBoolean HasWorldPose;
+    private fixed Byte _alignment_padding_[4];
     public override readonly Int32 GetHashCode() {
       unchecked { 
-        var hash = 8819;
-        hash = hash * 31 + Entity.GetHashCode();
-        hash = hash * 31 + WorldPosition.GetHashCode();
-        hash = hash * 31 + WorldRotation.GetHashCode();
-        hash = hash * 31 + HasWorldPose.GetHashCode();
+        var hash = 2039;
         return hash;
       }
     }
     public static void Serialize(void* ptr, FrameSerializer serializer) {
-      var p = (ClawTarget*)ptr;
-      QBoolean.Serialize(&p->HasWorldPose, serializer);
-      EntityRef.Serialize(&p->Entity, serializer);
-      FPVector3.Serialize(&p->WorldPosition, serializer);
-      FPQuaternion.Serialize(&p->WorldRotation, serializer);
+      var p = (Interactable*)ptr;
     }
   }
   [StructLayout(LayoutKind.Explicit)]
@@ -1267,12 +1287,14 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct Player : Quantum.IComponent {
-    public const Int32 SIZE = 24;
+    public const Int32 SIZE = 32;
     public const Int32 ALIGNMENT = 8;
-    [FieldOffset(16)]
+    [FieldOffset(24)]
     public FP WalkSpeed;
-    [FieldOffset(8)]
+    [FieldOffset(16)]
     public FP NormalJump;
+    [FieldOffset(8)]
+    public FP Mass;
     [FieldOffset(0)]
     [HideInInspector()]
     public PlayerRef PlayerRef;
@@ -1281,6 +1303,7 @@ namespace Quantum {
         var hash = 2621;
         hash = hash * 31 + WalkSpeed.GetHashCode();
         hash = hash * 31 + NormalJump.GetHashCode();
+        hash = hash * 31 + Mass.GetHashCode();
         hash = hash * 31 + PlayerRef.GetHashCode();
         return hash;
       }
@@ -1288,6 +1311,7 @@ namespace Quantum {
     public static void Serialize(void* ptr, FrameSerializer serializer) {
       var p = (Player*)ptr;
       PlayerRef.Serialize(&p->PlayerRef, serializer);
+      FP.Serialize(&p->Mass, serializer);
       FP.Serialize(&p->NormalJump, serializer);
       FP.Serialize(&p->WalkSpeed, serializer);
     }
@@ -1346,6 +1370,12 @@ namespace Quantum {
       AssetRef.Serialize(&p->PlayerMovementData, serializer);
       EntityRef.Serialize(&p->SpawnerEntityRef, serializer);
     }
+  }
+  public unsafe partial interface ISignalOnTargetGrabStarted : ISignal {
+    void OnTargetGrabStarted(Frame frame, EntityRef target, EntityRef claw, FPVector3 position);
+  }
+  public unsafe partial interface ISignalOnTargetGrabReleased : ISignal {
+    void OnTargetGrabReleased(Frame frame, EntityRef target, EntityRef claw, FPVector3 position);
   }
   public unsafe partial interface ISignalOnPlayerRespawned : ISignal {
     void OnPlayerRespawned(Frame frame, EntityRef playerEntityRef, QBoolean fullReset);
@@ -1419,8 +1449,8 @@ namespace Quantum {
       private ComponentSignals _componentSignals_CharacterController3D = CreateComponentSignals<CharacterController3D>(frame);
       private ComponentSignals _componentSignals_Claw = CreateComponentSignals<Quantum.Claw>(frame);
       private ComponentSignals _componentSignals_ClawGrip = CreateComponentSignals<Quantum.ClawGrip>(frame);
-      private ComponentSignals _componentSignals_ClawTarget = CreateComponentSignals<Quantum.ClawTarget>(frame);
       private ComponentSignals _componentSignals_EntityGroup = CreateComponentSignals<EntityGroup>(frame);
+      private ComponentSignals _componentSignals_Interactable = CreateComponentSignals<Quantum.Interactable>(frame);
       private ComponentSignals _componentSignals_KCC = CreateComponentSignals<Quantum.KCC>(frame);
       private ComponentSignals _componentSignals_KCCProcessorLink = CreateComponentSignals<Quantum.KCCProcessorLink>(frame);
       private ComponentSignals _componentSignals_MapEntityLink = CreateComponentSignals<MapEntityLink>(frame);
@@ -1446,8 +1476,28 @@ namespace Quantum {
       private ComponentSignals _componentSignals_Transform2DVertical = CreateComponentSignals<Transform2DVertical>(frame);
       private ComponentSignals _componentSignals_Transform3D = CreateComponentSignals<Transform3D>(frame);
       private ComponentSignals _componentSignals_View = CreateComponentSignals<View>(frame);
+      private ISignalOnTargetGrabStarted[] _ISignalOnTargetGrabStartedSystems = CreateSignalArray<ISignalOnTargetGrabStarted>(frame);
+      private ISignalOnTargetGrabReleased[] _ISignalOnTargetGrabReleasedSystems = CreateSignalArray<ISignalOnTargetGrabReleased>(frame);
       private ISignalOnPlayerRespawned[] _ISignalOnPlayerRespawnedSystems = CreateSignalArray<ISignalOnPlayerRespawned>(frame);
       private ISignalOnPlayerRespawnTimerReset[] _ISignalOnPlayerRespawnTimerResetSystems = CreateSignalArray<ISignalOnPlayerRespawnTimerReset>(frame);
+      public void OnTargetGrabStarted(EntityRef target, EntityRef claw, FPVector3 position) {
+        var array = _ISignalOnTargetGrabStartedSystems;
+        for (Int32 i = 0; i < array.Length; ++i) {
+          var s = array[i];
+          if (frame.SystemIsEnabledInHierarchy((SystemBase)s)) {
+            s.OnTargetGrabStarted(frame, target, claw, position);
+          }
+        }
+      }
+      public void OnTargetGrabReleased(EntityRef target, EntityRef claw, FPVector3 position) {
+        var array = _ISignalOnTargetGrabReleasedSystems;
+        for (Int32 i = 0; i < array.Length; ++i) {
+          var s = array[i];
+          if (frame.SystemIsEnabledInHierarchy((SystemBase)s)) {
+            s.OnTargetGrabReleased(frame, target, claw, position);
+          }
+        }
+      }
       public void OnPlayerRespawned(EntityRef playerEntityRef, QBoolean fullReset) {
         var array = _ISignalOnPlayerRespawnedSystems;
         for (Int32 i = 0; i < array.Length; ++i) {
@@ -1498,7 +1548,6 @@ namespace Quantum {
         registry.Register<Quantum.ClawGrip>(Quantum.ClawGrip.SIZE);
         registry.Register<Quantum.ClawSide>(4);
         registry.Register<Quantum.ClawState>(4);
-        registry.Register<Quantum.ClawTarget>(Quantum.ClawTarget.SIZE);
         registry.Register<ColorRGBA>(ColorRGBA.SIZE);
         registry.Register<ComponentPrototypeRef>(ComponentPrototypeRef.SIZE);
         registry.Register<ComponentTypeRef>(ComponentTypeRef.SIZE);
@@ -1532,6 +1581,7 @@ namespace Quantum {
         registry.Register<InputPitchYaw>(InputPitchYaw.SIZE);
         registry.Register<IntVector2>(IntVector2.SIZE);
         registry.Register<IntVector3>(IntVector3.SIZE);
+        registry.Register<Quantum.Interactable>(Quantum.Interactable.SIZE);
         registry.Register<Joint>(Joint.SIZE);
         registry.Register<Joint3D>(Joint3D.SIZE);
         registry.Register<Quantum.KCC>(Quantum.KCC.SIZE);
@@ -1603,7 +1653,7 @@ namespace Quantum {
         registry.Register<Quantum.BodyOrientation>(Quantum.BodyOrientation.Serialize, null, null, ComponentFlags.None);
         registry.Register<Quantum.Claw>(Quantum.Claw.Serialize, null, null, ComponentFlags.None);
         registry.Register<Quantum.ClawGrip>(Quantum.ClawGrip.Serialize, null, null, ComponentFlags.None);
-        registry.Register<Quantum.ClawTarget>(Quantum.ClawTarget.Serialize, null, null, ComponentFlags.None);
+        registry.Register<Quantum.Interactable>(Quantum.Interactable.Serialize, null, null, ComponentFlags.None);
         registry.Register<Quantum.KCC>(Quantum.KCC.Serialize, null, Quantum.KCC.OnRemoved, ComponentFlags.None);
         registry.Register<Quantum.KCCProcessorLink>(Quantum.KCCProcessorLink.Serialize, null, null, ComponentFlags.None);
         registry.Register<Quantum.NPC>(Quantum.NPC.Serialize, null, null, ComponentFlags.None);

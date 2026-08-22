@@ -1,0 +1,38 @@
+fileFormatVersion: 2
+guid: 23550ab0738d9044583e8529e3138cf9
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 272e0f14b4b64ca6893aadb634328654, type: 3}
+  UseCustomSettings: 0
+  OutputFolder: 
+  UnityOutputFolderPath: 
+  DeleteOrphanedFiles: 1
+  GeneratorOptions:
+    UserUsings:
+    - '#if QUANTUM_UNITY'
+    - TooltipAttribute = UnityEngine.TooltipAttribute
+    - HeaderAttribute = UnityEngine.HeaderAttribute
+    - SpaceAttribute = UnityEngine.SpaceAttribute
+    - RangeAttribute = UnityEngine.RangeAttribute
+    - HideInInspectorAttribute = UnityEngine.HideInInspector
+    - PreserveAttribute = UnityEngine.Scripting.PreserveAttribute
+    - FormerlySerializedAsAttribute = UnityEngine.Serialization.FormerlySerializedAsAttribute
+    - MovedFromAttribute = UnityEngine.Scripting.APIUpdating.MovedFromAttribute
+    - CreateAssetMenu = UnityEngine.CreateAssetMenuAttribute
+    - RuntimeInitializeOnLoadMethodAttribute = UnityEngine.RuntimeInitializeOnLoadMethodAttribute
+    - '#endif'
+    NewLine: 0
+    PrototypeSuffix: Prototype
+    PrototypePrefix: 
+    UnityPrototypeSuffix: 
+    UnityPrototypePrefix: QPrototype
+    ImportLegacyScripts: 1
+    LegacyCodeGenOptions: 0
+    LibName: 
+    FileNamePrefix: Quantum
+    MaxLinesPerFile: 2147483647

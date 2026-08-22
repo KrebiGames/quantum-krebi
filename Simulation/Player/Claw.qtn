@@ -1,0 +1,69 @@
+﻿enum ClawSide {
+	Left,
+	Right
+}
+
+enum ClawState {
+	Idle,
+	Reach,
+	Kick,
+	Grab
+}
+
+component Claw {
+	// General
+	ClawSide Side;
+	ClawState State;
+
+	// Arm
+	FPVector3 ShoulderLocalPosition;
+	FPVector3 IdleLocalPosition;
+	FPVector3 ReachLocalPosition;
+	FP MaxReach;
+	FP PositionSmooth;
+
+	// Kick
+	FP KickSmooth;
+	FP KickDuration;
+	FP KickTime;
+
+	// Grab
+	FP GrabDetectRange;
+	FP GrabReleaseRange;
+	FP CollisionSafeDistance;
+	FP GrabStrength;
+	FP GrabDamping;
+	FP MaxGrabForce;
+	FP CrabReactionScale;
+
+	// Runtime
+	EntityRef CollisionTarget;
+	FPVector3 CollisionLocalPoint;
+
+	FPVector3 PreviousDesiredPosition;
+	FPVector3 LastInteractionPosition;
+	FPVector3 CurrentLocalPosition;
+
+	bool CollisionSuppressed;
+}
+
+component ClawGrip {
+	EntityRef Target;
+	FPVector3 LocalPoint;
+}
+
+component Interactable {
+}
+
+signal OnTargetGrabStarted(EntityRef target, EntityRef claw, FPVector3 position);
+signal OnTargetGrabReleased(EntityRef target, EntityRef claw, FPVector3 position);
+
+event ClawGrabStarted {
+	ClawSide Side;
+	FPVector3 TargetPosition;
+}
+
+event ClawGrabReleased {
+	ClawSide Side;
+	FPVector3 TargetPosition;
+}

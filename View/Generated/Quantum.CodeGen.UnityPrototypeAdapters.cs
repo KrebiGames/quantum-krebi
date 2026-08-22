@@ -50,30 +50,69 @@ namespace Quantum.Prototypes.Unity {
   #endif //;
   
   [System.SerializableAttribute()]
-  public unsafe partial class ClawGripPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.ClawGripPrototype> {
-    public Quantum.QuantumEntityPrototype Entity;
-    partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.ClawGripPrototype prototype);
-    public override Quantum.Prototypes.ClawGripPrototype Convert(Quantum.QuantumEntityPrototypeConverter converter) {
-      var result = new Quantum.Prototypes.ClawGripPrototype();
-      converter.Convert(this.Entity, out result.Entity);
+  public unsafe partial class ClawPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.ClawPrototype> {
+    public Quantum.QEnum32<ClawSide> Side;
+    public Quantum.QEnum32<ClawState> State;
+    public FPVector3 ShoulderLocalPosition;
+    public FPVector3 IdleLocalPosition;
+    public FPVector3 ReachLocalPosition;
+    public FP MaxReach;
+    public FP PositionSmooth;
+    public FP KickSmooth;
+    public FP KickDuration;
+    public FP KickTime;
+    public FP GrabDetectRange;
+    public FP GrabReleaseRange;
+    public FP CollisionSafeDistance;
+    public FP GrabStrength;
+    public FP GrabDamping;
+    public FP MaxGrabForce;
+    public FP CrabReactionScale;
+    public Quantum.QuantumEntityPrototype CollisionTarget;
+    public FPVector3 CollisionLocalPoint;
+    public FPVector3 PreviousDesiredPosition;
+    public FPVector3 LastInteractionPosition;
+    public FPVector3 CurrentLocalPosition;
+    public QBoolean CollisionSuppressed;
+    partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.ClawPrototype prototype);
+    public override Quantum.Prototypes.ClawPrototype Convert(Quantum.QuantumEntityPrototypeConverter converter) {
+      var result = new Quantum.Prototypes.ClawPrototype();
+      converter.Convert(this.Side, out result.Side);
+      converter.Convert(this.State, out result.State);
+      converter.Convert(this.ShoulderLocalPosition, out result.ShoulderLocalPosition);
+      converter.Convert(this.IdleLocalPosition, out result.IdleLocalPosition);
+      converter.Convert(this.ReachLocalPosition, out result.ReachLocalPosition);
+      converter.Convert(this.MaxReach, out result.MaxReach);
+      converter.Convert(this.PositionSmooth, out result.PositionSmooth);
+      converter.Convert(this.KickSmooth, out result.KickSmooth);
+      converter.Convert(this.KickDuration, out result.KickDuration);
+      converter.Convert(this.KickTime, out result.KickTime);
+      converter.Convert(this.GrabDetectRange, out result.GrabDetectRange);
+      converter.Convert(this.GrabReleaseRange, out result.GrabReleaseRange);
+      converter.Convert(this.CollisionSafeDistance, out result.CollisionSafeDistance);
+      converter.Convert(this.GrabStrength, out result.GrabStrength);
+      converter.Convert(this.GrabDamping, out result.GrabDamping);
+      converter.Convert(this.MaxGrabForce, out result.MaxGrabForce);
+      converter.Convert(this.CrabReactionScale, out result.CrabReactionScale);
+      converter.Convert(this.CollisionTarget, out result.CollisionTarget);
+      converter.Convert(this.CollisionLocalPoint, out result.CollisionLocalPoint);
+      converter.Convert(this.PreviousDesiredPosition, out result.PreviousDesiredPosition);
+      converter.Convert(this.LastInteractionPosition, out result.LastInteractionPosition);
+      converter.Convert(this.CurrentLocalPosition, out result.CurrentLocalPosition);
+      converter.Convert(this.CollisionSuppressed, out result.CollisionSuppressed);
       ConvertUser(converter, ref result);
       return result;
     }
   }
   [System.SerializableAttribute()]
-  public unsafe partial class ClawTargetPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.ClawTargetPrototype> {
-    public Quantum.QuantumEntityPrototype Entity;
-    public FPVector3 WorldPosition;
-    [UnitAttribute(Units.Degrees)]
-    public FPVector3 WorldRotation;
-    public QBoolean HasWorldPose;
-    partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.ClawTargetPrototype prototype);
-    public override Quantum.Prototypes.ClawTargetPrototype Convert(Quantum.QuantumEntityPrototypeConverter converter) {
-      var result = new Quantum.Prototypes.ClawTargetPrototype();
-      converter.Convert(this.Entity, out result.Entity);
-      converter.Convert(this.WorldPosition, out result.WorldPosition);
-      converter.Convert(this.WorldRotation, out result.WorldRotation);
-      converter.Convert(this.HasWorldPose, out result.HasWorldPose);
+  public unsafe partial class ClawGripPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.ClawGripPrototype> {
+    public Quantum.QuantumEntityPrototype Target;
+    public FPVector3 LocalPoint;
+    partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.ClawGripPrototype prototype);
+    public override Quantum.Prototypes.ClawGripPrototype Convert(Quantum.QuantumEntityPrototypeConverter converter) {
+      var result = new Quantum.Prototypes.ClawGripPrototype();
+      converter.Convert(this.Target, out result.Target);
+      converter.Convert(this.LocalPoint, out result.LocalPoint);
       ConvertUser(converter, ref result);
       return result;
     }
