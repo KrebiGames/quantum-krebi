@@ -6,8 +6,8 @@ struct PlayerInputData {
 	FP RightClawReach;
 	button Sprint;
 	button Jump;
-	button LeftClawKick;
-	button RightClawKick;
+	button LeftClawPunch;
+	button RightClawPunch;
 	button LeftClawPinch;
 	button RightClawPinch;
 }

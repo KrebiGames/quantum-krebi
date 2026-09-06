@@ -43,7 +43,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "LeftClawKick",
+                    "name": "LeftClawPunch",
                     "type": "Button",
                     "id": "dbc2c5d0-efd7-491f-976f-2401ef24edef",
                     "expectedControlType": "",
@@ -52,7 +52,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "RightClawKick",
+                    "name": "RightClawPunch",
                     "type": "Button",
                     "id": "f6e18ee6-ff61-4e69-9b5f-a11524ac5653",
                     "expectedControlType": "",
@@ -325,7 +325,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "LeftClawKick",
+                    "action": "LeftClawPunch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -336,7 +336,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "LeftClawKick",
+                    "action": "LeftClawPunch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -347,7 +347,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "RightClawKick",
+                    "action": "RightClawPunch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -358,7 +358,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "RightClawKick",
+                    "action": "RightClawPunch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

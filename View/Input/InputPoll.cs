@@ -9,8 +9,8 @@ public class InputPoll : MonoBehaviour {
 	[SerializeField] private InputActionReference lookAction;
 	[SerializeField] private InputActionReference jumpAction;
 	[SerializeField] private InputActionReference sprintAction;
-	[SerializeField] private InputActionReference leftClawKickAction;
-	[SerializeField] private InputActionReference rightClawKickAction;
+	[SerializeField] private InputActionReference leftClawPunchAction;
+	[SerializeField] private InputActionReference rightClawPunchAction;
 	[SerializeField] private InputActionReference leftClawReachAction;
 	[SerializeField] private InputActionReference rightClawReachAction;
 	[SerializeField] private InputActionReference leftClawPinchAction;
@@ -23,8 +23,8 @@ public class InputPoll : MonoBehaviour {
 		public InputAction Look;
 		public InputAction Jump;
 		public InputAction Sprint;
-		public InputAction LeftClawKick;
-		public InputAction RightClawKick;
+		public InputAction LeftClawPunch;
+		public InputAction RightClawPunch;
 		public InputAction LeftClawReach;
 		public InputAction RightClawReach;
 		public InputAction LeftClawPinch;
@@ -56,8 +56,8 @@ public class InputPoll : MonoBehaviour {
 					Sprint = playerInput.actions.FindAction(sprintAction.action.id),
 					LeftClawReach = playerInput.actions.FindAction(leftClawReachAction.action.id),
 					RightClawReach = playerInput.actions.FindAction(rightClawReachAction.action.id),
-					LeftClawKick = playerInput.actions.FindAction(leftClawKickAction.action.id),
-					RightClawKick = playerInput.actions.FindAction(rightClawKickAction.action.id),
+					LeftClawPunch = playerInput.actions.FindAction(leftClawPunchAction.action.id),
+					RightClawPunch = playerInput.actions.FindAction(rightClawPunchAction.action.id),
 					LeftClawPinch = playerInput.actions.FindAction(leftClawPinchAction.action.id),
 					RightClawPinch = playerInput.actions.FindAction(rightClawPinchAction.action.id)
 				};
@@ -74,8 +74,8 @@ public class InputPoll : MonoBehaviour {
 			input.Sprint = actions.Sprint.IsPressed();
 			input.LeftClawReach = FP.FromFloat_UNSAFE(actions.LeftClawReach.ReadValue<float>());
 			input.RightClawReach = FP.FromFloat_UNSAFE(actions.RightClawReach.ReadValue<float>());
-			input.LeftClawKick = actions.LeftClawKick.IsPressed();
-			input.RightClawKick = actions.RightClawKick.IsPressed();
+			input.LeftClawPunch = actions.LeftClawPunch.IsPressed();
+			input.RightClawPunch = actions.RightClawPunch.IsPressed();
 			input.LeftClawPinch = actions.LeftClawPinch.IsPressed();
 			input.RightClawPinch = actions.RightClawPinch.IsPressed();
 		}

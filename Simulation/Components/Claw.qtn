@@ -6,7 +6,7 @@
 enum ClawState {
 	Idle,
 	Reach,
-	Kick,
+	Punch,
 	Grab
 }
 
@@ -21,10 +21,10 @@ component Claw {
 	FP MaxReach;
 	FP PositionSmooth;
 
-	// Kick
-	FP KickSmooth;
-	FP KickDuration;
-	FP KickTime;
+	// Punch
+	FP PunchSmooth;
+	FP PunchDuration;
+	FP PunchTime;
 
 	// Runtime
 	FPVector3 PreviousDesiredPosition;

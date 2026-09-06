@@ -6,7 +6,7 @@ public class ClawsAnimation : QuantumEntityViewComponent {
 	[SerializeField] Transform[] IKTtargets;
 
 	[SerializeField] Vector3 idleRotation;
-	[SerializeField] Vector3 kickRotation;
+	[SerializeField] Vector3 punchRotation;
 	[SerializeField] Vector3 reachRotation;
 	[SerializeField] Vector3 lockRotationOffset;
 
@@ -49,13 +49,11 @@ public class ClawsAnimation : QuantumEntityViewComponent {
 			lockedRotations[index] = GetLockedRotation(index, e.TargetPosition.ToUnityVector3());
 	}
 
-	private bool UsesLockedRotation(ClawState state) {
-		return state == ClawState.Grab;
-	}
+	private bool UsesLockedRotation(ClawState state) => state == ClawState.Grab;
 
 	private Quaternion GetLocalRotation(int index) {
 		Vector3 rotation = states[index] switch {
-			ClawState.Kick => kickRotation,
+			ClawState.Punch => punchRotation,
 			ClawState.Reach => reachRotation,
 			_ => idleRotation
 		};

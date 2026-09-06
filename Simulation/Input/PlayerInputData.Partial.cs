@@ -7,8 +7,8 @@ namespace Quantum {
 
 			input._a = playerInput.Jump;
 			input._b = playerInput.Sprint;
-			input._l1 = playerInput.LeftClawKick;
-			input._r1 = playerInput.RightClawKick;
+			input._l1 = playerInput.LeftClawPunch;
+			input._r1 = playerInput.RightClawPunch;
 			input._c = playerInput.LeftClawPinch;
 			input._d = playerInput.RightClawPinch;
 
@@ -26,8 +26,8 @@ namespace Quantum {
 
 			playerInput.Jump = input._a;
 			playerInput.Sprint = input._b;
-			playerInput.LeftClawKick = input._l1;
-			playerInput.RightClawKick = input._r1;
+			playerInput.LeftClawPunch = input._l1;
+			playerInput.RightClawPunch = input._r1;
 			playerInput.LeftClawPinch = input._c;
 			playerInput.RightClawPinch = input._d;
 

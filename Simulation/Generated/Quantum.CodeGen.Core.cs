@@ -56,7 +56,7 @@ namespace Quantum {
   public enum ClawState : int {
     Idle,
     Reach,
-    Kick,
+    Punch,
     Grab,
   }
   public enum EKCCCollisionSource : byte {
@@ -500,13 +500,13 @@ namespace Quantum {
     public Button Sprint;
     [FieldOffset(16)]
     public Button Jump;
-    [FieldOffset(28)]
-    public Button LeftClawKick;
-    [FieldOffset(52)]
-    public Button RightClawKick;
     [FieldOffset(40)]
-    public Button LeftClawPinch;
+    public Button LeftClawPunch;
     [FieldOffset(64)]
+    public Button RightClawPunch;
+    [FieldOffset(28)]
+    public Button LeftClawPinch;
+    [FieldOffset(52)]
     public Button RightClawPinch;
     public override readonly Int32 GetHashCode() {
       unchecked { 
@@ -517,8 +517,8 @@ namespace Quantum {
         hash = hash * 31 + RightClawReach.GetHashCode();
         hash = hash * 31 + Sprint.GetHashCode();
         hash = hash * 31 + Jump.GetHashCode();
-        hash = hash * 31 + LeftClawKick.GetHashCode();
-        hash = hash * 31 + RightClawKick.GetHashCode();
+        hash = hash * 31 + LeftClawPunch.GetHashCode();
+        hash = hash * 31 + RightClawPunch.GetHashCode();
         hash = hash * 31 + LeftClawPinch.GetHashCode();
         hash = hash * 31 + RightClawPinch.GetHashCode();
         return hash;
@@ -529,10 +529,10 @@ namespace Quantum {
       FP.Serialize(&p->LeftClawReach, serializer);
       FP.Serialize(&p->RightClawReach, serializer);
       Button.Serialize(&p->Jump, serializer);
-      Button.Serialize(&p->LeftClawKick, serializer);
       Button.Serialize(&p->LeftClawPinch, serializer);
-      Button.Serialize(&p->RightClawKick, serializer);
+      Button.Serialize(&p->LeftClawPunch, serializer);
       Button.Serialize(&p->RightClawPinch, serializer);
+      Button.Serialize(&p->RightClawPunch, serializer);
       Button.Serialize(&p->Sprint, serializer);
       FPVector2.Serialize(&p->AimDirection, serializer);
       FPVector2.Serialize(&p->MoveDirection, serializer);
@@ -964,16 +964,16 @@ namespace Quantum {
     public FPVector3 IdleLocalPosition;
     [FieldOffset(120)]
     public FPVector3 ReachLocalPosition;
-    [FieldOffset(32)]
-    public FP MaxReach;
-    [FieldOffset(40)]
-    public FP PositionSmooth;
-    [FieldOffset(16)]
-    public FP KickSmooth;
     [FieldOffset(8)]
-    public FP KickDuration;
+    public FP MaxReach;
+    [FieldOffset(16)]
+    public FP PositionSmooth;
+    [FieldOffset(32)]
+    public FP PunchSmooth;
     [FieldOffset(24)]
-    public FP KickTime;
+    public FP PunchDuration;
+    [FieldOffset(40)]
+    public FP PunchTime;
     [FieldOffset(96)]
     public FPVector3 PreviousDesiredPosition;
     [FieldOffset(48)]
@@ -988,9 +988,9 @@ namespace Quantum {
         hash = hash * 31 + ReachLocalPosition.GetHashCode();
         hash = hash * 31 + MaxReach.GetHashCode();
         hash = hash * 31 + PositionSmooth.GetHashCode();
-        hash = hash * 31 + KickSmooth.GetHashCode();
-        hash = hash * 31 + KickDuration.GetHashCode();
-        hash = hash * 31 + KickTime.GetHashCode();
+        hash = hash * 31 + PunchSmooth.GetHashCode();
+        hash = hash * 31 + PunchDuration.GetHashCode();
+        hash = hash * 31 + PunchTime.GetHashCode();
         hash = hash * 31 + PreviousDesiredPosition.GetHashCode();
         hash = hash * 31 + CurrentLocalPosition.GetHashCode();
         return hash;
@@ -1000,11 +1000,11 @@ namespace Quantum {
       var p = (Claw*)ptr;
       serializer.Stream.Serialize((Int32*)&p->Side);
       serializer.Stream.Serialize((Int32*)&p->State);
-      FP.Serialize(&p->KickDuration, serializer);
-      FP.Serialize(&p->KickSmooth, serializer);
-      FP.Serialize(&p->KickTime, serializer);
       FP.Serialize(&p->MaxReach, serializer);
       FP.Serialize(&p->PositionSmooth, serializer);
+      FP.Serialize(&p->PunchDuration, serializer);
+      FP.Serialize(&p->PunchSmooth, serializer);
+      FP.Serialize(&p->PunchTime, serializer);
       FPVector3.Serialize(&p->CurrentLocalPosition, serializer);
       FPVector3.Serialize(&p->IdleLocalPosition, serializer);
       FPVector3.Serialize(&p->PreviousDesiredPosition, serializer);

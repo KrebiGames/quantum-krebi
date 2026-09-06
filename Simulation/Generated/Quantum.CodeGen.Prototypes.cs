@@ -118,9 +118,9 @@ namespace Quantum.Prototypes {
     public FPVector3 ReachLocalPosition;
     public FP MaxReach;
     public FP PositionSmooth;
-    public FP KickSmooth;
-    public FP KickDuration;
-    public FP KickTime;
+    public FP PunchSmooth;
+    public FP PunchDuration;
+    public FP PunchTime;
     public FPVector3 PreviousDesiredPosition;
     public FPVector3 CurrentLocalPosition;
     partial void MaterializeUser(Frame frame, ref Quantum.Claw result, in PrototypeMaterializationContext context);
@@ -137,9 +137,9 @@ namespace Quantum.Prototypes {
       result.ReachLocalPosition = this.ReachLocalPosition;
       result.MaxReach = this.MaxReach;
       result.PositionSmooth = this.PositionSmooth;
-      result.KickSmooth = this.KickSmooth;
-      result.KickDuration = this.KickDuration;
-      result.KickTime = this.KickTime;
+      result.PunchSmooth = this.PunchSmooth;
+      result.PunchDuration = this.PunchDuration;
+      result.PunchTime = this.PunchTime;
       result.PreviousDesiredPosition = this.PreviousDesiredPosition;
       result.CurrentLocalPosition = this.CurrentLocalPosition;
       MaterializeUser(frame, ref result, in context);
@@ -519,8 +519,8 @@ namespace Quantum.Prototypes {
     public FP RightClawReach;
     public Button Sprint;
     public Button Jump;
-    public Button LeftClawKick;
-    public Button RightClawKick;
+    public Button LeftClawPunch;
+    public Button RightClawPunch;
     public Button LeftClawPinch;
     public Button RightClawPinch;
     partial void MaterializeUser(Frame frame, ref Quantum.PlayerInputData result, in PrototypeMaterializationContext context);
@@ -531,8 +531,8 @@ namespace Quantum.Prototypes {
       result.RightClawReach = this.RightClawReach;
       result.Sprint = this.Sprint;
       result.Jump = this.Jump;
-      result.LeftClawKick = this.LeftClawKick;
-      result.RightClawKick = this.RightClawKick;
+      result.LeftClawPunch = this.LeftClawPunch;
+      result.RightClawPunch = this.RightClawPunch;
       result.LeftClawPinch = this.LeftClawPinch;
       result.RightClawPinch = this.RightClawPinch;
       MaterializeUser(frame, ref result, in context);

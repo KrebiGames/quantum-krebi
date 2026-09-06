@@ -24,10 +24,19 @@ namespace Quantum {
 			bool interacting = false;
 
 			foreach (var (clawEntity, index) in frame.GetEntityGroupIterator(filter.Entity)) {
-				if (!frame.Unsafe.TryGetPointer<Claw>(clawEntity, out var claw) || !frame.Unsafe.TryGetPointer<ClawGrab>(clawEntity, out var grab) || !frame.Unsafe.TryGetPointer<Transform3D>(clawEntity, out var clawTransform))
+				if (!frame.Unsafe.TryGetPointer<Claw>(clawEntity, out var claw) || 
+					!frame.Unsafe.TryGetPointer<ClawGrab>(clawEntity, out var grab) || 
+					!frame.Unsafe.TryGetPointer<Transform3D>(clawEntity, out var clawTransform))
 					continue;
 
-				UpdateClaw(frame, filter.Entity, input, clawEntity, claw, grab, clawTransform, anchorTransform);
+				UpdateClaw(frame,
+					filter.Entity,
+					input,
+					clawEntity,
+					claw,
+					grab,
+					clawTransform,
+					anchorTransform);
 
 				if (grab->Target != EntityRef.None)
 					interacting = true;
@@ -37,9 +46,16 @@ namespace Quantum {
 				orientation->Interacting = interacting;
 		}
 
-		private void UpdateClaw(Frame frame, EntityRef entity, PlayerInputData input, EntityRef clawEntity, Claw* claw, ClawGrab* grab, Transform3D* clawTransform, Transform3D* anchorTransform) {
+		private void UpdateClaw(Frame frame,
+						  EntityRef entity,
+						  PlayerInputData input,
+						  EntityRef clawEntity,
+						  Claw* claw,
+						  ClawGrab* grab,
+						  Transform3D* clawTransform,
+						  Transform3D* anchorTransform) {
 			FP reach = claw->Side == ClawSide.Left ? input.LeftClawReach : input.RightClawReach;
-			bool kickPressed = claw->Side == ClawSide.Left ? input.LeftClawKick.WasPressed : input.RightClawKick.WasPressed;
+			bool kickPressed = claw->Side == ClawSide.Left ? input.LeftClawPunch.WasPressed : input.RightClawPunch.WasPressed;
 
 			reach = FPMath.Clamp01(reach);
 			bool reaching = reach > FP._0_01;
@@ -56,14 +72,14 @@ namespace Quantum {
 
 				if (!TryGetGrabPoint(frame, grab, out targetPosition))
 					targetPosition = grab->LastInteractionPosition;
-			} else if (claw->KickTime > FP._0) {
-				state = ClawState.Kick;
+			} else if (claw->PunchTime > FP._0) {
+				state = ClawState.Punch;
 				targetPosition = anchorTransform->Position + anchorTransform->Rotation * claw->ReachLocalPosition;
-				claw->KickTime -= frame.DeltaTime;
+				claw->PunchTime -= frame.DeltaTime;
 			} else if (kickPressed && !reaching) {
-				state = ClawState.Kick;
+				state = ClawState.Punch;
 				targetPosition = anchorTransform->Position + anchorTransform->Rotation * claw->ReachLocalPosition;
-				claw->KickTime = claw->KickDuration;
+				claw->PunchTime = claw->PunchDuration;
 			} else if (reaching) {
 				state = ClawState.Reach;
 				FPVector3 localPosition = claw->IdleLocalPosition + (claw->ReachLocalPosition - claw->IdleLocalPosition) * reach;
@@ -94,7 +110,7 @@ namespace Quantum {
 				targetLocalPosition = anchorTransform->Rotation.Inverted * (grabPosition - anchorTransform->Position);
 				targetLocalPosition = ClampReach(claw, targetLocalPosition);
 				grab->LastInteractionPosition = grabPosition;
-			} else if (claw->State == ClawState.Kick) {
+			} else if (claw->State == ClawState.Punch) {
 				targetLocalPosition = claw->ReachLocalPosition;
 			} else if (claw->State == ClawState.Reach) {
 				targetLocalPosition = claw->IdleLocalPosition + (claw->ReachLocalPosition - claw->IdleLocalPosition) * reach;
@@ -114,7 +130,7 @@ namespace Quantum {
 				return;
 			}
 
-			FP smooth = claw->State == ClawState.Kick ? claw->KickSmooth : claw->PositionSmooth;
+			FP smooth = claw->State == ClawState.Punch ? claw->PunchSmooth : claw->PositionSmooth;
 			FP t = FPMath.Clamp01(smooth * frame.DeltaTime);
 			claw->CurrentLocalPosition += (targetLocalPosition - claw->CurrentLocalPosition) * t;
 

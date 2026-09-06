@@ -48,8 +48,8 @@ MonoBehaviour:
   lookAction: {fileID: -5630151704836100654, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   jumpAction: {fileID: -2099379676528639254, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   sprintAction: {fileID: -7471211009204490832, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  leftClawKickAction: {fileID: 7761657645214320607, guid: 052faaac586de48259a63d0c4782560b, type: 3}
-  rightClawKickAction: {fileID: 2969397600401015227, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  leftClawPunchAction: {fileID: 7761657645214320607, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  rightClawPunchAction: {fileID: 2969397600401015227, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   leftClawReachAction: {fileID: -6529172364211390377, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   rightClawReachAction: {fileID: -78028481593329769, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   leftClawPinchAction: {fileID: 4248390062470050545, guid: 052faaac586de48259a63d0c4782560b, type: 3}

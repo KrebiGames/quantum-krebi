@@ -22,7 +22,7 @@ namespace Quantum {
 				if (!frame.Unsafe.TryGetPointer<Claw>(clawEntity, out var claw) || !frame.Unsafe.TryGetPointer<ClawGrab>(clawEntity, out var grab) || !frame.Unsafe.TryGetPointer<Transform3D>(clawEntity, out var clawTransform))
 					continue;
 
-				if (grab->Target != EntityRef.None || claw->KickTime > FP._0)
+				if (grab->Target != EntityRef.None || claw->PunchTime > FP._0)
 					continue;
 
 				FP reach = claw->Side == ClawSide.Left ? input.LeftClawReach : input.RightClawReach;
