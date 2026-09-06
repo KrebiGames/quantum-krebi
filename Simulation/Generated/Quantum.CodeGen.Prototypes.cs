@@ -118,9 +118,11 @@ namespace Quantum.Prototypes {
     public FPVector3 ReachLocalPosition;
     public FP MaxReach;
     public FP PositionSmooth;
-    public FP PunchSmooth;
+    public FP PunchStrength;
     public FP PunchDuration;
+    public FP PunchSmooth;
     public FP PunchTime;
+    public QBoolean PunchApplied;
     public FPVector3 PreviousDesiredPosition;
     public FPVector3 CurrentLocalPosition;
     partial void MaterializeUser(Frame frame, ref Quantum.Claw result, in PrototypeMaterializationContext context);
@@ -137,9 +139,11 @@ namespace Quantum.Prototypes {
       result.ReachLocalPosition = this.ReachLocalPosition;
       result.MaxReach = this.MaxReach;
       result.PositionSmooth = this.PositionSmooth;
-      result.PunchSmooth = this.PunchSmooth;
+      result.PunchStrength = this.PunchStrength;
       result.PunchDuration = this.PunchDuration;
+      result.PunchSmooth = this.PunchSmooth;
       result.PunchTime = this.PunchTime;
+      result.PunchApplied = this.PunchApplied;
       result.PreviousDesiredPosition = this.PreviousDesiredPosition;
       result.CurrentLocalPosition = this.CurrentLocalPosition;
       MaterializeUser(frame, ref result, in context);

@@ -22,11 +22,14 @@ component Claw {
 	FP PositionSmooth;
 
 	// Punch
-	FP PunchSmooth;
+	FP PunchStrength;
 	FP PunchDuration;
+	FP PunchSmooth;
 	FP PunchTime;
+	bool PunchApplied;
 
 	// Runtime
+	bool PunchApplied;
 	FPVector3 PreviousDesiredPosition;
 	FPVector3 CurrentLocalPosition;
 }

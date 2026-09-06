@@ -679,12 +679,16 @@ MonoBehaviour:
       RawValue: 28836
     PositionSmooth:
       RawValue: 655360
-    PunchSmooth:
-      RawValue: 1310720
+    PunchStrength:
+      RawValue: 327680
     PunchDuration:
       RawValue: 9830
+    PunchSmooth:
+      RawValue: 1310720
     PunchTime:
       RawValue: 0
+    PunchApplied:
+      Value: 0
     PreviousDesiredPosition:
       X:
         RawValue: 0
@@ -1320,7 +1324,7 @@ MonoBehaviour:
   - {fileID: 3022447985818049793}
   - {fileID: 7689249772675681329}
   idleRotation: {x: 90, y: 0, z: -60}
-  punchRotation: {x: 0, y: -40, z: -90}
+  punchRotation: {x: -60, y: -90, z: 0}
   reachRotation: {x: 90, y: 0, z: 0}
   lockRotationOffset: {x: 90, y: 0, z: 0}
   rotationSmooth: 10
@@ -1737,12 +1741,16 @@ MonoBehaviour:
       RawValue: 28836
     PositionSmooth:
       RawValue: 655360
-    PunchSmooth:
-      RawValue: 1310720
+    PunchStrength:
+      RawValue: 327680
     PunchDuration:
       RawValue: 9830
+    PunchSmooth:
+      RawValue: 1310720
     PunchTime:
       RawValue: 0
+    PunchApplied:
+      Value: 0
     PreviousDesiredPosition:
       X:
         RawValue: 0

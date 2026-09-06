@@ -58,8 +58,10 @@ public class ClawsAnimation : QuantumEntityViewComponent {
 			_ => idleRotation
 		};
 
-		if (index == (int)ClawSide.Right)
+		if (index == (int)ClawSide.Right) {
+			rotation.y = -rotation.y;
 			rotation.z = -rotation.z;
+		}
 
 		return Quaternion.Euler(rotation);
 	}

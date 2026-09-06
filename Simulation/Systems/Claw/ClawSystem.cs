@@ -3,7 +3,7 @@ namespace Quantum {
 	using UnityEngine.Scripting;
 
 	[Preserve]
-	public unsafe class ClawSystem : SystemMainThreadFilter<ClawSystem.Filter> {
+	public unsafe class ClawSystem : SystemMainThreadFilter<ClawSystem.Filter>, ISignalOnCollision3D {
 		private static readonly FP MaxSpeed = FP.FromFloat_UNSAFE(8.0f);
 		private static readonly FP TeleportDistance = FP.FromFloat_UNSAFE(1.0f);
 
@@ -24,8 +24,8 @@ namespace Quantum {
 			bool interacting = false;
 
 			foreach (var (clawEntity, index) in frame.GetEntityGroupIterator(filter.Entity)) {
-				if (!frame.Unsafe.TryGetPointer<Claw>(clawEntity, out var claw) || 
-					!frame.Unsafe.TryGetPointer<ClawGrab>(clawEntity, out var grab) || 
+				if (!frame.Unsafe.TryGetPointer<Claw>(clawEntity, out var claw) ||
+					!frame.Unsafe.TryGetPointer<ClawGrab>(clawEntity, out var grab) ||
 					!frame.Unsafe.TryGetPointer<Transform3D>(clawEntity, out var clawTransform))
 					continue;
 
@@ -80,6 +80,7 @@ namespace Quantum {
 				state = ClawState.Punch;
 				targetPosition = anchorTransform->Position + anchorTransform->Rotation * claw->ReachLocalPosition;
 				claw->PunchTime = claw->PunchDuration;
+				claw->PunchApplied = false;
 			} else if (reaching) {
 				state = ClawState.Reach;
 				FPVector3 localPosition = claw->IdleLocalPosition + (claw->ReachLocalPosition - claw->IdleLocalPosition) * reach;
@@ -150,6 +151,40 @@ namespace Quantum {
 
 			body->Velocity = FPVector3.ClampMagnitude(desiredVelocity, MaxSpeed);
 			claw->PreviousDesiredPosition = desiredPosition;
+		}
+
+		public void OnCollision3D(Frame frame, CollisionInfo3D info) {
+			EntityRef clawEntity;
+			EntityRef targetEntity;
+			Claw* claw;
+
+			if (frame.Unsafe.TryGetPointer<Claw>(info.Entity, out claw)) {
+				clawEntity = info.Entity;
+				targetEntity = info.Other;
+			} else if (frame.Unsafe.TryGetPointer<Claw>(info.Other, out claw)) {
+				clawEntity = info.Other;
+				targetEntity = info.Entity;
+			} else {
+				return;
+			}
+
+			if (claw->State != ClawState.Punch || claw->PunchApplied)
+				return;
+
+			if (!frame.Has<Interactable>(targetEntity))
+				return;
+
+			if (!frame.Unsafe.TryGetPointer<PhysicsBody3D>(clawEntity, out var clawBody) ||
+				!frame.Unsafe.TryGetPointer<PhysicsBody3D>(targetEntity, out var targetBody))
+				return;
+
+			if (clawBody->Velocity.SqrMagnitude <= FP._0_01)
+				return;
+
+			FPVector3 impulse = clawBody->Velocity.Normalized * claw->PunchStrength;
+			targetBody->AddLinearImpulse(impulse);
+
+			claw->PunchApplied = true;
 		}
 
 		private void ReleaseGrab(Frame frame, EntityRef clawEntity, ClawGrab* grab) {
