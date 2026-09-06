@@ -21,17 +21,19 @@ component Claw {
 	FP MaxReach;
 	FP PositionSmooth;
 
-	// Punch
+	// Runtime
+	FPVector3 PreviousDesiredPosition;
+	FPVector3 CurrentLocalPosition;
+}
+
+component ClawPunch {
 	FP PunchStrength;
 	FP PunchDuration;
 	FP PunchSmooth;
-	FP PunchTime;
-	bool PunchApplied;
 
 	// Runtime
+	FP PunchTime;
 	bool PunchApplied;
-	FPVector3 PreviousDesiredPosition;
-	FPVector3 CurrentLocalPosition;
 }
 
 component ClawGrab {

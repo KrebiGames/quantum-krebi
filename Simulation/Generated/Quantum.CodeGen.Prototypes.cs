@@ -118,11 +118,6 @@ namespace Quantum.Prototypes {
     public FPVector3 ReachLocalPosition;
     public FP MaxReach;
     public FP PositionSmooth;
-    public FP PunchStrength;
-    public FP PunchDuration;
-    public FP PunchSmooth;
-    public FP PunchTime;
-    public QBoolean PunchApplied;
     public FPVector3 PreviousDesiredPosition;
     public FPVector3 CurrentLocalPosition;
     partial void MaterializeUser(Frame frame, ref Quantum.Claw result, in PrototypeMaterializationContext context);
@@ -139,11 +134,6 @@ namespace Quantum.Prototypes {
       result.ReachLocalPosition = this.ReachLocalPosition;
       result.MaxReach = this.MaxReach;
       result.PositionSmooth = this.PositionSmooth;
-      result.PunchStrength = this.PunchStrength;
-      result.PunchDuration = this.PunchDuration;
-      result.PunchSmooth = this.PunchSmooth;
-      result.PunchTime = this.PunchTime;
-      result.PunchApplied = this.PunchApplied;
       result.PreviousDesiredPosition = this.PreviousDesiredPosition;
       result.CurrentLocalPosition = this.CurrentLocalPosition;
       MaterializeUser(frame, ref result, in context);
@@ -192,6 +182,29 @@ namespace Quantum.Prototypes {
       result.CollisionLocalPoint = this.CollisionLocalPoint;
       result.LastInteractionPosition = this.LastInteractionPosition;
       result.CollisionSuppressed = this.CollisionSuppressed;
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.ClawPunch))]
+  public unsafe partial class ClawPunchPrototype : ComponentPrototype<Quantum.ClawPunch> {
+    public FP PunchStrength;
+    public FP PunchDuration;
+    public FP PunchSmooth;
+    public FP PunchTime;
+    public QBoolean PunchApplied;
+    partial void MaterializeUser(Frame frame, ref Quantum.ClawPunch result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+      Quantum.ClawPunch component = default;
+      Materialize((Frame)f, ref component, in context);
+      return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.ClawPunch result, in PrototypeMaterializationContext context = default) {
+      result.PunchStrength = this.PunchStrength;
+      result.PunchDuration = this.PunchDuration;
+      result.PunchSmooth = this.PunchSmooth;
+      result.PunchTime = this.PunchTime;
+      result.PunchApplied = this.PunchApplied;
+      MaterializeUser(frame, ref result, in context);
     }
   }
   [System.SerializableAttribute()]

@@ -341,6 +341,7 @@ GameObject:
   - component: {fileID: 5810354844314361306}
   - component: {fileID: 2882052205724599686}
   - component: {fileID: 3940820610435062788}
+  - component: {fileID: 796651769757556573}
   - component: {fileID: 5947482083434367520}
   m_Layer: 0
   m_Name: R Claw Entity
@@ -679,16 +680,6 @@ MonoBehaviour:
       RawValue: 28836
     PositionSmooth:
       RawValue: 655360
-    PunchStrength:
-      RawValue: 327680
-    PunchDuration:
-      RawValue: 9830
-    PunchSmooth:
-      RawValue: 1310720
-    PunchTime:
-      RawValue: 0
-    PunchApplied:
-      Value: 0
     PreviousDesiredPosition:
       X:
         RawValue: 0
@@ -703,6 +694,29 @@ MonoBehaviour:
         RawValue: 0
       Z:
         RawValue: 0
+--- !u!114 &796651769757556573
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2346001460760995123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 454e2b582a8c4784aaf04db00a0a82c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeClawPunch
+  Prototype:
+    PunchStrength:
+      RawValue: 327680
+    PunchDuration:
+      RawValue: 9830
+    PunchSmooth:
+      RawValue: 1310720
+    PunchTime:
+      RawValue: 0
+    PunchApplied:
+      Value: 0
 --- !u!114 &5947482083434367520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1403,6 +1417,7 @@ GameObject:
   - component: {fileID: 1183772480965102820}
   - component: {fileID: 3860635237031680443}
   - component: {fileID: 3665861960261083174}
+  - component: {fileID: 8958620279681174574}
   - component: {fileID: 7097148226055203842}
   m_Layer: 0
   m_Name: L Claw Entity
@@ -1741,16 +1756,6 @@ MonoBehaviour:
       RawValue: 28836
     PositionSmooth:
       RawValue: 655360
-    PunchStrength:
-      RawValue: 327680
-    PunchDuration:
-      RawValue: 9830
-    PunchSmooth:
-      RawValue: 1310720
-    PunchTime:
-      RawValue: 0
-    PunchApplied:
-      Value: 0
     PreviousDesiredPosition:
       X:
         RawValue: 0
@@ -1765,6 +1770,29 @@ MonoBehaviour:
         RawValue: 0
       Z:
         RawValue: 0
+--- !u!114 &8958620279681174574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7419804292083686977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 454e2b582a8c4784aaf04db00a0a82c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeClawPunch
+  Prototype:
+    PunchStrength:
+      RawValue: 327680
+    PunchDuration:
+      RawValue: 9830
+    PunchSmooth:
+      RawValue: 1310720
+    PunchTime:
+      RawValue: 0
+    PunchApplied:
+      Value: 0
 --- !u!114 &7097148226055203842
 MonoBehaviour:
   m_ObjectHideFlags: 0

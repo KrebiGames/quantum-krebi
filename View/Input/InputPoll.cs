@@ -31,9 +31,7 @@ public class InputPoll : MonoBehaviour {
 		public InputAction RightClawPinch;
 	}
 
-	private void Start() {
-		QuantumCallback.Subscribe<CallbackPollInput>(this, PollInput);
-	}
+	private void Start() => QuantumCallback.Subscribe<CallbackPollInput>(this, PollInput);
 
 	private void PollInput(CallbackPollInput callback) {
 		PlayerInputData input = default;
@@ -72,14 +70,28 @@ public class InputPoll : MonoBehaviour {
 
 			input.Jump = actions.Jump.IsPressed();
 			input.Sprint = actions.Sprint.IsPressed();
-			input.LeftClawReach = FP.FromFloat_UNSAFE(actions.LeftClawReach.ReadValue<float>());
-			input.RightClawReach = FP.FromFloat_UNSAFE(actions.RightClawReach.ReadValue<float>());
-			input.LeftClawPunch = actions.LeftClawPunch.IsPressed();
-			input.RightClawPunch = actions.RightClawPunch.IsPressed();
+
+			float leftReach = actions.LeftClawReach.phase == InputActionPhase.Performed ? actions.LeftClawReach.ReadValue<float>() : 0.0f;
+			float rightReach = actions.RightClawReach.phase == InputActionPhase.Performed ? actions.RightClawReach.ReadValue<float>() : 0.0f;
+			input.LeftClawReach = FP.FromFloat_UNSAFE(ReadReach(actions.LeftClawReach));
+			input.RightClawReach = FP.FromFloat_UNSAFE(ReadReach(actions.RightClawReach));
+
+			input.LeftClawPunch = ReadPunch(actions.LeftClawPunch);
+			input.RightClawPunch = ReadPunch(actions.RightClawPunch);
+
 			input.LeftClawPinch = actions.LeftClawPinch.IsPressed();
 			input.RightClawPinch = actions.RightClawPinch.IsPressed();
 		}
 
 		callback.SetInput(input, DeterministicInputFlags.Repeatable);
 	}
+
+	private float ReadReach(InputAction action) {
+		if (action.activeControl?.device is Mouse)
+			return action.phase == InputActionPhase.Performed ? action.ReadValue<float>() : 0.0f;
+
+		return action.ReadValue<float>();
+	}
+
+	private bool ReadPunch(InputAction action) => action.WasPerformedThisFrame();
 }

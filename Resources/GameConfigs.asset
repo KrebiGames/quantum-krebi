@@ -68,9 +68,12 @@ MonoBehaviour:
     Guid:
       Value: 127061825759951034
   Entities:
+    CopyMode: 0
     CommitCommandsMode: 0
     DefaultEntityCapacity: 1024
     DefaultComponentBlockCapacity: 128
+    DefaultTableBlockCapacity: 128
+    ForceSparseSetStorageOnAllComponents: 0
     ComponentTypeConfiguration: []
   Physics:
     Gravity:
@@ -151,8 +154,8 @@ MonoBehaviour:
     - 
     - Water
     - UI
-    - Claw
-    - Interactable
+    - 
+    - 
     - 
     - 
     - 
@@ -354,6 +357,12 @@ MonoBehaviour:
     SystemName: 
     StartDisabled: 0
     Children:
+    - SystemType:
+        AssemblyQualifiedName: Quantum.ClawPunchSystem, Quantum.Simulation, Version=0.0.0.0,
+          Culture=neutral, PublicKeyToken=null
+      SystemName: 
+      StartDisabled: 0
+      Children: []
     - SystemType:
         AssemblyQualifiedName: Quantum.ClawGrabSystem, Quantum.Simulation, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null

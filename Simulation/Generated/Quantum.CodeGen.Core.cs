@@ -952,35 +952,25 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct Claw : Quantum.IComponent {
-    public const Int32 SIZE = 184;
+    public const Int32 SIZE = 144;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(0)]
     public ClawSide Side;
     [FieldOffset(4)]
     public ClawState State;
-    [FieldOffset(160)]
+    [FieldOffset(120)]
     public FPVector3 ShoulderLocalPosition;
-    [FieldOffset(88)]
-    public FPVector3 IdleLocalPosition;
-    [FieldOffset(136)]
-    public FPVector3 ReachLocalPosition;
-    [FieldOffset(16)]
-    public FP MaxReach;
-    [FieldOffset(24)]
-    public FP PositionSmooth;
     [FieldOffset(48)]
-    public FP PunchStrength;
-    [FieldOffset(32)]
-    public FP PunchDuration;
-    [FieldOffset(40)]
-    public FP PunchSmooth;
-    [FieldOffset(56)]
-    public FP PunchTime;
+    public FPVector3 IdleLocalPosition;
+    [FieldOffset(96)]
+    public FPVector3 ReachLocalPosition;
     [FieldOffset(8)]
-    public QBoolean PunchApplied;
-    [FieldOffset(112)]
+    public FP MaxReach;
+    [FieldOffset(16)]
+    public FP PositionSmooth;
+    [FieldOffset(72)]
     public FPVector3 PreviousDesiredPosition;
-    [FieldOffset(64)]
+    [FieldOffset(24)]
     public FPVector3 CurrentLocalPosition;
     public override readonly Int32 GetHashCode() {
       unchecked { 
@@ -992,11 +982,6 @@ namespace Quantum {
         hash = hash * 31 + ReachLocalPosition.GetHashCode();
         hash = hash * 31 + MaxReach.GetHashCode();
         hash = hash * 31 + PositionSmooth.GetHashCode();
-        hash = hash * 31 + PunchStrength.GetHashCode();
-        hash = hash * 31 + PunchDuration.GetHashCode();
-        hash = hash * 31 + PunchSmooth.GetHashCode();
-        hash = hash * 31 + PunchTime.GetHashCode();
-        hash = hash * 31 + PunchApplied.GetHashCode();
         hash = hash * 31 + PreviousDesiredPosition.GetHashCode();
         hash = hash * 31 + CurrentLocalPosition.GetHashCode();
         return hash;
@@ -1006,13 +991,8 @@ namespace Quantum {
       var p = (Claw*)ptr;
       serializer.Stream.Serialize((Int32*)&p->Side);
       serializer.Stream.Serialize((Int32*)&p->State);
-      QBoolean.Serialize(&p->PunchApplied, serializer);
       FP.Serialize(&p->MaxReach, serializer);
       FP.Serialize(&p->PositionSmooth, serializer);
-      FP.Serialize(&p->PunchDuration, serializer);
-      FP.Serialize(&p->PunchSmooth, serializer);
-      FP.Serialize(&p->PunchStrength, serializer);
-      FP.Serialize(&p->PunchTime, serializer);
       FPVector3.Serialize(&p->CurrentLocalPosition, serializer);
       FPVector3.Serialize(&p->IdleLocalPosition, serializer);
       FPVector3.Serialize(&p->PreviousDesiredPosition, serializer);
@@ -1100,6 +1080,40 @@ namespace Quantum {
       FPVector3.Serialize(&p->LastInteractionPosition, serializer);
       FPVector3.Serialize(&p->LocalPoint, serializer);
       FPVector3.Serialize(&p->PreviousHandlePosition, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct ClawPunch : Quantum.IComponent {
+    public const Int32 SIZE = 40;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(24)]
+    public FP PunchStrength;
+    [FieldOffset(8)]
+    public FP PunchDuration;
+    [FieldOffset(16)]
+    public FP PunchSmooth;
+    [FieldOffset(32)]
+    public FP PunchTime;
+    [FieldOffset(0)]
+    public QBoolean PunchApplied;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 6917;
+        hash = hash * 31 + PunchStrength.GetHashCode();
+        hash = hash * 31 + PunchDuration.GetHashCode();
+        hash = hash * 31 + PunchSmooth.GetHashCode();
+        hash = hash * 31 + PunchTime.GetHashCode();
+        hash = hash * 31 + PunchApplied.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+      var p = (ClawPunch*)ptr;
+      QBoolean.Serialize(&p->PunchApplied, serializer);
+      FP.Serialize(&p->PunchDuration, serializer);
+      FP.Serialize(&p->PunchSmooth, serializer);
+      FP.Serialize(&p->PunchStrength, serializer);
+      FP.Serialize(&p->PunchTime, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
@@ -1481,6 +1495,7 @@ namespace Quantum {
       private ComponentSignals _componentSignals_CharacterController3D = CreateComponentSignals<CharacterController3D>(frame);
       private ComponentSignals _componentSignals_Claw = CreateComponentSignals<Quantum.Claw>(frame);
       private ComponentSignals _componentSignals_ClawGrab = CreateComponentSignals<Quantum.ClawGrab>(frame);
+      private ComponentSignals _componentSignals_ClawPunch = CreateComponentSignals<Quantum.ClawPunch>(frame);
       private ComponentSignals _componentSignals_EntityGroup = CreateComponentSignals<EntityGroup>(frame);
       private ComponentSignals _componentSignals_Interactable = CreateComponentSignals<Quantum.Interactable>(frame);
       private ComponentSignals _componentSignals_KCC = CreateComponentSignals<Quantum.KCC>(frame);
@@ -1578,6 +1593,7 @@ namespace Quantum {
         registry.Register<CharacterJoint3D>(CharacterJoint3D.SIZE);
         registry.Register<Quantum.Claw>(Quantum.Claw.SIZE);
         registry.Register<Quantum.ClawGrab>(Quantum.ClawGrab.SIZE);
+        registry.Register<Quantum.ClawPunch>(Quantum.ClawPunch.SIZE);
         registry.Register<Quantum.ClawSide>(4);
         registry.Register<Quantum.ClawState>(4);
         registry.Register<ColorRGBA>(ColorRGBA.SIZE);
@@ -1685,6 +1701,7 @@ namespace Quantum {
         registry.Register<Quantum.BodyOrientation>(Quantum.BodyOrientation.Serialize, null, null, ComponentFlags.None);
         registry.Register<Quantum.Claw>(Quantum.Claw.Serialize, null, null, ComponentFlags.None);
         registry.Register<Quantum.ClawGrab>(Quantum.ClawGrab.Serialize, null, null, ComponentFlags.None);
+        registry.Register<Quantum.ClawPunch>(Quantum.ClawPunch.Serialize, null, null, ComponentFlags.None);
         registry.Register<Quantum.Interactable>(Quantum.Interactable.Serialize, null, null, ComponentFlags.None);
         registry.Register<Quantum.KCC>(Quantum.KCC.Serialize, null, Quantum.KCC.OnRemoved, ComponentFlags.None);
         registry.Register<Quantum.KCCProcessorLink>(Quantum.KCCProcessorLink.Serialize, null, null, ComponentFlags.None);

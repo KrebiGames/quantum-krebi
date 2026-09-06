@@ -48,7 +48,7 @@
                     "id": "dbc2c5d0-efd7-491f-976f-2401ef24edef",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "Tap(duration=0.18)",
+                    "interactions": "",
                     "initialStateCheck": false
                 },
                 {
@@ -57,7 +57,7 @@
                     "id": "f6e18ee6-ff61-4e69-9b5f-a11524ac5653",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "Tap(duration=0.18)",
+                    "interactions": "",
                     "initialStateCheck": false
                 },
                 {
@@ -66,7 +66,7 @@
                     "id": "811baa5e-25b0-4b2d-9373-a881574d0c98",
                     "expectedControlType": "Axis",
                     "processors": "",
-                    "interactions": "Hold(duration=0.18)",
+                    "interactions": "",
                     "initialStateCheck": true
                 },
                 {
@@ -75,7 +75,7 @@
                     "id": "c207d137-c821-4abc-ad12-0c2613d834f1",
                     "expectedControlType": "Axis",
                     "processors": "",
-                    "interactions": "Hold(duration=0.18)",
+                    "interactions": "",
                     "initialStateCheck": true
                 },
                 {
@@ -289,7 +289,7 @@
                     "name": "",
                     "id": "da703838-a5d9-4e09-9d29-efd14e7bce46",
                     "path": "<Mouse>/leftButton",
-                    "interactions": "",
+                    "interactions": "Hold(duration=0.13)",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "LeftClawReach",
@@ -311,7 +311,7 @@
                     "name": "",
                     "id": "dee93bb6-b78e-4c43-b920-3569e8a98e91",
                     "path": "<Mouse>/rightButton",
-                    "interactions": "",
+                    "interactions": "Hold(duration=0.13)",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "RightClawReach",
@@ -333,7 +333,7 @@
                     "name": "",
                     "id": "d78d95b1-8c06-4796-9c44-8235a32f38d2",
                     "path": "<Mouse>/leftButton",
-                    "interactions": "",
+                    "interactions": "Tap(duration=0.13)",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "LeftClawPunch",
@@ -355,7 +355,7 @@
                     "name": "",
                     "id": "b99c35ad-de7d-4bcc-bbb3-622794e4f5fb",
                     "path": "<Mouse>/rightButton",
-                    "interactions": "",
+                    "interactions": "Tap(duration=0.13)",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
                     "action": "RightClawPunch",
