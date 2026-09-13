@@ -10,46 +10,68 @@ public class ClawsAnimation : QuantumEntityViewComponent {
 	[SerializeField] Vector3 reachRotation;
 	[SerializeField] Vector3 lockRotationOffset;
 
+	[SerializeField] float grabOffset = 0.05f;
 	[SerializeField] float rotationSmooth = 10f;
 
 	private ClawState[] states;
-	private Quaternion[] lockedRotations;
+	private Vector3[] grabPoints;
+	private bool[] hasGrabPoints;
 
 	public override void OnInitialize() {
 		states = new ClawState[IKTtargets.Length];
-		lockedRotations = new Quaternion[IKTtargets.Length];
+		grabPoints = new Vector3[IKTtargets.Length];
+		hasGrabPoints = new bool[IKTtargets.Length];
+	}
 
-		for (int i = 0; i < IKTtargets.Length; i++)
-			lockedRotations[i] = IKTtargets[i].rotation;
+	public override void OnUpdateView() {
+		for (int i = 0; i < hasGrabPoints.Length; i++)
+			hasGrabPoints[i] = false;
 
-		QuantumEvent.Subscribe<EventClawStateChanged>(this, OnClawStateChanged);
+		Frame frame = PredictedFrame;
+
+		if (frame == null)
+			return;
+
+		foreach (var (clawEntity, index) in frame.GetEntityGroupIterator(EntityRef)) {
+			if (!frame.TryGet<Claw>(clawEntity, out var claw))
+				continue;
+
+			int side = (int)claw.Side;
+
+			if (side < 0 || side >= states.Length)
+				continue;
+
+			states[side] = claw.State;
+
+			if (claw.State != ClawState.Grab || !frame.TryGet<ClawGrab>(clawEntity, out var grab) || grab.Target == EntityRef.None || !frame.TryGet<Transform3D>(grab.Target, out var targetTransform))
+				continue;
+
+			grabPoints[side] = (targetTransform.Position + targetTransform.Rotation * grab.LocalPoint).ToUnityVector3();
+			hasGrabPoints[side] = true;
+		}
 	}
 
 	void LateUpdate() {
 		float t = 1f - Mathf.Exp(-rotationSmooth * Time.deltaTime);
+		int count = Mathf.Min(entities.Length, IKTtargets.Length);
 
-		for (int i = 0; i < entities.Length; i++) {
-			IKTtargets[i].position = entities[i].position;
+		for (int i = 0; i < count; i++) {
+			Vector3 position = entities[i].position;
 
-			if (UsesLockedRotation(states[i]))
-				IKTtargets[i].rotation = Quaternion.Slerp(IKTtargets[i].rotation, lockedRotations[i], t);
-			else
+			if (states[i] == ClawState.Grab && hasGrabPoints[i]) {
+				Vector3 direction = grabPoints[i] - transform.position;
+
+				if (direction.sqrMagnitude > 0.0001f)
+					position -= direction.normalized * grabOffset;
+
+				IKTtargets[i].position = position;
+				IKTtargets[i].rotation = Quaternion.Slerp(IKTtargets[i].rotation, GetGrabRotation(i, position, grabPoints[i]), t);
+			} else {
+				IKTtargets[i].position = position;
 				IKTtargets[i].localRotation = Quaternion.Slerp(IKTtargets[i].localRotation, GetLocalRotation(i), t);
+			}
 		}
 	}
-
-	private void OnClawStateChanged(EventClawStateChanged e) {
-		if (e.Entity != EntityRef)
-			return;
-
-		int index = (int)e.Side;
-		states[index] = e.State;
-
-		if (UsesLockedRotation(e.State))
-			lockedRotations[index] = GetLockedRotation(index, e.TargetPosition.ToUnityVector3());
-	}
-
-	private bool UsesLockedRotation(ClawState state) => state == ClawState.Grab;
 
 	private Quaternion GetLocalRotation(int index) {
 		Vector3 rotation = states[index] switch {
@@ -66,8 +88,8 @@ public class ClawsAnimation : QuantumEntityViewComponent {
 		return Quaternion.Euler(rotation);
 	}
 
-	private Quaternion GetLockedRotation(int index, Vector3 targetPosition) {
-		Vector3 direction = targetPosition - entities[index].position;
+	private Quaternion GetGrabRotation(int index, Vector3 position, Vector3 grabPoint) {
+		Vector3 direction = grabPoint - position;
 
 		if (direction.sqrMagnitude < 0.0001f)
 			return IKTtargets[index].rotation;
