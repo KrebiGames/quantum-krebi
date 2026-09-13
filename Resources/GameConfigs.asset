@@ -352,6 +352,12 @@ MonoBehaviour:
       StartDisabled: 0
       Children: []
   - SystemType:
+      AssemblyQualifiedName: Quantum.ClawGrabSystem, Quantum.Simulation, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    SystemName: 
+    StartDisabled: 0
+    Children: []
+  - SystemType:
       AssemblyQualifiedName: Quantum.ClawSystem, Quantum.Simulation, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
     SystemName: 
@@ -363,14 +369,14 @@ MonoBehaviour:
       SystemName: 
       StartDisabled: 0
       Children: []
-    - SystemType:
-        AssemblyQualifiedName: Quantum.ClawGrabSystem, Quantum.Simulation, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      SystemName: 
-      StartDisabled: 0
-      Children: []
   - SystemType:
       AssemblyQualifiedName: Quantum.Core.PhysicsSystem3D, Quantum.Simulation, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+    SystemName: 
+    StartDisabled: 0
+    Children: []
+  - SystemType:
+      AssemblyQualifiedName: Quantum.ClawTargetSystem, Quantum.Simulation, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
     SystemName: 
     StartDisabled: 0
