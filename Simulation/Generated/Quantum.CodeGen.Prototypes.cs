@@ -142,19 +142,17 @@ namespace Quantum.Prototypes {
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.ClawGrab))]
   public unsafe class ClawGrabPrototype : ComponentPrototype<Quantum.ClawGrab> {
-    public FP GrabDetectRange;
-    public FP GrabReleaseRange;
+    public FP GrabRange;
     public FP CollisionSafeDistance;
     public FP GrabMaxAngle;
-    public FP GrabStrength;
-    public FP GrabDamping;
-    public FP MaxGrabForce;
+    public FP GrabResponsiveness;
+    public FP MaxGrabAcceleration;
     public FP CrabReactionScale;
-    public FP GrabForceSmooth;
-    public FPVector3 CurrentGrabForce;
     public MapEntityId Target;
     public FPVector3 LocalPoint;
+    public FPVector3 TargetPosition;
     public FPVector3 PreviousHandlePosition;
+    public FPVector3 CurrentGrabForce;
     public MapEntityId CollisionTarget;
     public FPVector3 CollisionLocalPoint;
     public FPVector3 LastInteractionPosition;
@@ -165,19 +163,17 @@ namespace Quantum.Prototypes {
       return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.ClawGrab result, in PrototypeMaterializationContext context = default) {
-      result.GrabDetectRange = this.GrabDetectRange;
-      result.GrabReleaseRange = this.GrabReleaseRange;
+      result.GrabRange = this.GrabRange;
       result.CollisionSafeDistance = this.CollisionSafeDistance;
       result.GrabMaxAngle = this.GrabMaxAngle;
-      result.GrabStrength = this.GrabStrength;
-      result.GrabDamping = this.GrabDamping;
-      result.MaxGrabForce = this.MaxGrabForce;
+      result.GrabResponsiveness = this.GrabResponsiveness;
+      result.MaxGrabAcceleration = this.MaxGrabAcceleration;
       result.CrabReactionScale = this.CrabReactionScale;
-      result.GrabForceSmooth = this.GrabForceSmooth;
-      result.CurrentGrabForce = this.CurrentGrabForce;
       PrototypeValidator.FindMapEntity(this.Target, in context, out result.Target);
       result.LocalPoint = this.LocalPoint;
+      result.TargetPosition = this.TargetPosition;
       result.PreviousHandlePosition = this.PreviousHandlePosition;
+      result.CurrentGrabForce = this.CurrentGrabForce;
       PrototypeValidator.FindMapEntity(this.CollisionTarget, in context, out result.CollisionTarget);
       result.CollisionLocalPoint = this.CollisionLocalPoint;
       result.LastInteractionPosition = this.LastInteractionPosition;
@@ -192,6 +188,7 @@ namespace Quantum.Prototypes {
     public FP PunchSmooth;
     public FP PunchTime;
     public QBoolean PunchApplied;
+    public FPVector3 TargetLocalPosition;
     partial void MaterializeUser(Frame frame, ref Quantum.ClawPunch result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
       Quantum.ClawPunch component = default;
@@ -204,7 +201,25 @@ namespace Quantum.Prototypes {
       result.PunchSmooth = this.PunchSmooth;
       result.PunchTime = this.PunchTime;
       result.PunchApplied = this.PunchApplied;
+      result.TargetLocalPosition = this.TargetLocalPosition;
       MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.ClawTarget))]
+  public unsafe class ClawTargetPrototype : ComponentPrototype<Quantum.ClawTarget> {
+    public FP DetectRange;
+    public MapEntityId Entity;
+    public FPVector3 Point;
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+      Quantum.ClawTarget component = default;
+      Materialize((Frame)f, ref component, in context);
+      return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.ClawTarget result, in PrototypeMaterializationContext context = default) {
+      result.DetectRange = this.DetectRange;
+      PrototypeValidator.FindMapEntity(this.Entity, in context, out result.Entity);
+      result.Point = this.Point;
     }
   }
   [System.SerializableAttribute()]

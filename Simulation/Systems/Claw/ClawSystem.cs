@@ -30,7 +30,8 @@ namespace Quantum {
 					!frame.Unsafe.TryGetPointer<Transform3D>(clawEntity, out var clawTransform))
 					continue;
 
-				UpdateClaw(frame, filter.Entity, input, clawEntity, claw, punch, grab, clawTransform, anchorTransform);
+				frame.Unsafe.TryGetPointer<ClawTarget>(clawEntity, out var target);
+				UpdateClaw(frame, filter.Entity, input, clawEntity, claw, punch, grab, target, clawTransform, anchorTransform);
 
 				if (grab->Target != EntityRef.None)
 					interacting = true;
@@ -40,40 +41,27 @@ namespace Quantum {
 				orientation->Interacting = interacting;
 		}
 
-		private void UpdateClaw(Frame frame,
-						  EntityRef entity,
-						  PlayerInputData input,
-						  EntityRef clawEntity,
-						  Claw* claw,
-						  ClawPunch* punch,
-						  ClawGrab* grab,
-						  Transform3D* clawTransform,
-						  Transform3D* anchorTransform) {
+		private void UpdateClaw(Frame frame, EntityRef entity, PlayerInputData input, EntityRef clawEntity, Claw* claw, ClawPunch* punch, ClawGrab* grab, ClawTarget* target, Transform3D* clawTransform, Transform3D* anchorTransform) {
 			FP reach = claw->Side == ClawSide.Left ? input.LeftClawReach : input.RightClawReach;
 			bool punchPressed = claw->Side == ClawSide.Left ? input.LeftClawPunch.WasPressed : input.RightClawPunch.WasPressed;
 
 			reach = FPMath.Clamp01(reach);
 			bool reaching = reach > FP._0_01;
 
-			if (grab->Target != EntityRef.None && (!reaching || !IsGrabValid(frame, claw, grab, clawTransform, anchorTransform)))
-				ReleaseGrab(frame, clawEntity, grab);
-
 			ClawState state;
 			FPVector3 targetPosition;
 
 			if (grab->Target != EntityRef.None) {
 				state = ClawState.Grab;
-				grab->CollisionSuppressed = true;
-
-				if (!TryGetGrabPoint(frame, grab, out targetPosition))
-					targetPosition = grab->LastInteractionPosition;
+				targetPosition = grab->TargetPosition;
 			} else if (punch->PunchTime > FP._0) {
 				state = ClawState.Punch;
-				targetPosition = anchorTransform->Position + anchorTransform->Rotation * claw->ReachLocalPosition;
+				targetPosition = anchorTransform->Position + anchorTransform->Rotation * punch->TargetLocalPosition;
 				punch->PunchTime -= frame.DeltaTime;
 			} else if (punchPressed && !reaching) {
 				state = ClawState.Punch;
-				targetPosition = anchorTransform->Position + anchorTransform->Rotation * claw->ReachLocalPosition;
+				punch->TargetLocalPosition = GetPunchTargetLocalPosition(claw, target, clawTransform, anchorTransform);
+				targetPosition = anchorTransform->Position + anchorTransform->Rotation * punch->TargetLocalPosition;
 				punch->PunchTime = punch->PunchDuration;
 				punch->PunchApplied = false;
 			} else if (reaching) {
@@ -86,9 +74,7 @@ namespace Quantum {
 			}
 
 			SetState(frame, entity, claw, state, targetPosition);
-
 			UpdatePosition(frame, clawEntity, claw, punch, grab, clawTransform, anchorTransform, reach);
-			UpdateCollisionSuppression(frame, grab, clawTransform);
 		}
 
 		private void SetState(Frame frame, EntityRef entity, Claw* claw, ClawState state, FPVector3 targetPosition) {
@@ -102,12 +88,11 @@ namespace Quantum {
 		private void UpdatePosition(Frame frame, EntityRef clawEntity, Claw* claw, ClawPunch* punch, ClawGrab* grab, Transform3D* clawTransform, Transform3D* anchorTransform, FP reach) {
 			FPVector3 targetLocalPosition;
 
-			if (grab->Target != EntityRef.None && TryGetGrabPoint(frame, grab, out FPVector3 grabPosition)) {
-				targetLocalPosition = anchorTransform->Rotation.Inverted * (grabPosition - anchorTransform->Position);
+			if (grab->Target != EntityRef.None) {
+				targetLocalPosition = anchorTransform->Rotation.Inverted * (grab->TargetPosition - anchorTransform->Position);
 				targetLocalPosition = ClampReach(claw, targetLocalPosition);
-				grab->LastInteractionPosition = grabPosition;
 			} else if (claw->State == ClawState.Punch) {
-				targetLocalPosition = claw->ReachLocalPosition;
+				targetLocalPosition = punch->TargetLocalPosition;
 			} else if (claw->State == ClawState.Reach) {
 				targetLocalPosition = claw->IdleLocalPosition + (claw->ReachLocalPosition - claw->IdleLocalPosition) * reach;
 			} else {
@@ -148,69 +133,18 @@ namespace Quantum {
 			claw->PreviousDesiredPosition = desiredPosition;
 		}
 
-		private void ReleaseGrab(Frame frame, EntityRef clawEntity, ClawGrab* grab) {
-			EntityRef target = grab->Target;
-			FPVector3 position = grab->LastInteractionPosition;
+		private FPVector3 GetPunchTargetLocalPosition(Claw* claw, ClawTarget* target, Transform3D* clawTransform, Transform3D* anchorTransform) {
+			if (target == null || target->Entity == EntityRef.None)
+				return claw->ReachLocalPosition;
 
-			if (TryGetGrabPoint(frame, grab, out FPVector3 currentPosition))
-				position = currentPosition;
+			FPVector3 direction = target->Point - clawTransform->Position;
 
-			frame.Signals.OnTargetGrabReleased(target, clawEntity, position);
+			if (direction.SqrMagnitude == FP._0)
+				return claw->ReachLocalPosition;
 
-			grab->CollisionTarget = target;
-			grab->CollisionLocalPoint = grab->LocalPoint;
-			grab->LastInteractionPosition = position;
-
-			grab->Target = EntityRef.None;
-			grab->LocalPoint = FPVector3.Zero;
-			grab->PreviousHandlePosition = FPVector3.Zero;
-			grab->CurrentGrabForce = FPVector3.Zero;
-		}
-
-		private void UpdateCollisionSuppression(Frame frame, ClawGrab* grab, Transform3D* clawTransform) {
-			if (!grab->CollisionSuppressed || grab->Target != EntityRef.None)
-				return;
-
-			FPVector3 interactionPosition = grab->LastInteractionPosition;
-
-			if (grab->CollisionTarget != EntityRef.None && frame.Unsafe.TryGetPointer<Transform3D>(grab->CollisionTarget, out var targetTransform))
-				interactionPosition = targetTransform->Position + targetTransform->Rotation * grab->CollisionLocalPoint;
-
-			if ((clawTransform->Position - interactionPosition).SqrMagnitude < grab->CollisionSafeDistance * grab->CollisionSafeDistance)
-				return;
-
-			grab->CollisionSuppressed = false;
-			grab->CollisionTarget = EntityRef.None;
-			grab->CollisionLocalPoint = FPVector3.Zero;
-		}
-
-		private bool IsGrabValid(Frame frame, Claw* claw, ClawGrab* grab, Transform3D* clawTransform, Transform3D* anchorTransform) {
-			FPVector3 localClawPosition = anchorTransform->Rotation.Inverted * (clawTransform->Position - anchorTransform->Position);
-			FP angle = FPMath.Abs(FPMath.Atan2(localClawPosition.X, localClawPosition.Z) * FP.Rad2Deg);
-
-			if (angle > grab->GrabMaxAngle)
-				return false;
-
-			if (!TryGetGrabPoint(frame, grab, out FPVector3 point))
-				return false;
-
-			return IsWithinReach(claw, anchorTransform, point, grab->GrabReleaseRange);
-		}
-
-		private bool TryGetGrabPoint(Frame frame, ClawGrab* grab, out FPVector3 position) {
-			position = FPVector3.Zero;
-
-			if (grab->Target == EntityRef.None || !frame.Unsafe.TryGetPointer<Transform3D>(grab->Target, out var transform))
-				return false;
-
-			position = transform->Position + transform->Rotation * grab->LocalPoint;
-			return true;
-		}
-
-		private bool IsWithinReach(Claw* claw, Transform3D* anchorTransform, FPVector3 position, FP extraRange) {
-			FPVector3 shoulder = anchorTransform->Position + anchorTransform->Rotation * claw->ShoulderLocalPosition;
-			FP maxReach = claw->MaxReach + extraRange;
-			return (position - shoulder).SqrMagnitude <= maxReach * maxReach;
+			FP distance = (claw->ReachLocalPosition - claw->IdleLocalPosition).Magnitude;
+			FPVector3 position = clawTransform->Position + direction.Normalized * distance;
+			return ClampReach(claw, anchorTransform->Rotation.Inverted * (position - anchorTransform->Position));
 		}
 
 		private FPVector3 ClampReach(Claw* claw, FPVector3 position) {

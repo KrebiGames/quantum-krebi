@@ -34,7 +34,6 @@ Transform:
   m_Children:
   - {fileID: 1733168166916102778}
   - {fileID: 7160099644815396706}
-  - {fileID: 5631558115820044387}
   m_Father: {fileID: 7084230614345603675}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5106775526467358705
@@ -341,6 +340,7 @@ GameObject:
   - component: {fileID: 5810354844314361306}
   - component: {fileID: 2882052205724599686}
   - component: {fileID: 3940820610435062788}
+  - component: {fileID: 2941775657526450558}
   - component: {fileID: 796651769757556573}
   - component: {fileID: 5947482083434367520}
   m_Layer: 0
@@ -694,6 +694,29 @@ MonoBehaviour:
         RawValue: 0
       Z:
         RawValue: 0
+--- !u!114 &2941775657526450558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2346001460760995123}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ea47fd4064bfd34591942e4367e55f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeClawTarget
+  Prototype:
+    DetectRange:
+      RawValue: 32768
+    Entity: {fileID: 0}
+    Point:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+      Z:
+        RawValue: 0
 --- !u!114 &796651769757556573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -708,7 +731,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeClawPunch
   Prototype:
     PunchStrength:
-      RawValue: 327680
+      RawValue: 131072
     PunchDuration:
       RawValue: 9830
     PunchSmooth:
@@ -717,6 +740,13 @@ MonoBehaviour:
       RawValue: 0
     PunchApplied:
       Value: 0
+    TargetLocalPosition:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+      Z:
+        RawValue: 0
 --- !u!114 &5947482083434367520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -730,31 +760,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeClawGrab
   Prototype:
-    GrabDetectRange:
-      RawValue: 13107
-    GrabReleaseRange:
+    GrabRange:
       RawValue: 13107
     CollisionSafeDistance:
       RawValue: 6554
     GrabMaxAngle:
-      RawValue: 1966080
-    GrabStrength:
-      RawValue: 1966080
-    GrabDamping:
-      RawValue: 655360
-    MaxGrabForce:
-      RawValue: 1966080
+      RawValue: 3932160
+    GrabResponsiveness:
+      RawValue: 786432
+    MaxGrabAcceleration:
+      RawValue: 5242880
     CrabReactionScale:
       RawValue: 0
-    GrabForceSmooth:
-      RawValue: 655360
-    CurrentGrabForce:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
     Target: {fileID: 0}
     LocalPoint:
       X:
@@ -763,7 +780,21 @@ MonoBehaviour:
         RawValue: 0
       Z:
         RawValue: 0
+    TargetPosition:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+      Z:
+        RawValue: 0
     PreviousHandlePosition:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+      Z:
+        RawValue: 0
+    CurrentGrabForce:
       X:
         RawValue: 0
       Y:
@@ -818,37 +849,6 @@ Transform:
   m_Children:
   - {fileID: 6148946587866119578}
   m_Father: {fileID: 7084230614345603675}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &3934789009746385716
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5631558115820044387}
-  m_Layer: 0
-  m_Name: GameObject
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5631558115820044387
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3934789009746385716}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.04, y: 0.060000002, z: 0.44}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 6243375094655287651}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4899267199245480236
 GameObject:
@@ -1417,6 +1417,7 @@ GameObject:
   - component: {fileID: 1183772480965102820}
   - component: {fileID: 3860635237031680443}
   - component: {fileID: 3665861960261083174}
+  - component: {fileID: 856116360796199724}
   - component: {fileID: 8958620279681174574}
   - component: {fileID: 7097148226055203842}
   m_Layer: 0
@@ -1770,6 +1771,29 @@ MonoBehaviour:
         RawValue: 0
       Z:
         RawValue: 0
+--- !u!114 &856116360796199724
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7419804292083686977}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ea47fd4064bfd34591942e4367e55f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeClawTarget
+  Prototype:
+    DetectRange:
+      RawValue: 32768
+    Entity: {fileID: 0}
+    Point:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+      Z:
+        RawValue: 0
 --- !u!114 &8958620279681174574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1784,7 +1808,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeClawPunch
   Prototype:
     PunchStrength:
-      RawValue: 327680
+      RawValue: 131072
     PunchDuration:
       RawValue: 9830
     PunchSmooth:
@@ -1793,6 +1817,13 @@ MonoBehaviour:
       RawValue: 0
     PunchApplied:
       Value: 0
+    TargetLocalPosition:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+      Z:
+        RawValue: 0
 --- !u!114 &7097148226055203842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1806,31 +1837,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeClawGrab
   Prototype:
-    GrabDetectRange:
-      RawValue: 13107
-    GrabReleaseRange:
+    GrabRange:
       RawValue: 13107
     CollisionSafeDistance:
       RawValue: 6554
     GrabMaxAngle:
-      RawValue: 1966080
-    GrabStrength:
-      RawValue: 1966080
-    GrabDamping:
-      RawValue: 655360
-    MaxGrabForce:
-      RawValue: 1966080
+      RawValue: 3932160
+    GrabResponsiveness:
+      RawValue: 786432
+    MaxGrabAcceleration:
+      RawValue: 5242880
     CrabReactionScale:
       RawValue: 0
-    GrabForceSmooth:
-      RawValue: 655360
-    CurrentGrabForce:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
     Target: {fileID: 0}
     LocalPoint:
       X:
@@ -1839,7 +1857,21 @@ MonoBehaviour:
         RawValue: 0
       Z:
         RawValue: 0
+    TargetPosition:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+      Z:
+        RawValue: 0
     PreviousHandlePosition:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+      Z:
+        RawValue: 0
+    CurrentGrabForce:
       X:
         RawValue: 0
       Y:

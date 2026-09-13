@@ -26,6 +26,14 @@ component Claw {
 	FPVector3 CurrentLocalPosition;
 }
 
+component ClawTarget {
+	FP DetectRange;
+
+	// Runtime
+	EntityRef Entity;
+	FPVector3 Point;
+}
+
 component ClawPunch {
 	FP PunchStrength;
 	FP PunchDuration;
@@ -34,25 +42,23 @@ component ClawPunch {
 	// Runtime
 	FP PunchTime;
 	bool PunchApplied;
+	FPVector3 TargetLocalPosition;
 }
 
 component ClawGrab {
-	// Settings
-	FP GrabDetectRange;
-	FP GrabReleaseRange;
+	FP GrabRange;
 	FP CollisionSafeDistance;
 	FP GrabMaxAngle;
-	FP GrabStrength;
-	FP GrabDamping;
-	FP MaxGrabForce;
+	FP GrabResponsiveness;
+	FP MaxGrabAcceleration;
 	FP CrabReactionScale;
-	FP GrabForceSmooth;
-	FPVector3 CurrentGrabForce;
 
 	// Runtime
 	EntityRef Target;
 	FPVector3 LocalPoint;
+	FPVector3 TargetPosition;
 	FPVector3 PreviousHandlePosition;
+	FPVector3 CurrentGrabForce;
 
 	EntityRef CollisionTarget;
 	FPVector3 CollisionLocalPoint;

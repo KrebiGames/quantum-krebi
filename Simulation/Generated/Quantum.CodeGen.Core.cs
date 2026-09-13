@@ -1005,55 +1005,49 @@ namespace Quantum {
     public const Int32 SIZE = 216;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(48)]
-    public FP GrabDetectRange;
-    [FieldOffset(72)]
-    public FP GrabReleaseRange;
+    public FP GrabRange;
     [FieldOffset(24)]
     public FP CollisionSafeDistance;
-    [FieldOffset(64)]
-    public FP GrabMaxAngle;
-    [FieldOffset(80)]
-    public FP GrabStrength;
     [FieldOffset(40)]
-    public FP GrabDamping;
-    [FieldOffset(88)]
-    public FP MaxGrabForce;
+    public FP GrabMaxAngle;
+    [FieldOffset(56)]
+    public FP GrabResponsiveness;
+    [FieldOffset(64)]
+    public FP MaxGrabAcceleration;
     [FieldOffset(32)]
     public FP CrabReactionScale;
-    [FieldOffset(56)]
-    public FP GrabForceSmooth;
-    [FieldOffset(120)]
-    public FPVector3 CurrentGrabForce;
     [FieldOffset(16)]
     public EntityRef Target;
-    [FieldOffset(168)]
+    [FieldOffset(144)]
     public FPVector3 LocalPoint;
     [FieldOffset(192)]
+    public FPVector3 TargetPosition;
+    [FieldOffset(168)]
     public FPVector3 PreviousHandlePosition;
+    [FieldOffset(96)]
+    public FPVector3 CurrentGrabForce;
     [FieldOffset(8)]
     public EntityRef CollisionTarget;
-    [FieldOffset(96)]
+    [FieldOffset(72)]
     public FPVector3 CollisionLocalPoint;
-    [FieldOffset(144)]
+    [FieldOffset(120)]
     public FPVector3 LastInteractionPosition;
     [FieldOffset(0)]
     public QBoolean CollisionSuppressed;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 5479;
-        hash = hash * 31 + GrabDetectRange.GetHashCode();
-        hash = hash * 31 + GrabReleaseRange.GetHashCode();
+        hash = hash * 31 + GrabRange.GetHashCode();
         hash = hash * 31 + CollisionSafeDistance.GetHashCode();
         hash = hash * 31 + GrabMaxAngle.GetHashCode();
-        hash = hash * 31 + GrabStrength.GetHashCode();
-        hash = hash * 31 + GrabDamping.GetHashCode();
-        hash = hash * 31 + MaxGrabForce.GetHashCode();
+        hash = hash * 31 + GrabResponsiveness.GetHashCode();
+        hash = hash * 31 + MaxGrabAcceleration.GetHashCode();
         hash = hash * 31 + CrabReactionScale.GetHashCode();
-        hash = hash * 31 + GrabForceSmooth.GetHashCode();
-        hash = hash * 31 + CurrentGrabForce.GetHashCode();
         hash = hash * 31 + Target.GetHashCode();
         hash = hash * 31 + LocalPoint.GetHashCode();
+        hash = hash * 31 + TargetPosition.GetHashCode();
         hash = hash * 31 + PreviousHandlePosition.GetHashCode();
+        hash = hash * 31 + CurrentGrabForce.GetHashCode();
         hash = hash * 31 + CollisionTarget.GetHashCode();
         hash = hash * 31 + CollisionLocalPoint.GetHashCode();
         hash = hash * 31 + LastInteractionPosition.GetHashCode();
@@ -1068,23 +1062,21 @@ namespace Quantum {
       EntityRef.Serialize(&p->Target, serializer);
       FP.Serialize(&p->CollisionSafeDistance, serializer);
       FP.Serialize(&p->CrabReactionScale, serializer);
-      FP.Serialize(&p->GrabDamping, serializer);
-      FP.Serialize(&p->GrabDetectRange, serializer);
-      FP.Serialize(&p->GrabForceSmooth, serializer);
       FP.Serialize(&p->GrabMaxAngle, serializer);
-      FP.Serialize(&p->GrabReleaseRange, serializer);
-      FP.Serialize(&p->GrabStrength, serializer);
-      FP.Serialize(&p->MaxGrabForce, serializer);
+      FP.Serialize(&p->GrabRange, serializer);
+      FP.Serialize(&p->GrabResponsiveness, serializer);
+      FP.Serialize(&p->MaxGrabAcceleration, serializer);
       FPVector3.Serialize(&p->CollisionLocalPoint, serializer);
       FPVector3.Serialize(&p->CurrentGrabForce, serializer);
       FPVector3.Serialize(&p->LastInteractionPosition, serializer);
       FPVector3.Serialize(&p->LocalPoint, serializer);
       FPVector3.Serialize(&p->PreviousHandlePosition, serializer);
+      FPVector3.Serialize(&p->TargetPosition, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct ClawPunch : Quantum.IComponent {
-    public const Int32 SIZE = 40;
+    public const Int32 SIZE = 64;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(24)]
     public FP PunchStrength;
@@ -1096,6 +1088,8 @@ namespace Quantum {
     public FP PunchTime;
     [FieldOffset(0)]
     public QBoolean PunchApplied;
+    [FieldOffset(40)]
+    public FPVector3 TargetLocalPosition;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 6917;
@@ -1104,6 +1098,7 @@ namespace Quantum {
         hash = hash * 31 + PunchSmooth.GetHashCode();
         hash = hash * 31 + PunchTime.GetHashCode();
         hash = hash * 31 + PunchApplied.GetHashCode();
+        hash = hash * 31 + TargetLocalPosition.GetHashCode();
         return hash;
       }
     }
@@ -1114,6 +1109,33 @@ namespace Quantum {
       FP.Serialize(&p->PunchSmooth, serializer);
       FP.Serialize(&p->PunchStrength, serializer);
       FP.Serialize(&p->PunchTime, serializer);
+      FPVector3.Serialize(&p->TargetLocalPosition, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct ClawTarget : Quantum.IComponent {
+    public const Int32 SIZE = 40;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(8)]
+    public FP DetectRange;
+    [FieldOffset(0)]
+    public EntityRef Entity;
+    [FieldOffset(16)]
+    public FPVector3 Point;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 8819;
+        hash = hash * 31 + DetectRange.GetHashCode();
+        hash = hash * 31 + Entity.GetHashCode();
+        hash = hash * 31 + Point.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+      var p = (ClawTarget*)ptr;
+      EntityRef.Serialize(&p->Entity, serializer);
+      FP.Serialize(&p->DetectRange, serializer);
+      FPVector3.Serialize(&p->Point, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
@@ -1496,6 +1518,7 @@ namespace Quantum {
       private ComponentSignals _componentSignals_Claw = CreateComponentSignals<Quantum.Claw>(frame);
       private ComponentSignals _componentSignals_ClawGrab = CreateComponentSignals<Quantum.ClawGrab>(frame);
       private ComponentSignals _componentSignals_ClawPunch = CreateComponentSignals<Quantum.ClawPunch>(frame);
+      private ComponentSignals _componentSignals_ClawTarget = CreateComponentSignals<Quantum.ClawTarget>(frame);
       private ComponentSignals _componentSignals_EntityGroup = CreateComponentSignals<EntityGroup>(frame);
       private ComponentSignals _componentSignals_Interactable = CreateComponentSignals<Quantum.Interactable>(frame);
       private ComponentSignals _componentSignals_KCC = CreateComponentSignals<Quantum.KCC>(frame);
@@ -1596,6 +1619,7 @@ namespace Quantum {
         registry.Register<Quantum.ClawPunch>(Quantum.ClawPunch.SIZE);
         registry.Register<Quantum.ClawSide>(4);
         registry.Register<Quantum.ClawState>(4);
+        registry.Register<Quantum.ClawTarget>(Quantum.ClawTarget.SIZE);
         registry.Register<ColorRGBA>(ColorRGBA.SIZE);
         registry.Register<ComponentPrototypeRef>(ComponentPrototypeRef.SIZE);
         registry.Register<ComponentTypeRef>(ComponentTypeRef.SIZE);
@@ -1702,6 +1726,7 @@ namespace Quantum {
         registry.Register<Quantum.Claw>(Quantum.Claw.Serialize, null, null, ComponentFlags.None);
         registry.Register<Quantum.ClawGrab>(Quantum.ClawGrab.Serialize, null, null, ComponentFlags.None);
         registry.Register<Quantum.ClawPunch>(Quantum.ClawPunch.Serialize, null, null, ComponentFlags.None);
+        registry.Register<Quantum.ClawTarget>(Quantum.ClawTarget.Serialize, null, null, ComponentFlags.None);
         registry.Register<Quantum.Interactable>(Quantum.Interactable.Serialize, null, null, ComponentFlags.None);
         registry.Register<Quantum.KCC>(Quantum.KCC.Serialize, null, Quantum.KCC.OnRemoved, ComponentFlags.None);
         registry.Register<Quantum.KCCProcessorLink>(Quantum.KCCProcessorLink.Serialize, null, null, ComponentFlags.None);
