@@ -523,6 +523,8 @@ namespace Quantum.Prototypes {
   [Quantum.Prototypes.Prototype(typeof(Quantum.Player))]
   public unsafe partial class PlayerPrototype : ComponentPrototype<Quantum.Player> {
     public FP WalkSpeed;
+    public FP SwimSpeed;
+    public FP SwimUpSpeed;
     public FP NormalJump;
     public FP Mass;
     [HideInInspector()]
@@ -535,6 +537,8 @@ namespace Quantum.Prototypes {
     }
     public void Materialize(Frame frame, ref Quantum.Player result, in PrototypeMaterializationContext context = default) {
       result.WalkSpeed = this.WalkSpeed;
+      result.SwimSpeed = this.SwimSpeed;
+      result.SwimUpSpeed = this.SwimUpSpeed;
       result.NormalJump = this.NormalJump;
       result.Mass = this.Mass;
       result.PlayerRef = this.PlayerRef;
@@ -728,6 +732,21 @@ namespace Quantum.Prototypes {
         case "": case null: break;
         default: PrototypeValidator.UnknownUnionField(_field_used_, in context); break;
       }
+      MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.Water))]
+  public unsafe partial class WaterPrototype : ComponentPrototype<Quantum.Water> {
+    [HideInInspector()]
+    public Int32 _empty_prototype_dummy_field_;
+    partial void MaterializeUser(Frame frame, ref Quantum.Water result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+      Quantum.Water component = default;
+      Materialize((Frame)f, ref component, in context);
+      return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.Water result, in PrototypeMaterializationContext context = default) {
       MaterializeUser(frame, ref result, in context);
     }
   }

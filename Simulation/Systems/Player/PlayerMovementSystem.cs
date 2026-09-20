@@ -18,10 +18,11 @@ namespace Quantum {
 			Player* player = filter.Player;
 			KCC* kcc = filter.KCC;
 
-			// Movement
-			FP moveSpeed = player->WalkSpeed;
+			bool isSwimming = filter.PlayerStatus->IsSwimming;
 
-			if (input.Sprint.IsDown && kcc->IsGrounded)
+			FP moveSpeed = isSwimming ? player->SwimSpeed : player->WalkSpeed;
+
+			if (!isSwimming && input.Sprint.IsDown && kcc->IsGrounded)
 				moveSpeed = FP._1;
 
 			FPVector3 moveDirection =
@@ -29,7 +30,12 @@ namespace Quantum {
 
 			kcc->SetInputDirection(moveDirection * moveSpeed, false);
 
-			// Look
+			if (isSwimming) {
+				FPVector3 velocity = kcc->Data.DynamicVelocity;
+				velocity.Y = input.Jump.IsDown ? player->SwimUpSpeed : FP._0;
+				kcc->SetDynamicVelocity(velocity);
+			}
+
 			PlayerMovementData movementData =
 				frame.FindAsset<PlayerMovementData>(filter.PlayerStatus->PlayerMovementData.Id);
 
@@ -38,8 +44,7 @@ namespace Quantum {
 				input.AimDirection.X * movementData.DefaultRotationSpeed * frame.DeltaTime
 			);
 
-			// Jump
-			if (input.Jump.WasPressed && kcc->IsGrounded)
+			if (!isSwimming && input.Jump.WasPressed && kcc->IsGrounded)
 				kcc->Jump(FPVector3.Up * player->NormalJump);
 		}
 	}

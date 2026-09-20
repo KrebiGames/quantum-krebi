@@ -66,9 +66,6 @@ component ClawGrab {
 	bool CollisionSuppressed;
 }
 
-component Interactable {
-}
-
 signal OnTargetGrabStarted(EntityRef target, EntityRef claw, FPVector3 position);
 signal OnTargetGrabReleased(EntityRef target, EntityRef claw, FPVector3 position);
 

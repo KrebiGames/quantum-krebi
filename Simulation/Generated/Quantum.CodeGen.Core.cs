@@ -1355,10 +1355,14 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct Player : Quantum.IComponent {
-    public const Int32 SIZE = 32;
+    public const Int32 SIZE = 48;
     public const Int32 ALIGNMENT = 8;
-    [FieldOffset(24)]
+    [FieldOffset(40)]
     public FP WalkSpeed;
+    [FieldOffset(24)]
+    public FP SwimSpeed;
+    [FieldOffset(32)]
+    public FP SwimUpSpeed;
     [FieldOffset(16)]
     public FP NormalJump;
     [FieldOffset(8)]
@@ -1370,6 +1374,8 @@ namespace Quantum {
       unchecked { 
         var hash = 2621;
         hash = hash * 31 + WalkSpeed.GetHashCode();
+        hash = hash * 31 + SwimSpeed.GetHashCode();
+        hash = hash * 31 + SwimUpSpeed.GetHashCode();
         hash = hash * 31 + NormalJump.GetHashCode();
         hash = hash * 31 + Mass.GetHashCode();
         hash = hash * 31 + PlayerRef.GetHashCode();
@@ -1381,6 +1387,8 @@ namespace Quantum {
       PlayerRef.Serialize(&p->PlayerRef, serializer);
       FP.Serialize(&p->Mass, serializer);
       FP.Serialize(&p->NormalJump, serializer);
+      FP.Serialize(&p->SwimSpeed, serializer);
+      FP.Serialize(&p->SwimUpSpeed, serializer);
       FP.Serialize(&p->WalkSpeed, serializer);
     }
   }
@@ -1408,19 +1416,22 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct PlayerStatus : Quantum.IComponent {
-    public const Int32 SIZE = 24;
+    public const Int32 SIZE = 32;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(0)]
     [ExcludeFromPrototype()]
     public PlayerRef PlayerRef;
-    [FieldOffset(16)]
+    [FieldOffset(24)]
     [ExcludeFromPrototype()]
     public EntityRef SpawnerEntityRef;
     [FieldOffset(4)]
     [ExcludeFromPrototype()]
     public PlayerTeam PlayerTeam;
-    [FieldOffset(8)]
+    [FieldOffset(16)]
     public AssetRef<PlayerMovementData> PlayerMovementData;
+    [FieldOffset(8)]
+    [ExcludeFromPrototype()]
+    public QBoolean IsSwimming;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 6329;
@@ -1428,6 +1439,7 @@ namespace Quantum {
         hash = hash * 31 + SpawnerEntityRef.GetHashCode();
         hash = hash * 31 + (Int32)PlayerTeam;
         hash = hash * 31 + PlayerMovementData.GetHashCode();
+        hash = hash * 31 + IsSwimming.GetHashCode();
         return hash;
       }
     }
@@ -1435,8 +1447,25 @@ namespace Quantum {
       var p = (PlayerStatus*)ptr;
       PlayerRef.Serialize(&p->PlayerRef, serializer);
       serializer.Stream.Serialize((Int32*)&p->PlayerTeam);
+      QBoolean.Serialize(&p->IsSwimming, serializer);
       AssetRef.Serialize(&p->PlayerMovementData, serializer);
       EntityRef.Serialize(&p->SpawnerEntityRef, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct Water : Quantum.IComponent {
+    public const Int32 SIZE = 4;
+    public const Int32 ALIGNMENT = 4;
+    [FieldOffset(0)]
+    private fixed Byte _alignment_padding_[4];
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 5867;
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+      var p = (Water*)ptr;
     }
   }
   public unsafe partial interface ISignalOnTargetGrabStarted : ISignal {
@@ -1546,6 +1575,7 @@ namespace Quantum {
       private ComponentSignals _componentSignals_Transform2DVertical = CreateComponentSignals<Transform2DVertical>(frame);
       private ComponentSignals _componentSignals_Transform3D = CreateComponentSignals<Transform3D>(frame);
       private ComponentSignals _componentSignals_View = CreateComponentSignals<View>(frame);
+      private ComponentSignals _componentSignals_Water = CreateComponentSignals<Quantum.Water>(frame);
       private ISignalOnTargetGrabStarted[] _ISignalOnTargetGrabStartedSystems = CreateSignalArray<ISignalOnTargetGrabStarted>(frame);
       private ISignalOnTargetGrabReleased[] _ISignalOnTargetGrabReleasedSystems = CreateSignalArray<ISignalOnTargetGrabReleased>(frame);
       private ISignalOnPlayerRespawned[] _ISignalOnPlayerRespawnedSystems = CreateSignalArray<ISignalOnPlayerRespawned>(frame);
@@ -1714,6 +1744,7 @@ namespace Quantum {
         registry.Register<Transform2DVertical>(Transform2DVertical.SIZE);
         registry.Register<Transform3D>(Transform3D.SIZE);
         registry.Register<View>(View.SIZE);
+        registry.Register<Quantum.Water>(Quantum.Water.SIZE);
         registry.Register<Quantum._globals_>(Quantum._globals_.SIZE);
         return registry;
       }
@@ -1736,6 +1767,7 @@ namespace Quantum {
         registry.Register<Quantum.Player>(Quantum.Player.Serialize, null, null, ComponentFlags.None);
         registry.Register<Quantum.PlayerSpawner>(Quantum.PlayerSpawner.Serialize, null, null, ComponentFlags.None);
         registry.Register<Quantum.PlayerStatus>(Quantum.PlayerStatus.Serialize, null, null, ComponentFlags.None);
+        registry.Register<Quantum.Water>(Quantum.Water.Serialize, null, null, ComponentFlags.None);
         return registry;
       }
     }

@@ -1221,6 +1221,10 @@ MonoBehaviour:
   Prototype:
     WalkSpeed:
       RawValue: 19661
+    SwimSpeed:
+      RawValue: 13107
+    SwimUpSpeed:
+      RawValue: 13107
     NormalJump:
       RawValue: 39322
     Mass:
@@ -1341,6 +1345,7 @@ MonoBehaviour:
   punchRotation: {x: -60, y: -90, z: 0}
   reachRotation: {x: 90, y: 0, z: 0}
   lockRotationOffset: {x: 90, y: 0, z: 0}
+  grabOffset: 0.05
   rotationSmooth: 10
 --- !u!1 &6005787706641765756
 GameObject:

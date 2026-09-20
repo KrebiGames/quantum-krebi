@@ -4,6 +4,8 @@
 
 component Player {
 	FP WalkSpeed;
+	FP SwimSpeed;
+	FP SwimUpSpeed;
 	FP NormalJump;
 	FP Mass;
 
@@ -22,6 +24,9 @@ component PlayerStatus {
 	PlayerTeam PlayerTeam;
 
 	asset_ref<PlayerMovementData> PlayerMovementData;
+
+	[ExcludeFromPrototype]
+	bool IsSwimming;
 }
 
 component PlayerSpawner {
