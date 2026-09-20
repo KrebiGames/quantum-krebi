@@ -50,60 +50,6 @@ namespace Quantum.Prototypes.Unity {
   #endif //;
   
   [System.SerializableAttribute()]
-  public unsafe partial class ClawGrabPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.ClawGrabPrototype> {
-    public FP GrabRange;
-    public FP CollisionSafeDistance;
-    public FP GrabMaxAngle;
-    public FP GrabResponsiveness;
-    public FP MaxGrabAcceleration;
-    public FP CrabReactionScale;
-    public Quantum.QuantumEntityPrototype Target;
-    public FPVector3 LocalPoint;
-    public FPVector3 TargetPosition;
-    public FPVector3 PreviousHandlePosition;
-    public FPVector3 CurrentGrabForce;
-    public Quantum.QuantumEntityPrototype CollisionTarget;
-    public FPVector3 CollisionLocalPoint;
-    public FPVector3 LastInteractionPosition;
-    public QBoolean CollisionSuppressed;
-    partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.ClawGrabPrototype prototype);
-    public override Quantum.Prototypes.ClawGrabPrototype Convert(Quantum.QuantumEntityPrototypeConverter converter) {
-      var result = new Quantum.Prototypes.ClawGrabPrototype();
-      converter.Convert(this.GrabRange, out result.GrabRange);
-      converter.Convert(this.CollisionSafeDistance, out result.CollisionSafeDistance);
-      converter.Convert(this.GrabMaxAngle, out result.GrabMaxAngle);
-      converter.Convert(this.GrabResponsiveness, out result.GrabResponsiveness);
-      converter.Convert(this.MaxGrabAcceleration, out result.MaxGrabAcceleration);
-      converter.Convert(this.CrabReactionScale, out result.CrabReactionScale);
-      converter.Convert(this.Target, out result.Target);
-      converter.Convert(this.LocalPoint, out result.LocalPoint);
-      converter.Convert(this.TargetPosition, out result.TargetPosition);
-      converter.Convert(this.PreviousHandlePosition, out result.PreviousHandlePosition);
-      converter.Convert(this.CurrentGrabForce, out result.CurrentGrabForce);
-      converter.Convert(this.CollisionTarget, out result.CollisionTarget);
-      converter.Convert(this.CollisionLocalPoint, out result.CollisionLocalPoint);
-      converter.Convert(this.LastInteractionPosition, out result.LastInteractionPosition);
-      converter.Convert(this.CollisionSuppressed, out result.CollisionSuppressed);
-      ConvertUser(converter, ref result);
-      return result;
-    }
-  }
-  [System.SerializableAttribute()]
-  public unsafe partial class ClawTargetPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.ClawTargetPrototype> {
-    public FP DetectRange;
-    public Quantum.QuantumEntityPrototype Entity;
-    public FPVector3 Point;
-    partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.ClawTargetPrototype prototype);
-    public override Quantum.Prototypes.ClawTargetPrototype Convert(Quantum.QuantumEntityPrototypeConverter converter) {
-      var result = new Quantum.Prototypes.ClawTargetPrototype();
-      converter.Convert(this.DetectRange, out result.DetectRange);
-      converter.Convert(this.Entity, out result.Entity);
-      converter.Convert(this.Point, out result.Point);
-      ConvertUser(converter, ref result);
-      return result;
-    }
-  }
-  [System.SerializableAttribute()]
   public unsafe partial class KCCPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.KCCPrototype> {
     public AssetRef<KCCSettings> Settings;
     partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.KCCPrototype prototype);

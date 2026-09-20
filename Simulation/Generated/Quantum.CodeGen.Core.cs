@@ -79,6 +79,12 @@ namespace Quantum {
     Blue,
     Red,
   }
+  public enum PlayerWaterState : int {
+    None,
+    Submerged,
+    Surface,
+    Seabed,
+  }
   [System.FlagsAttribute()]
   public enum InputButtons : int {
     _left = 1 << 0,
@@ -891,10 +897,13 @@ namespace Quantum {
     public const Int32 SIZE = 24;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(16)]
+    [ExcludeFromPrototype()]
     public FP PreviousBaseYaw;
     [FieldOffset(8)]
+    [ExcludeFromPrototype()]
     public FP ContinuousBaseYaw;
     [FieldOffset(0)]
+    [ExcludeFromPrototype()]
     public QBoolean Initialized;
     public override readonly Int32 GetHashCode() {
       unchecked { 
@@ -925,8 +934,10 @@ namespace Quantum {
     [FieldOffset(8)]
     public FP InteractionRotationSmooth;
     [FieldOffset(16)]
+    [ExcludeFromPrototype()]
     public FP LocalYaw;
     [FieldOffset(0)]
+    [ExcludeFromPrototype()]
     public QBoolean Interacting;
     public override readonly Int32 GetHashCode() {
       unchecked { 
@@ -957,6 +968,7 @@ namespace Quantum {
     [FieldOffset(0)]
     public ClawSide Side;
     [FieldOffset(4)]
+    [ExcludeFromPrototype()]
     public ClawState State;
     [FieldOffset(120)]
     public FPVector3 ShoulderLocalPosition;
@@ -969,8 +981,10 @@ namespace Quantum {
     [FieldOffset(16)]
     public FP PositionSmooth;
     [FieldOffset(72)]
+    [ExcludeFromPrototype()]
     public FPVector3 PreviousDesiredPosition;
     [FieldOffset(24)]
+    [ExcludeFromPrototype()]
     public FPVector3 CurrentLocalPosition;
     public override readonly Int32 GetHashCode() {
       unchecked { 
@@ -1017,22 +1031,31 @@ namespace Quantum {
     [FieldOffset(32)]
     public FP CrabReactionScale;
     [FieldOffset(16)]
+    [ExcludeFromPrototype()]
     public EntityRef Target;
     [FieldOffset(144)]
+    [ExcludeFromPrototype()]
     public FPVector3 LocalPoint;
     [FieldOffset(192)]
+    [ExcludeFromPrototype()]
     public FPVector3 TargetPosition;
     [FieldOffset(168)]
+    [ExcludeFromPrototype()]
     public FPVector3 PreviousHandlePosition;
     [FieldOffset(96)]
+    [ExcludeFromPrototype()]
     public FPVector3 CurrentGrabForce;
     [FieldOffset(8)]
+    [ExcludeFromPrototype()]
     public EntityRef CollisionTarget;
     [FieldOffset(72)]
+    [ExcludeFromPrototype()]
     public FPVector3 CollisionLocalPoint;
     [FieldOffset(120)]
+    [ExcludeFromPrototype()]
     public FPVector3 LastInteractionPosition;
     [FieldOffset(0)]
+    [ExcludeFromPrototype()]
     public QBoolean CollisionSuppressed;
     public override readonly Int32 GetHashCode() {
       unchecked { 
@@ -1085,10 +1108,13 @@ namespace Quantum {
     [FieldOffset(16)]
     public FP PunchSmooth;
     [FieldOffset(32)]
+    [ExcludeFromPrototype()]
     public FP PunchTime;
     [FieldOffset(0)]
+    [ExcludeFromPrototype()]
     public QBoolean PunchApplied;
     [FieldOffset(40)]
+    [ExcludeFromPrototype()]
     public FPVector3 TargetLocalPosition;
     public override readonly Int32 GetHashCode() {
       unchecked { 
@@ -1119,8 +1145,10 @@ namespace Quantum {
     [FieldOffset(8)]
     public FP DetectRange;
     [FieldOffset(0)]
+    [ExcludeFromPrototype()]
     public EntityRef Entity;
     [FieldOffset(16)]
+    [ExcludeFromPrototype()]
     public FPVector3 Point;
     public override readonly Int32 GetHashCode() {
       unchecked { 
@@ -1355,27 +1383,39 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct Player : Quantum.IComponent {
-    public const Int32 SIZE = 48;
+    public const Int32 SIZE = 80;
     public const Int32 ALIGNMENT = 8;
-    [FieldOffset(40)]
+    [FieldOffset(64)]
     public FP WalkSpeed;
     [FieldOffset(24)]
+    public FP SeaBedWalkSpeed;
+    [FieldOffset(48)]
     public FP SwimSpeed;
+    [FieldOffset(40)]
+    public FP SwimJumpSpeed;
+    [FieldOffset(56)]
+    public FP SwimVerticalResponsiveness;
+    [FieldOffset(72)]
+    public FP WaterEntryResistance;
     [FieldOffset(32)]
-    public FP SwimUpSpeed;
+    public FP SprintMultiplier;
     [FieldOffset(16)]
     public FP NormalJump;
     [FieldOffset(8)]
     public FP Mass;
     [FieldOffset(0)]
-    [HideInInspector()]
+    [ExcludeFromPrototype()]
     public PlayerRef PlayerRef;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 2621;
         hash = hash * 31 + WalkSpeed.GetHashCode();
+        hash = hash * 31 + SeaBedWalkSpeed.GetHashCode();
         hash = hash * 31 + SwimSpeed.GetHashCode();
-        hash = hash * 31 + SwimUpSpeed.GetHashCode();
+        hash = hash * 31 + SwimJumpSpeed.GetHashCode();
+        hash = hash * 31 + SwimVerticalResponsiveness.GetHashCode();
+        hash = hash * 31 + WaterEntryResistance.GetHashCode();
+        hash = hash * 31 + SprintMultiplier.GetHashCode();
         hash = hash * 31 + NormalJump.GetHashCode();
         hash = hash * 31 + Mass.GetHashCode();
         hash = hash * 31 + PlayerRef.GetHashCode();
@@ -1387,9 +1427,13 @@ namespace Quantum {
       PlayerRef.Serialize(&p->PlayerRef, serializer);
       FP.Serialize(&p->Mass, serializer);
       FP.Serialize(&p->NormalJump, serializer);
+      FP.Serialize(&p->SeaBedWalkSpeed, serializer);
+      FP.Serialize(&p->SprintMultiplier, serializer);
+      FP.Serialize(&p->SwimJumpSpeed, serializer);
       FP.Serialize(&p->SwimSpeed, serializer);
-      FP.Serialize(&p->SwimUpSpeed, serializer);
+      FP.Serialize(&p->SwimVerticalResponsiveness, serializer);
       FP.Serialize(&p->WalkSpeed, serializer);
+      FP.Serialize(&p->WaterEntryResistance, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
@@ -1416,7 +1460,7 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct PlayerStatus : Quantum.IComponent {
-    public const Int32 SIZE = 32;
+    public const Int32 SIZE = 40;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(0)]
     [ExcludeFromPrototype()]
@@ -1431,7 +1475,13 @@ namespace Quantum {
     public AssetRef<PlayerMovementData> PlayerMovementData;
     [FieldOffset(8)]
     [ExcludeFromPrototype()]
-    public QBoolean IsSwimming;
+    public PlayerWaterState WaterState;
+    [FieldOffset(32)]
+    [ExcludeFromPrototype()]
+    public FP WaterSurfaceY;
+    [FieldOffset(12)]
+    [ExcludeFromPrototype()]
+    public QBoolean WaterEntryActive;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 6329;
@@ -1439,7 +1489,9 @@ namespace Quantum {
         hash = hash * 31 + SpawnerEntityRef.GetHashCode();
         hash = hash * 31 + (Int32)PlayerTeam;
         hash = hash * 31 + PlayerMovementData.GetHashCode();
-        hash = hash * 31 + IsSwimming.GetHashCode();
+        hash = hash * 31 + (Int32)WaterState;
+        hash = hash * 31 + WaterSurfaceY.GetHashCode();
+        hash = hash * 31 + WaterEntryActive.GetHashCode();
         return hash;
       }
     }
@@ -1447,9 +1499,11 @@ namespace Quantum {
       var p = (PlayerStatus*)ptr;
       PlayerRef.Serialize(&p->PlayerRef, serializer);
       serializer.Stream.Serialize((Int32*)&p->PlayerTeam);
-      QBoolean.Serialize(&p->IsSwimming, serializer);
+      serializer.Stream.Serialize((Int32*)&p->WaterState);
+      QBoolean.Serialize(&p->WaterEntryActive, serializer);
       AssetRef.Serialize(&p->PlayerMovementData, serializer);
       EntityRef.Serialize(&p->SpawnerEntityRef, serializer);
+      FP.Serialize(&p->WaterSurfaceY, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
@@ -1493,6 +1547,7 @@ namespace Quantum {
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.EKCCProcessorSource>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.InputButtons>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.PlayerTeam>();
+      FramePrinter.EnsurePrimitiveNotStripped<Quantum.PlayerWaterState>();
       FramePrinter.EnsurePrimitiveNotStripped<QueryOptions>();
     }
   }
@@ -1725,6 +1780,7 @@ namespace Quantum {
         registry.Register<Quantum.PlayerSpawner>(Quantum.PlayerSpawner.SIZE);
         registry.Register<Quantum.PlayerStatus>(Quantum.PlayerStatus.SIZE);
         registry.Register<Quantum.PlayerTeam>(4);
+        registry.Register<Quantum.PlayerWaterState>(4);
         registry.Register<Ptr>(Ptr.SIZE);
         registry.Register<QBoolean>(QBoolean.SIZE);
         registry.Register<Quantum.Ptr>(Quantum.Ptr.SIZE);

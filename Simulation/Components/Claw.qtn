@@ -12,26 +12,23 @@ enum ClawState {
 
 component Claw {
 	ClawSide Side;
-	ClawState State;
+	[ExcludeFromPrototype] ClawState State;
 
-	// Arm
 	FPVector3 ShoulderLocalPosition;
 	FPVector3 IdleLocalPosition;
 	FPVector3 ReachLocalPosition;
 	FP MaxReach;
 	FP PositionSmooth;
 
-	// Runtime
-	FPVector3 PreviousDesiredPosition;
-	FPVector3 CurrentLocalPosition;
+	[ExcludeFromPrototype] FPVector3 PreviousDesiredPosition;
+	[ExcludeFromPrototype] FPVector3 CurrentLocalPosition;
 }
 
 component ClawTarget {
 	FP DetectRange;
 
-	// Runtime
-	EntityRef Entity;
-	FPVector3 Point;
+	[ExcludeFromPrototype] EntityRef Entity;
+	[ExcludeFromPrototype] FPVector3 Point;
 }
 
 component ClawPunch {
@@ -39,10 +36,9 @@ component ClawPunch {
 	FP PunchDuration;
 	FP PunchSmooth;
 
-	// Runtime
-	FP PunchTime;
-	bool PunchApplied;
-	FPVector3 TargetLocalPosition;
+	[ExcludeFromPrototype] FP PunchTime;
+	[ExcludeFromPrototype] bool PunchApplied;
+	[ExcludeFromPrototype] FPVector3 TargetLocalPosition;
 }
 
 component ClawGrab {
@@ -53,17 +49,15 @@ component ClawGrab {
 	FP MaxGrabAcceleration;
 	FP CrabReactionScale;
 
-	// Runtime
-	EntityRef Target;
-	FPVector3 LocalPoint;
-	FPVector3 TargetPosition;
-	FPVector3 PreviousHandlePosition;
-	FPVector3 CurrentGrabForce;
-
-	EntityRef CollisionTarget;
-	FPVector3 CollisionLocalPoint;
-	FPVector3 LastInteractionPosition;
-	bool CollisionSuppressed;
+	[ExcludeFromPrototype] EntityRef Target;
+	[ExcludeFromPrototype] FPVector3 LocalPoint;
+	[ExcludeFromPrototype] FPVector3 TargetPosition;
+	[ExcludeFromPrototype] FPVector3 PreviousHandlePosition;
+	[ExcludeFromPrototype] FPVector3 CurrentGrabForce;
+	[ExcludeFromPrototype] EntityRef CollisionTarget;
+	[ExcludeFromPrototype] FPVector3 CollisionLocalPoint;
+	[ExcludeFromPrototype] FPVector3 LastInteractionPosition;
+	[ExcludeFromPrototype] bool CollisionSuppressed;
 }
 
 signal OnTargetGrabStarted(EntityRef target, EntityRef claw, FPVector3 position);

@@ -322,12 +322,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Quantum.Unity::Quantum.QPrototypeBodyAnchor
   Prototype:
-    PreviousBaseYaw:
-      RawValue: 0
-    ContinuousBaseYaw:
-      RawValue: 0
-    Initialized:
-      Value: 0
+    _empty_prototype_dummy_field_: 0
 --- !u!1 &2346001460760995123
 GameObject:
   m_ObjectHideFlags: 0
@@ -653,8 +648,6 @@ MonoBehaviour:
   Prototype:
     Side:
       Value: 1
-    State:
-      Value: 0
     ShoulderLocalPosition:
       X:
         RawValue: 2621
@@ -680,20 +673,6 @@ MonoBehaviour:
       RawValue: 28836
     PositionSmooth:
       RawValue: 655360
-    PreviousDesiredPosition:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
-    CurrentLocalPosition:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
 --- !u!114 &2941775657526450558
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -709,14 +688,6 @@ MonoBehaviour:
   Prototype:
     DetectRange:
       RawValue: 32768
-    Entity: {fileID: 0}
-    Point:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
 --- !u!114 &796651769757556573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -736,17 +707,6 @@ MonoBehaviour:
       RawValue: 9830
     PunchSmooth:
       RawValue: 1310720
-    PunchTime:
-      RawValue: 0
-    PunchApplied:
-      Value: 0
-    TargetLocalPosition:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
 --- !u!114 &5947482083434367520
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -772,52 +732,6 @@ MonoBehaviour:
       RawValue: 5242880
     CrabReactionScale:
       RawValue: 0
-    Target: {fileID: 0}
-    LocalPoint:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
-    TargetPosition:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
-    PreviousHandlePosition:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
-    CurrentGrabForce:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
-    CollisionTarget: {fileID: 0}
-    CollisionLocalPoint:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
-    LastInteractionPosition:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
-    CollisionSuppressed:
-      Value: 0
 --- !u!1 &3674313892466611095
 GameObject:
   m_ObjectHideFlags: 0
@@ -868,6 +782,7 @@ GameObject:
   - component: {fileID: 5821677893836817624}
   - component: {fileID: 460759140073149556}
   - component: {fileID: 5327499573764976049}
+  - component: {fileID: -1741775247501276567}
   m_Layer: 0
   m_Name: Krebi
   m_TagString: Untagged
@@ -1221,16 +1136,22 @@ MonoBehaviour:
   Prototype:
     WalkSpeed:
       RawValue: 19661
+    SeaBedWalkSpeed:
+      RawValue: 16384
     SwimSpeed:
-      RawValue: 13107
-    SwimUpSpeed:
-      RawValue: 13107
+      RawValue: 29491
+    SwimJumpSpeed:
+      RawValue: 78643
+    SwimVerticalResponsiveness:
+      RawValue: 98304
+    WaterEntryResistance:
+      RawValue: 327680
+    SprintMultiplier:
+      RawValue: 131072
     NormalJump:
       RawValue: 39322
     Mass:
       RawValue: 327680
-    PlayerRef:
-      _index: 0
 --- !u!114 &8845943841588611987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1319,10 +1240,6 @@ MonoBehaviour:
       RawValue: 524288
     InteractionRotationSmooth:
       RawValue: 65536
-    LocalYaw:
-      RawValue: 0
-    Interacting:
-      Value: 0
 --- !u!114 &5327499573764976049
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1347,6 +1264,21 @@ MonoBehaviour:
   lockRotationOffset: {x: 90, y: 0, z: 0}
   grabOffset: 0.05
   rotationSmooth: 10
+--- !u!114 &-1741775247501276567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4899267199245480236}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea4d83783e14efa4ba95cacb9361070c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CameraView
+  normalVerticalRange: {x: 5, y: 80}
+  waterVerticalRange: {x: -80, y: 80}
+  verticalRangeTransitionSpeed: 150
 --- !u!1 &6005787706641765756
 GameObject:
   m_ObjectHideFlags: 0
@@ -1735,8 +1667,6 @@ MonoBehaviour:
   Prototype:
     Side:
       Value: 0
-    State:
-      Value: 0
     ShoulderLocalPosition:
       X:
         RawValue: -2621
@@ -1762,20 +1692,6 @@ MonoBehaviour:
       RawValue: 28836
     PositionSmooth:
       RawValue: 655360
-    PreviousDesiredPosition:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
-    CurrentLocalPosition:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
 --- !u!114 &856116360796199724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1791,14 +1707,6 @@ MonoBehaviour:
   Prototype:
     DetectRange:
       RawValue: 32768
-    Entity: {fileID: 0}
-    Point:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
 --- !u!114 &8958620279681174574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1818,17 +1726,6 @@ MonoBehaviour:
       RawValue: 9830
     PunchSmooth:
       RawValue: 1310720
-    PunchTime:
-      RawValue: 0
-    PunchApplied:
-      Value: 0
-    TargetLocalPosition:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
 --- !u!114 &7097148226055203842
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1854,52 +1751,6 @@ MonoBehaviour:
       RawValue: 5242880
     CrabReactionScale:
       RawValue: 0
-    Target: {fileID: 0}
-    LocalPoint:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
-    TargetPosition:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
-    PreviousHandlePosition:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
-    CurrentGrabForce:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
-    CollisionTarget: {fileID: 0}
-    CollisionLocalPoint:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
-    LastInteractionPosition:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-      Z:
-        RawValue: 0
-    CollisionSuppressed:
-      Value: 0
 --- !u!1001 &613088328480851354
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -66,7 +66,7 @@ public class InputPoll : MonoBehaviour {
 			input.MoveDirection = actions.Move.ReadValue<Vector2>().ToFPVector2();
 
 			Vector2 look = actions.Look.ReadValue<Vector2>();
-			input.AimDirection = new Vector2(look.x, 0).ToFPVector2();
+			input.AimDirection = look.ToFPVector2();
 
 			input.Jump = actions.Jump.IsPressed();
 			input.Sprint = actions.Sprint.IsPressed();

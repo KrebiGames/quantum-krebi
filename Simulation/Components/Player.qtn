@@ -1,32 +1,39 @@
 ﻿enum PlayerTeam {
-	Blue, Red
+	Blue,
+	Red
+}
+
+enum PlayerWaterState {
+	None,
+	Submerged,
+	Surface,
+	Seabed
 }
 
 component Player {
 	FP WalkSpeed;
+	FP SeaBedWalkSpeed;
 	FP SwimSpeed;
-	FP SwimUpSpeed;
+	FP SwimJumpSpeed;
+	FP SwimVerticalResponsiveness;
+	FP WaterEntryResistance;
+	FP SprintMultiplier;
 	FP NormalJump;
 	FP Mass;
 
-	[HideInInspector]
-	PlayerRef PlayerRef;
+	[ExcludeFromPrototype] PlayerRef PlayerRef;
 }
 
 component PlayerStatus {
-	[ExcludeFromPrototype]
-	player_ref PlayerRef;
-
-	[ExcludeFromPrototype]
-	entity_ref SpawnerEntityRef;
-
-	[ExcludeFromPrototype]
-	PlayerTeam PlayerTeam;
+	[ExcludeFromPrototype] player_ref PlayerRef;
+	[ExcludeFromPrototype] entity_ref SpawnerEntityRef;
+	[ExcludeFromPrototype] PlayerTeam PlayerTeam;
 
 	asset_ref<PlayerMovementData> PlayerMovementData;
 
-	[ExcludeFromPrototype]
-	bool IsSwimming;
+	[ExcludeFromPrototype] PlayerWaterState WaterState;
+	[ExcludeFromPrototype] FP WaterSurfaceY;
+	[ExcludeFromPrototype] bool WaterEntryActive;
 }
 
 component PlayerSpawner {
@@ -39,15 +46,15 @@ component BodyOrientation {
 	FP NormalRotationSmooth;
 	FP SprintRotationSmooth;
 	FP InteractionRotationSmooth;
-	FP LocalYaw;
 
-	bool Interacting;
+	[ExcludeFromPrototype] FP LocalYaw;
+	[ExcludeFromPrototype] bool Interacting;
 }
 
 component BodyAnchor {
-	FP PreviousBaseYaw;
-	FP ContinuousBaseYaw;
-	bool Initialized;
+	[ExcludeFromPrototype] FP PreviousBaseYaw;
+	[ExcludeFromPrototype] FP ContinuousBaseYaw;
+	[ExcludeFromPrototype] bool Initialized;
 }
 
 signal OnPlayerRespawned(entity_ref playerEntityRef, bool fullReset);

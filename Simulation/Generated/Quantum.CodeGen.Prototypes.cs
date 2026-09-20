@@ -67,9 +67,8 @@ namespace Quantum.Prototypes {
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.BodyAnchor))]
   public unsafe partial class BodyAnchorPrototype : ComponentPrototype<Quantum.BodyAnchor> {
-    public FP PreviousBaseYaw;
-    public FP ContinuousBaseYaw;
-    public QBoolean Initialized;
+    [HideInInspector()]
+    public Int32 _empty_prototype_dummy_field_;
     partial void MaterializeUser(Frame frame, ref Quantum.BodyAnchor result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
       Quantum.BodyAnchor component = default;
@@ -77,9 +76,6 @@ namespace Quantum.Prototypes {
       return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.BodyAnchor result, in PrototypeMaterializationContext context = default) {
-      result.PreviousBaseYaw = this.PreviousBaseYaw;
-      result.ContinuousBaseYaw = this.ContinuousBaseYaw;
-      result.Initialized = this.Initialized;
       MaterializeUser(frame, ref result, in context);
     }
   }
@@ -90,8 +86,6 @@ namespace Quantum.Prototypes {
     public FP NormalRotationSmooth;
     public FP SprintRotationSmooth;
     public FP InteractionRotationSmooth;
-    public FP LocalYaw;
-    public QBoolean Interacting;
     partial void MaterializeUser(Frame frame, ref Quantum.BodyOrientation result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
       Quantum.BodyOrientation component = default;
@@ -103,8 +97,6 @@ namespace Quantum.Prototypes {
       result.NormalRotationSmooth = this.NormalRotationSmooth;
       result.SprintRotationSmooth = this.SprintRotationSmooth;
       result.InteractionRotationSmooth = this.InteractionRotationSmooth;
-      result.LocalYaw = this.LocalYaw;
-      result.Interacting = this.Interacting;
       MaterializeUser(frame, ref result, in context);
     }
   }
@@ -112,14 +104,11 @@ namespace Quantum.Prototypes {
   [Quantum.Prototypes.Prototype(typeof(Quantum.Claw))]
   public unsafe partial class ClawPrototype : ComponentPrototype<Quantum.Claw> {
     public Quantum.QEnum32<ClawSide> Side;
-    public Quantum.QEnum32<ClawState> State;
     public FPVector3 ShoulderLocalPosition;
     public FPVector3 IdleLocalPosition;
     public FPVector3 ReachLocalPosition;
     public FP MaxReach;
     public FP PositionSmooth;
-    public FPVector3 PreviousDesiredPosition;
-    public FPVector3 CurrentLocalPosition;
     partial void MaterializeUser(Frame frame, ref Quantum.Claw result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
       Quantum.Claw component = default;
@@ -128,35 +117,24 @@ namespace Quantum.Prototypes {
     }
     public void Materialize(Frame frame, ref Quantum.Claw result, in PrototypeMaterializationContext context = default) {
       result.Side = this.Side;
-      result.State = this.State;
       result.ShoulderLocalPosition = this.ShoulderLocalPosition;
       result.IdleLocalPosition = this.IdleLocalPosition;
       result.ReachLocalPosition = this.ReachLocalPosition;
       result.MaxReach = this.MaxReach;
       result.PositionSmooth = this.PositionSmooth;
-      result.PreviousDesiredPosition = this.PreviousDesiredPosition;
-      result.CurrentLocalPosition = this.CurrentLocalPosition;
       MaterializeUser(frame, ref result, in context);
     }
   }
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.ClawGrab))]
-  public unsafe class ClawGrabPrototype : ComponentPrototype<Quantum.ClawGrab> {
+  public unsafe partial class ClawGrabPrototype : ComponentPrototype<Quantum.ClawGrab> {
     public FP GrabRange;
     public FP CollisionSafeDistance;
     public FP GrabMaxAngle;
     public FP GrabResponsiveness;
     public FP MaxGrabAcceleration;
     public FP CrabReactionScale;
-    public MapEntityId Target;
-    public FPVector3 LocalPoint;
-    public FPVector3 TargetPosition;
-    public FPVector3 PreviousHandlePosition;
-    public FPVector3 CurrentGrabForce;
-    public MapEntityId CollisionTarget;
-    public FPVector3 CollisionLocalPoint;
-    public FPVector3 LastInteractionPosition;
-    public QBoolean CollisionSuppressed;
+    partial void MaterializeUser(Frame frame, ref Quantum.ClawGrab result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
       Quantum.ClawGrab component = default;
       Materialize((Frame)f, ref component, in context);
@@ -169,15 +147,7 @@ namespace Quantum.Prototypes {
       result.GrabResponsiveness = this.GrabResponsiveness;
       result.MaxGrabAcceleration = this.MaxGrabAcceleration;
       result.CrabReactionScale = this.CrabReactionScale;
-      PrototypeValidator.FindMapEntity(this.Target, in context, out result.Target);
-      result.LocalPoint = this.LocalPoint;
-      result.TargetPosition = this.TargetPosition;
-      result.PreviousHandlePosition = this.PreviousHandlePosition;
-      result.CurrentGrabForce = this.CurrentGrabForce;
-      PrototypeValidator.FindMapEntity(this.CollisionTarget, in context, out result.CollisionTarget);
-      result.CollisionLocalPoint = this.CollisionLocalPoint;
-      result.LastInteractionPosition = this.LastInteractionPosition;
-      result.CollisionSuppressed = this.CollisionSuppressed;
+      MaterializeUser(frame, ref result, in context);
     }
   }
   [System.SerializableAttribute()]
@@ -186,9 +156,6 @@ namespace Quantum.Prototypes {
     public FP PunchStrength;
     public FP PunchDuration;
     public FP PunchSmooth;
-    public FP PunchTime;
-    public QBoolean PunchApplied;
-    public FPVector3 TargetLocalPosition;
     partial void MaterializeUser(Frame frame, ref Quantum.ClawPunch result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
       Quantum.ClawPunch component = default;
@@ -199,18 +166,14 @@ namespace Quantum.Prototypes {
       result.PunchStrength = this.PunchStrength;
       result.PunchDuration = this.PunchDuration;
       result.PunchSmooth = this.PunchSmooth;
-      result.PunchTime = this.PunchTime;
-      result.PunchApplied = this.PunchApplied;
-      result.TargetLocalPosition = this.TargetLocalPosition;
       MaterializeUser(frame, ref result, in context);
     }
   }
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.ClawTarget))]
-  public unsafe class ClawTargetPrototype : ComponentPrototype<Quantum.ClawTarget> {
+  public unsafe partial class ClawTargetPrototype : ComponentPrototype<Quantum.ClawTarget> {
     public FP DetectRange;
-    public MapEntityId Entity;
-    public FPVector3 Point;
+    partial void MaterializeUser(Frame frame, ref Quantum.ClawTarget result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
       Quantum.ClawTarget component = default;
       Materialize((Frame)f, ref component, in context);
@@ -218,8 +181,7 @@ namespace Quantum.Prototypes {
     }
     public void Materialize(Frame frame, ref Quantum.ClawTarget result, in PrototypeMaterializationContext context = default) {
       result.DetectRange = this.DetectRange;
-      PrototypeValidator.FindMapEntity(this.Entity, in context, out result.Entity);
-      result.Point = this.Point;
+      MaterializeUser(frame, ref result, in context);
     }
   }
   [System.SerializableAttribute()]
@@ -523,12 +485,14 @@ namespace Quantum.Prototypes {
   [Quantum.Prototypes.Prototype(typeof(Quantum.Player))]
   public unsafe partial class PlayerPrototype : ComponentPrototype<Quantum.Player> {
     public FP WalkSpeed;
+    public FP SeaBedWalkSpeed;
     public FP SwimSpeed;
-    public FP SwimUpSpeed;
+    public FP SwimJumpSpeed;
+    public FP SwimVerticalResponsiveness;
+    public FP WaterEntryResistance;
+    public FP SprintMultiplier;
     public FP NormalJump;
     public FP Mass;
-    [HideInInspector()]
-    public PlayerRef PlayerRef;
     partial void MaterializeUser(Frame frame, ref Quantum.Player result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
       Quantum.Player component = default;
@@ -537,11 +501,14 @@ namespace Quantum.Prototypes {
     }
     public void Materialize(Frame frame, ref Quantum.Player result, in PrototypeMaterializationContext context = default) {
       result.WalkSpeed = this.WalkSpeed;
+      result.SeaBedWalkSpeed = this.SeaBedWalkSpeed;
       result.SwimSpeed = this.SwimSpeed;
-      result.SwimUpSpeed = this.SwimUpSpeed;
+      result.SwimJumpSpeed = this.SwimJumpSpeed;
+      result.SwimVerticalResponsiveness = this.SwimVerticalResponsiveness;
+      result.WaterEntryResistance = this.WaterEntryResistance;
+      result.SprintMultiplier = this.SprintMultiplier;
       result.NormalJump = this.NormalJump;
       result.Mass = this.Mass;
-      result.PlayerRef = this.PlayerRef;
       MaterializeUser(frame, ref result, in context);
     }
   }
