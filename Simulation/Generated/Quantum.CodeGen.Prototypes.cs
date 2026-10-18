@@ -185,6 +185,23 @@ namespace Quantum.Prototypes {
     }
   }
   [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.Floatable))]
+  public unsafe partial class FloatablePrototype : ComponentPrototype<Quantum.Floatable> {
+    public FP Buoyancy;
+    public FP Drag;
+    partial void MaterializeUser(Frame frame, ref Quantum.Floatable result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+      Quantum.Floatable component = default;
+      Materialize((Frame)f, ref component, in context);
+      return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.Floatable result, in PrototypeMaterializationContext context = default) {
+      result.Buoyancy = this.Buoyancy;
+      result.Drag = this.Drag;
+      MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.Input))]
   public unsafe partial class InputPrototype : StructPrototype {
     public Button _left;
@@ -714,6 +731,21 @@ namespace Quantum.Prototypes {
       return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.Water result, in PrototypeMaterializationContext context = default) {
+      MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.WaterContact))]
+  public unsafe partial class WaterContactPrototype : ComponentPrototype<Quantum.WaterContact> {
+    [HideInInspector()]
+    public Int32 _empty_prototype_dummy_field_;
+    partial void MaterializeUser(Frame frame, ref Quantum.WaterContact result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+      Quantum.WaterContact component = default;
+      Materialize((Frame)f, ref component, in context);
+      return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.WaterContact result, in PrototypeMaterializationContext context = default) {
       MaterializeUser(frame, ref result, in context);
     }
   }

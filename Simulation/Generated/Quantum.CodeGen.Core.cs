@@ -1167,6 +1167,28 @@ namespace Quantum {
     }
   }
   [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct Floatable : Quantum.IComponent {
+    public const Int32 SIZE = 16;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(0)]
+    public FP Buoyancy;
+    [FieldOffset(8)]
+    public FP Drag;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 4703;
+        hash = hash * 31 + Buoyancy.GetHashCode();
+        hash = hash * 31 + Drag.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+      var p = (Floatable*)ptr;
+      FP.Serialize(&p->Buoyancy, serializer);
+      FP.Serialize(&p->Drag, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct Interactable : Quantum.IComponent {
     public const Int32 SIZE = 4;
     public const Int32 ALIGNMENT = 4;
@@ -1460,7 +1482,7 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct PlayerStatus : Quantum.IComponent {
-    public const Int32 SIZE = 40;
+    public const Int32 SIZE = 48;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(0)]
     [ExcludeFromPrototype()]
@@ -1473,10 +1495,13 @@ namespace Quantum {
     public PlayerTeam PlayerTeam;
     [FieldOffset(16)]
     public AssetRef<PlayerMovementData> PlayerMovementData;
+    [FieldOffset(32)]
+    [ExcludeFromPrototype()]
+    public EntityRef WaterEntity;
     [FieldOffset(8)]
     [ExcludeFromPrototype()]
     public PlayerWaterState WaterState;
-    [FieldOffset(32)]
+    [FieldOffset(40)]
     [ExcludeFromPrototype()]
     public FP WaterSurfaceY;
     [FieldOffset(12)]
@@ -1489,6 +1514,7 @@ namespace Quantum {
         hash = hash * 31 + SpawnerEntityRef.GetHashCode();
         hash = hash * 31 + (Int32)PlayerTeam;
         hash = hash * 31 + PlayerMovementData.GetHashCode();
+        hash = hash * 31 + WaterEntity.GetHashCode();
         hash = hash * 31 + (Int32)WaterState;
         hash = hash * 31 + WaterSurfaceY.GetHashCode();
         hash = hash * 31 + WaterEntryActive.GetHashCode();
@@ -1503,6 +1529,7 @@ namespace Quantum {
       QBoolean.Serialize(&p->WaterEntryActive, serializer);
       AssetRef.Serialize(&p->PlayerMovementData, serializer);
       EntityRef.Serialize(&p->SpawnerEntityRef, serializer);
+      EntityRef.Serialize(&p->WaterEntity, serializer);
       FP.Serialize(&p->WaterSurfaceY, serializer);
     }
   }
@@ -1520,6 +1547,25 @@ namespace Quantum {
     }
     public static void Serialize(void* ptr, FrameSerializer serializer) {
       var p = (Water*)ptr;
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct WaterContact : Quantum.IComponent {
+    public const Int32 SIZE = 8;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(0)]
+    [ExcludeFromPrototype()]
+    public EntityRef WaterEntity;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 15991;
+        hash = hash * 31 + WaterEntity.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+      var p = (WaterContact*)ptr;
+      EntityRef.Serialize(&p->WaterEntity, serializer);
     }
   }
   public unsafe partial interface ISignalOnTargetGrabStarted : ISignal {
@@ -1604,6 +1650,7 @@ namespace Quantum {
       private ComponentSignals _componentSignals_ClawPunch = CreateComponentSignals<Quantum.ClawPunch>(frame);
       private ComponentSignals _componentSignals_ClawTarget = CreateComponentSignals<Quantum.ClawTarget>(frame);
       private ComponentSignals _componentSignals_EntityGroup = CreateComponentSignals<EntityGroup>(frame);
+      private ComponentSignals _componentSignals_Floatable = CreateComponentSignals<Quantum.Floatable>(frame);
       private ComponentSignals _componentSignals_Interactable = CreateComponentSignals<Quantum.Interactable>(frame);
       private ComponentSignals _componentSignals_KCC = CreateComponentSignals<Quantum.KCC>(frame);
       private ComponentSignals _componentSignals_KCCProcessorLink = CreateComponentSignals<Quantum.KCCProcessorLink>(frame);
@@ -1631,6 +1678,7 @@ namespace Quantum {
       private ComponentSignals _componentSignals_Transform3D = CreateComponentSignals<Transform3D>(frame);
       private ComponentSignals _componentSignals_View = CreateComponentSignals<View>(frame);
       private ComponentSignals _componentSignals_Water = CreateComponentSignals<Quantum.Water>(frame);
+      private ComponentSignals _componentSignals_WaterContact = CreateComponentSignals<Quantum.WaterContact>(frame);
       private ISignalOnTargetGrabStarted[] _ISignalOnTargetGrabStartedSystems = CreateSignalArray<ISignalOnTargetGrabStarted>(frame);
       private ISignalOnTargetGrabReleased[] _ISignalOnTargetGrabReleasedSystems = CreateSignalArray<ISignalOnTargetGrabReleased>(frame);
       private ISignalOnPlayerRespawned[] _ISignalOnPlayerRespawnedSystems = CreateSignalArray<ISignalOnPlayerRespawned>(frame);
@@ -1725,6 +1773,7 @@ namespace Quantum {
         registry.Register<FPQuaternion>(FPQuaternion.SIZE);
         registry.Register<FPVector2>(FPVector2.SIZE);
         registry.Register<FPVector3>(FPVector3.SIZE);
+        registry.Register<Quantum.Floatable>(Quantum.Floatable.SIZE);
         registry.Register<FrameMetaData>(FrameMetaData.SIZE);
         registry.Register<FrameTimer>(FrameTimer.SIZE);
         registry.Register<HingeJoint>(HingeJoint.SIZE);
@@ -1801,6 +1850,7 @@ namespace Quantum {
         registry.Register<Transform3D>(Transform3D.SIZE);
         registry.Register<View>(View.SIZE);
         registry.Register<Quantum.Water>(Quantum.Water.SIZE);
+        registry.Register<Quantum.WaterContact>(Quantum.WaterContact.SIZE);
         registry.Register<Quantum._globals_>(Quantum._globals_.SIZE);
         return registry;
       }
@@ -1814,6 +1864,7 @@ namespace Quantum {
         registry.Register<Quantum.ClawGrab>(Quantum.ClawGrab.Serialize, null, null, ComponentFlags.None);
         registry.Register<Quantum.ClawPunch>(Quantum.ClawPunch.Serialize, null, null, ComponentFlags.None);
         registry.Register<Quantum.ClawTarget>(Quantum.ClawTarget.Serialize, null, null, ComponentFlags.None);
+        registry.Register<Quantum.Floatable>(Quantum.Floatable.Serialize, null, null, ComponentFlags.None);
         registry.Register<Quantum.Interactable>(Quantum.Interactable.Serialize, null, null, ComponentFlags.None);
         registry.Register<Quantum.KCC>(Quantum.KCC.Serialize, null, Quantum.KCC.OnRemoved, ComponentFlags.None);
         registry.Register<Quantum.KCCProcessorLink>(Quantum.KCCProcessorLink.Serialize, null, null, ComponentFlags.None);
@@ -1824,6 +1875,7 @@ namespace Quantum {
         registry.Register<Quantum.PlayerSpawner>(Quantum.PlayerSpawner.Serialize, null, null, ComponentFlags.None);
         registry.Register<Quantum.PlayerStatus>(Quantum.PlayerStatus.Serialize, null, null, ComponentFlags.None);
         registry.Register<Quantum.Water>(Quantum.Water.Serialize, null, null, ComponentFlags.None);
+        registry.Register<Quantum.WaterContact>(Quantum.WaterContact.Serialize, null, null, ComponentFlags.None);
         return registry;
       }
     }

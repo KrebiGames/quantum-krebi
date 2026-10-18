@@ -31,6 +31,7 @@ component PlayerStatus {
 
 	asset_ref<PlayerMovementData> PlayerMovementData;
 
+	[ExcludeFromPrototype] entity_ref WaterEntity;
 	[ExcludeFromPrototype] PlayerWaterState WaterState;
 	[ExcludeFromPrototype] FP WaterSurfaceY;
 	[ExcludeFromPrototype] bool WaterEntryActive;
